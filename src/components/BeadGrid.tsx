@@ -9,9 +9,9 @@ interface BeadGridProps {
 
 export const BeadGrid: React.FC<BeadGridProps> = ({ beads, onSelect, onBeadHover }) => {
   return (
-    <div className="w-64">
+    <div className="w-full md:w-64">
       <h3 className="text-lg font-light text-gray-700 mb-6">選擇珠子</h3>
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-4 md:grid-cols-2 gap-4">
         {beads.map((bead) => (
           <button
             key={bead.id}

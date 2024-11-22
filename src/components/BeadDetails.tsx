@@ -7,7 +7,7 @@ interface BeadDetailsProps {
 
 export const BeadDetails: React.FC<BeadDetailsProps> = ({ bead }) => {
   return (
-    <div className="w-80 bg-black/20 backdrop-blur-sm p-6 rounded-2xl border border-white/10">
+    <div className="w-full md:w-80 bg-black/20 backdrop-blur-sm p-6 rounded-2xl border border-white/10">
       <h4 className="text-gray-800 text-lg mb-4 font-light">{bead.name}的故事</h4>
       <p className="text-gray-700 text-sm mb-4 leading-relaxed">{bead.story}</p>
       

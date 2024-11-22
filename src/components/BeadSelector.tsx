@@ -48,20 +48,20 @@ const BeadSelector: React.FC<BeadSelectorProps> = ({ onSelect }) => {
   };
 
   return (
-    <div className="flex flex-col gap-8 bg-white/5 backdrop-blur-xl p-12 rounded-3xl border border-white/10 shadow-2xl">
+    <div className="flex flex-col gap-8 bg-white/5 backdrop-blur-xl p-6 md:p-12 rounded-3xl border border-white/10 shadow-2xl w-full max-w-[1200px]">
       <BeadControls 
         settings={settings}
         onSettingChange={handleSettingChange}
       />
       
-      <div className="flex gap-12">
+      <div className="flex flex-col md:flex-row gap-8 md:gap-12">
         <BeadPreview 
           settings={settings}
           selectedBeads={selectedBeads}
           calculatePosition={calculatePosition}
         />
         
-        <div className="flex gap-8">
+        <div className="flex flex-col md:flex-row gap-8">
           <BeadGrid 
             beads={beads}
             onSelect={handleBeadSelect}

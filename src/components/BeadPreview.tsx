@@ -13,7 +13,7 @@ export const BeadPreview: React.FC<BeadPreviewProps> = ({
   calculatePosition
 }) => {
   return (
-    <div className="relative w-[400px] h-[400px] bg-black/20 rounded-2xl backdrop-blur-sm">
+    <div className="relative w-full md:w-[400px] aspect-square bg-black/20 rounded-2xl backdrop-blur-sm">
       <div className="absolute inset-0 border border-gray-700/30 rounded-2xl" />
       <div className="absolute inset-0">
         {Array(settings.beadCount).fill(null).map((_, index) => (
