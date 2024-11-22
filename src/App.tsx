@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import BeadSelector from './components/BeadSelector';
-import BraceletPreview from './components/BraceletPreview';
+import './index.css';
 
 const App: React.FC = () => {
   const [selectedBeads, setSelectedBeads] = useState<string[]>(Array(12).fill(''));
@@ -12,15 +12,14 @@ const App: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 py-6 flex flex-col justify-center sm:py-12">
-      <div className="relative py-3 sm:max-w-xl sm:mx-auto">
-        <div className="relative px-4 py-10 bg-white mx-8 md:mx-0 shadow rounded-3xl sm:p-10">
-          <div className="max-w-md mx-auto">
-            <div className="divide-y divide-gray-200">
-              <BraceletPreview beads={selectedBeads} />
-              <BeadSelector onSelect={handleBeadSelect} />
-            </div>
-          </div>
+    <div className="min-h-screen bg-gradient-to-b from-slate-900 via-slate-800 to-slate-900 relative">
+      <div className="absolute inset-0 bg-black/50" />
+      <div className="container mx-auto p-8 relative z-10">
+        <h1 className="text-3xl font-light text-white/90 mb-12 text-center tracking-wider">
+          精緻手鍊設計
+        </h1>
+        <div className="flex justify-center">
+          <BeadSelector onSelect={handleBeadSelect} />
         </div>
       </div>
     </div>
