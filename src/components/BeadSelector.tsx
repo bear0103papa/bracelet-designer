@@ -10,7 +10,7 @@ const BeadSelector: React.FC<BeadSelectorProps> = ({ onSelect }) => {
   const [selectedBeads, setSelectedBeads] = useState<SelectedBead[]>([]);
   const [currentPosition, setCurrentPosition] = useState(0);
   const [settings, setSettings] = useState<BeadSelectorState>({
-    beadSize: 44,
+    beadSize: 56,
     beadCount: 18
   });
   const [selectedBead, setSelectedBead] = useState<Bead | null>(null);
@@ -33,6 +33,20 @@ const BeadSelector: React.FC<BeadSelectorProps> = ({ onSelect }) => {
     }));
   };
 
+  const calculatePosition = (index: number, totalBeads: number): React.CSSProperties => {
+    const angle = (index * 360) / totalBeads - 90;
+    const radius = 150;
+    const x = radius * Math.cos((angle * Math.PI) / 180);
+    const y = radius * Math.sin((angle * Math.PI) / 180);
+    
+    return {
+      position: 'absolute',
+      left: '50%',
+      top: '50%',
+      transform: `translate(-50%, -50%) translate(${x}px, ${y}px)`,
+    };
+  };
+
   return (
     <div className="flex flex-col gap-8 bg-white/5 backdrop-blur-xl p-12 rounded-3xl border border-white/10 shadow-2xl">
       <BeadControls 
@@ -44,6 +58,7 @@ const BeadSelector: React.FC<BeadSelectorProps> = ({ onSelect }) => {
         <BeadPreview 
           settings={settings}
           selectedBeads={selectedBeads}
+          calculatePosition={calculatePosition}
         />
         
         <div className="flex gap-8">
