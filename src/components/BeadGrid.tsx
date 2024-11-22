@@ -23,6 +23,7 @@ export const BeadGrid: React.FC<BeadGridProps> = ({ beads, onSelect, onBeadHover
             <img 
               src={bead.image} 
               alt={bead.name} 
+              loading="lazy"
               className="w-12 h-12 rounded-full object-cover mx-auto group-hover:scale-105 transition-transform"
             />
             <p className="mt-2 text-sm text-gray-700 text-center font-light">{bead.name}</p>
