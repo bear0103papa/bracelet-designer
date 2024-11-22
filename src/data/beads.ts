@@ -1,12 +1,3 @@
-import bead01 from '../assets/beads/01.png';
-import bead02 from '../assets/beads/02.png';
-import bead03 from '../assets/beads/03.png';
-import bead04 from '../assets/beads/04.png';
-import bead05 from '../assets/beads/05.png';
-import bead06 from '../assets/beads/06.png';
-import bead07 from '../assets/beads/07.png';
-import bead08 from '../assets/beads/08.png';
-
 export const beads = [
   {
     id: 1,
