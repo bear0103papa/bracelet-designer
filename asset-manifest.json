@@ -1,15 +1,16 @@
 {
   "files": {
-    "main.css": "/bracelet-designer/static/css/main.b35624a7.css",
-    "main.js": "/bracelet-designer/static/js/main.a37b593f.js",
-    "static/js/453.70ce650d.chunk.js": "/bracelet-designer/static/js/453.70ce650d.chunk.js",
+    "main.css": "/bracelet-designer/static/css/main.e6c13ad2.css",
+    "main.js": "/bracelet-designer/static/js/main.a2bd9109.js",
+    "static/js/453.363571e7.chunk.js": "/bracelet-designer/static/js/453.363571e7.chunk.js",
+    "static/media/cat-pearl.png": "/bracelet-designer/static/media/cat-pearl.8765430c38d6c50a203e.png",
     "index.html": "/bracelet-designer/index.html",
-    "main.b35624a7.css.map": "/bracelet-designer/static/css/main.b35624a7.css.map",
-    "main.a37b593f.js.map": "/bracelet-designer/static/js/main.a37b593f.js.map",
-    "453.70ce650d.chunk.js.map": "/bracelet-designer/static/js/453.70ce650d.chunk.js.map"
+    "main.e6c13ad2.css.map": "/bracelet-designer/static/css/main.e6c13ad2.css.map",
+    "main.a2bd9109.js.map": "/bracelet-designer/static/js/main.a2bd9109.js.map",
+    "453.363571e7.chunk.js.map": "/bracelet-designer/static/js/453.363571e7.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.b35624a7.css",
-    "static/js/main.a37b593f.js"
+    "static/css/main.e6c13ad2.css",
+    "static/js/main.a2bd9109.js"
   ]
 }
