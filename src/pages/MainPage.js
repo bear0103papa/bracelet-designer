@@ -1,0 +1,200 @@
+import { useState, useEffect } from 'react';
+import styled from 'styled-components';
+import CategoryTabs from '../components/CategoryTabs';
+import CategoryContent from '../components/CategoryContent';
+import ProductDisplay from '../components/ProductDisplay';
+import SavedDesigns from '../components/SavedDesigns';
+import { useDesign } from '../contexts/DesignContext';
+import CrystalPage from './CrystalPage';
+import AccessoryPage from './AccessoryPage';
+import HelperPage from './HelperPage';
+
+const PageLayout = styled.div`
+  display: grid;
+  gap: 20px;
+  padding: 20px;
+  min-height: calc(100vh - 60px);
+  
+  @media (min-width: 768px) {
+    grid-template-columns: 400px 1fr;
+  }
+  
+  @media (max-width: 767px) {
+    grid-template-columns: 1fr;
+  }
+`;
+
+const LeftPanel = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  
+  @media (max-width: 767px) {
+    order: 1;
+  }
+`;
+
+const RightPanel = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  overflow-y: auto;
+  max-height: calc(100vh - 100px);
+  
+  @media (max-width: 767px) {
+    order: 2;
+    max-height: none;
+  }
+`;
+
+const SavedDesignsWrapper = styled.div`
+  background: white;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+`;
+
+const OrderSection = styled.div`
+  background: white;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+`;
+
+const TotalPrice = styled.div`
+  font-size: 18px;
+  font-weight: bold;
+  margin: 15px 0;
+  text-align: right;
+  color: #333;
+`;
+
+const OrderButton = styled.button`
+  width: 100%;
+  padding: 12px;
+  background: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 16px;
+  cursor: pointer;
+  
+  &:hover {
+    background: #45a049;
+  }
+`;
+
+const OrderForm = styled.form`
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+`;
+
+const Input = styled.input`
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+`;
+
+const TextArea = styled.textarea`
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  min-height: 100px;
+`;
+
+const MainPage = () => {
+  const [currentCategory, setCurrentCategory] = useState('crystal');
+  const [showOrderForm, setShowOrderForm] = useState(false);
+  const [orderSuccess, setOrderSuccess] = useState(false);
+  const { currentDesign } = useDesign();
+
+  const calculateTotal = () => {
+    return currentDesign.crystals.reduce((sum, crystal) => sum + crystal.price, 0);
+  };
+
+  const handleOrder = () => {
+    setShowOrderForm(true);
+  };
+
+  const handleSubmitOrder = (e) => {
+    e.preventDefault();
+    const formData = new FormData(e.target);
+    // 這裡可以處理訂單提交邏輯
+    setOrderSuccess(true);
+    setShowOrderForm(false);
+  };
+
+  const renderContent = () => {
+    switch (currentCategory) {
+      case 'crystal':
+        return <CrystalPage />;
+      case 'accessory':
+        return <AccessoryPage />;
+      case 'helper':
+        return <HelperPage />;
+      default:
+        return <CrystalPage />;
+    }
+  };
+
+  return (
+    <PageLayout>
+      <LeftPanel>
+        <ProductDisplay />
+        <SavedDesignsWrapper>
+          <SavedDesigns />
+          <TotalPrice>
+            總金額: NT$ {calculateTotal()}
+          </TotalPrice>
+          <OrderButton onClick={handleOrder}>
+            下單
+          </OrderButton>
+          
+          {showOrderForm && (
+            <OrderForm onSubmit={handleSubmitOrder}>
+              <Input 
+                name="name" 
+                placeholder="姓名" 
+                required 
+              />
+              <Input 
+                name="email" 
+                type="email" 
+                placeholder="Email" 
+                required 
+              />
+              <TextArea 
+                name="address" 
+                placeholder="送貨地址" 
+                required 
+              />
+              <OrderButton type="submit">
+                確認送出
+              </OrderButton>
+            </OrderForm>
+          )}
+          
+          {orderSuccess && (
+            <div style={{ 
+              color: '#4CAF50', 
+              textAlign: 'center', 
+              marginTop: '10px' 
+            }}>
+              訂購成功！
+            </div>
+          )}
+        </SavedDesignsWrapper>
+      </LeftPanel>
+      <RightPanel>
+        <CategoryTabs 
+          currentCategory={currentCategory} 
+          onCategoryChange={setCurrentCategory} 
+        />
+        {renderContent()}
+      </RightPanel>
+    </PageLayout>
+  );
+};
+
+export default MainPage; 
