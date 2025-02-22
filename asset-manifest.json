@@ -1,16 +1,17 @@
 {
   "files": {
-    "main.css": "/bracelet-designer/static/css/main.e6c13ad2.css",
-    "main.js": "/bracelet-designer/static/js/main.85ec247c.js",
-    "static/js/453.363571e7.chunk.js": "/bracelet-designer/static/js/453.363571e7.chunk.js",
-    "static/media/cat-pearl.png": "/bracelet-designer/static/media/cat-pearl.8765430c38d6c50a203e.png",
-    "index.html": "/bracelet-designer/index.html",
-    "main.e6c13ad2.css.map": "/bracelet-designer/static/css/main.e6c13ad2.css.map",
-    "main.85ec247c.js.map": "/bracelet-designer/static/js/main.85ec247c.js.map",
-    "453.363571e7.chunk.js.map": "/bracelet-designer/static/js/453.363571e7.chunk.js.map"
+    "main.css": "/kabilehuo/crystal-jewelry/static/css/main.e6c13ad2.css",
+    "main.js": "/kabilehuo/crystal-jewelry/static/js/main.8d86ad18.js",
+    "static/js/453.363571e7.chunk.js": "/kabilehuo/crystal-jewelry/static/js/453.363571e7.chunk.js",
+    "static/media/cat-pearl.png": "/kabilehuo/crystal-jewelry/static/media/cat-pearl.8765430c38d6c50a203e.png",
+    "static/media/Logo.jpg": "/kabilehuo/crystal-jewelry/static/media/Logo.a8fedd51f375bc0c76b4.jpg",
+    "index.html": "/kabilehuo/crystal-jewelry/index.html",
+    "main.e6c13ad2.css.map": "/kabilehuo/crystal-jewelry/static/css/main.e6c13ad2.css.map",
+    "main.8d86ad18.js.map": "/kabilehuo/crystal-jewelry/static/js/main.8d86ad18.js.map",
+    "453.363571e7.chunk.js.map": "/kabilehuo/crystal-jewelry/static/js/453.363571e7.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.e6c13ad2.css",
-    "static/js/main.85ec247c.js"
+    "static/js/main.8d86ad18.js"
   ]
 }
