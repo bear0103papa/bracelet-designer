@@ -66,7 +66,7 @@ const SizeSelector = () => {
 
   const handleCustomSize = (e) => {
     const valueInCm = parseFloat(e.target.value);
-    if (!isNaN(valueInCm) && valueInCm >= 0 && valueInCm <= 30) {
+    if (!isNaN(valueInCm) && valueInCm >= 8 && valueInCm <= 30) {
       handleSizeChange(valueInCm);
     }
   };
@@ -87,7 +87,7 @@ const SizeSelector = () => {
         <CustomInput
           type="number"
           step="0.1"
-          min="0"
+          min="8"
           max="30"
           value={currentSizeInCm}
           onChange={handleCustomSize}
