@@ -14,17 +14,16 @@ const DisplayContainer = styled.div`
 const ImageContainer = styled.div`
   position: relative;
   width: 100%;
-  height: 300px;
+  height: 500px;
 `;
 
 const BraceletContainer = styled.div`
   position: absolute;
-  top: 50%;
+  top: calc(50% + 40px);
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 200px;
-  height: 200px;
-  border: 1px dashed #ccc;
+  width: 250px;
+  height: 250px;
   border-radius: 50%;
   transition: all 0.3s ease;
 `;
@@ -38,10 +37,9 @@ const CrystalBead = styled.img`
   top: 50%;
   transform-origin: center;
   transform: 
-    translate(-20px, 80px)
+    translate(-50%, -50%)
     rotate(${props => props.angle}deg)
     translateX(${props => props.radius}px);
-  cursor: ${props => props.moveMode ? 'pointer' : 'grab'};
   transition: all 0.3s ease;
   z-index: ${props => props.moveMode ? (props.isSource ? 3 : 2) : 1};
   pointer-events: auto;
@@ -60,17 +58,6 @@ const CrystalBead = styled.img`
     filter: brightness(1.1);
   }
 `;
-
-const SizeDisplay = styled.div`
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  background: rgba(255, 255, 255, 0.9);
-  padding: 5px 10px;
-  border-radius: 4px;
-  font-size: 14px;
-`;
-
 const TrashIcon = styled.div`
   position: absolute;
   bottom: -20px;
@@ -143,65 +130,9 @@ const MiniCrystalBead = styled.img`
   object-fit: cover;
 `;
 
-const SizeSelectorContainer = styled.div`
-  margin-bottom: 20px;
-`;
-
-const Title = styled.h3`
-  margin-bottom: 12px;
-  font-size: 16px;
-  color: #333;
-  display: flex;
-  align-items: center;
-  gap: 4px;
-`;
-
-const SizeOptions = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-`;
-
-const SizeButton = styled.button`
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  background: ${props => props.active ? '#D4C4B4' : '#fff'};
-  color: ${props => props.active ? '#fff' : '#333'};
-  border: 1px solid ${props => props.active ? '#D4C4B4' : '#ddd'};
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.3s ease;
-  
-  &:hover {
-    background: ${props => props.active ? '#333' : '#e0e0e0'};
-  }
-`;
-
-const CustomInput = styled.input`
-  width: 80px;
-  padding: 8px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  text-align: center;
-`;
-
-const Unit = styled.span`
-  margin-left: 4px;
-  color: #666;
-  font-size: 14px;
-`;
-
-const ErrorMessage = styled.div`
-  color: #ff4444;
-  font-size: 14px;
-  margin-top: 8px;
-`;
-
 const ClearAllButton = styled.button`
   position: absolute;
-  top: 10px;
+  top: 90px;
   left: 10px;
   padding: 8px 16px;
   background: rgba(255, 0, 0, 0.1);
@@ -210,89 +141,60 @@ const ClearAllButton = styled.button`
   color: #ff4444;
   cursor: pointer;
   transition: all 0.3s ease;
+  display: block;
   
   &:hover {
     background: rgba(255, 0, 0, 0.2);
   }
-`;
-
-const MobileActionMenu = styled.div`
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  background: white;
-  border-radius: 16px 16px 0 0;
-  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
-  padding: 20px;
-  transform: translateY(${props => props.show ? '0' : '100%'});
-  transition: transform 0.3s ease;
-  z-index: 1000;
-`;
-
-const ActionButton = styled.button`
-  width: 100%;
-  padding: 16px;
-  margin-bottom: 8px;
-  border: none;
-  border-radius: 8px;
-  background: ${props => props.variant === 'danger' ? '#ffebee' : '#f5f5f5'};
-  color: ${props => props.variant === 'danger' ? '#ff4444' : '#333'};
-  font-size: 16px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-`;
-
-const MoveIndicator = styled.div`
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: ${props => props.size}px;
-  height: ${props => props.size}px;
-  transform: translate(-50%, -50%) 
-    rotate(${props => props.angle}deg)
-    translateX(${props => props.radius}px);
-  border: 3px dashed #4a90e2;
-  border-radius: 50%;
-  animation: pulse 1.5s infinite;
-  pointer-events: none;
-  z-index: 2;
-
-  @keyframes pulse {
-    0% { opacity: 0.8; }
-    50% { opacity: 0.4; }
-    100% { opacity: 0.8; }
+  
+  @media (max-width: 767px) {
+    display: none;
   }
 `;
 
-const MovePrompt = styled.div`
-  position: fixed;
-  top: 20px;
+const MobileActionMenu = styled.div`
+  position: absolute;
+  bottom: 20px;
   left: 50%;
   transform: translateX(-50%);
-  background: rgba(74, 144, 226, 0.9);
-  color: white;
-  padding: 12px 24px;
-  border-radius: 24px;
-  z-index: 1000;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+  z-index: 1001;
+  width: 80%;
+  max-width: 300px;
+  overflow: hidden;
+`;
+
+const MobileActionButton = styled.button`
+  width: 100%;
+  padding: 15px;
+  border: none;
+  background: white;
+  text-align: center;
+  font-size: 16px;
+  border-bottom: 1px solid #eee;
+  
+  &:last-child {
+    border-bottom: none;
+  }
+  
+  &:active {
+    background: #f5f5f5;
+  }
 `;
 
 const Backdrop = styled.div`
+  display: ${props => props.show ? 'block' : 'none'};
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
   background: rgba(0, 0, 0, 0.5);
-  opacity: ${props => props.show ? 1 : 0};
-  visibility: ${props => props.show ? 'visible' : 'hidden'};
-  transition: all 0.3s ease;
-  z-index: 999;
+  z-index: 1000;
 `;
 
-// 添加 Modal 相關樣式
 const Modal = styled.div`
   position: fixed;
   top: 0;
@@ -303,23 +205,32 @@ const Modal = styled.div`
   display: ${props => props.show ? 'flex' : 'none'};
   justify-content: center;
   align-items: center;
-  z-index: 1000;
+  z-index: 1100;
+  
+  @media (max-width: 767px) {
+    align-items: flex-start;
+    padding-top: 20%;
+  }
 `;
 
 const ModalContent = styled.div`
   background: white;
   padding: 20px;
-  border-radius: 12px;
-  max-width: 500px;
+  border-radius: 8px;
+  position: relative;
   width: 90%;
+  max-width: 500px;
   max-height: 80vh;
   overflow-y: auto;
-  position: relative;
+  
+  @media (max-width: 767px) {
+    max-height: 70vh;
+  }
 `;
 
 const CloseButton = styled.button`
   position: absolute;
-  top: 10px;
+  top: 100px;
   right: 10px;
   background: none;
   border: none;
@@ -332,8 +243,206 @@ const CloseButton = styled.button`
   }
 `;
 
+const SaveButtonContainer = styled.div`
+  position: absolute;
+  top: 90px;
+  right: 10px;
+  z-index: 10;
+  
+  @media (min-width: 768px) {
+    top: 95px;
+    right: 15px;
+  }
+`;
+
+const SaveButton = styled.button`
+  background: transparent;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  color: #666;
+  transition: all 0.3s ease;
+  position: relative;
+  
+  &:hover {
+    transform: scale(1.1);
+    color: #ff6b6b;
+  }
+  
+  &:hover::after {
+    content: "儲存樣式";
+    position: absolute;
+    bottom: -30px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0, 0, 0, 0.7);
+    color: white;
+    padding: 5px 10px;
+    border-radius: 4px;
+    font-size: 14px;
+    white-space: nowrap;
+  }
+  
+  @media (min-width: 768px) {
+    font-size: 28px; /* 在桌面版上稍微大一點 */
+  }
+`;
+
+// 添加手圍尺寸選擇器相關樣式，使用不同的變數名稱避免衝突
+const ProductSizeContainer = styled.div`
+  margin: 15px 0;
+  text-align: center;
+`;
+
+const ProductSizeTitle = styled.h3`
+  font-size: 16px;
+  color: #333;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
+
+const ProductUnitLabel = styled.span`
+  font-size: 14px;
+  color: #666;
+  margin-left: 5px;
+  font-weight: normal;
+`;
+
+const ProductSizeOptions = styled.div`
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 10px;
+`;
+
+const ProductSizeButton = styled.button`
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  background: ${props => props.active ? '#666' : '#fff'};
+  color: ${props => props.active ? '#fff' : '#333'};
+  border: 1px solid #ddd;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  font-size: 16px;
+  
+  &:hover {
+    background: ${props => props.active ? '#666' : '#f0f0f0'};
+  }
+`;
+
+const ProductCustomButton = styled(ProductSizeButton)`
+  width: 70px;
+  height: 45px;
+  border-radius: 22.5px;
+  padding: 0 15px;
+`;
+
+const ProductCustomInputContainer = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 10px;
+`;
+
+const ProductCustomInput = styled.input`
+  width: 80px;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  text-align: center;
+  font-size: 16px;
+`;
+
+const ProductUnit = styled.span`
+  margin-left: 8px;
+  color: #666;
+  font-size: 14px;
+`;
+
+const RemainingLength = styled.div`
+  text-align: center;
+  margin-top: 10px;
+  font-size: 14px;
+  color: ${props => props.isLow ? '#ff6b6b' : '#666'};
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
+
+const HeartIcon = styled.span`
+  color: #ff6b6b;
+  margin-left: 5px;
+`;
+
+const MoveModeTip = styled.div`
+  position: absolute;
+  top: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(74, 144, 226, 0.9);
+  color: white;
+  padding: 8px 12px;
+  border-radius: 20px;
+  font-size: 14px;
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`;
+
+const CancelMoveButton = styled.button`
+  background: white;
+  color: #4a90e2;
+  border: none;
+  border-radius: 15px;
+  padding: 4px 10px;
+  margin-top: 5px;
+  font-size: 12px;
+  cursor: pointer;
+  
+  &:hover {
+    background: #f0f0f0;
+  }
+`;
+
+const ModalActions = styled.div`
+  display: flex;
+  justify-content: space-around;
+  margin-top: 20px;
+  padding-top: 15px;
+  border-top: 1px solid #eee;
+`;
+
+const ActionButton = styled.button`
+  background: #4a90e2;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 8px 16px;
+  cursor: pointer;
+  font-size: 14px;
+  
+  &:hover {
+    background: #3a80d2;
+  }
+  
+  &:nth-child(2) {
+    background: #ff6b6b;
+    
+    &:hover {
+      background: #ff5252;
+    }
+  }
+`;
+
 const ProductDisplay = ({ onCrystalClick }) => {
-  const { currentDesign, setCurrentDesign, setSelectedCrystal } = useDesign();
+  const { currentDesign, setCurrentDesign, setSelectedCrystal, savedDesigns, setSavedDesigns } = useDesign();
   const [beadPositions, setBeadPositions] = useState([]);
   const [displaySize, setDisplaySize] = useState(200);
   const [remainingLength, setRemainingLength] = useState(currentDesign.size);
@@ -342,7 +451,7 @@ const ProductDisplay = ({ onCrystalClick }) => {
   const [isDragging, setIsDragging] = useState(false);
   const [dragStartTime, setDragStartTime] = useState(0);
   const [showFloating, setShowFloating] = useState(false);
-  const sizesInCm = [14.0, 15.0, 16.0, 17.0, 18.0];
+  const sizesInCm = [14, 15, 16, 17, 18];
   const currentSizeInCm = currentDesign.size / 10;
   const [inputValue, setInputValue] = useState(currentSizeInCm.toString());
   const [sizeError, setSizeError] = useState('');
@@ -352,15 +461,15 @@ const ProductDisplay = ({ onCrystalClick }) => {
   const [moveMode, setMoveMode] = useState(false);
   const [sourceIndex, setSourceIndex] = useState(null);
   const [showModal, setShowModal] = useState(false);
-
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 767);
+  const [showCustomInput, setShowCustomInput] = useState(false);
+  const [customValue, setCustomValue] = useState('');
 
   useEffect(() => {
     if (currentDesign.crystals.length > 0) {
       const wristCircumference = currentDesign.size;
-      const FIXED_CIRCLE_SIZE = 200;
-      const BRACELET_RADIUS = FIXED_CIRCLE_SIZE / 2;
-      const MM_TO_PIXEL = 3.5;
-      const FIXED_GAP_ANGLE = 20; // 水晶之間的固定間距角度
+      const BRACELET_RADIUS = 120; // 增加手環半徑
+      const MM_TO_PIXEL = 5;
       
       // 計算實際使用的長度
       const usedLength = currentDesign.crystals.reduce((sum, crystal) => {
@@ -372,34 +481,26 @@ const ProductDisplay = ({ onCrystalClick }) => {
       setRemainingLength(remaining);
       setIsSpaceFull(remaining <= 0);
 
-      // 計算總共需要的角度（包含間距）
-      const totalGapAngles = FIXED_GAP_ANGLE * currentDesign.crystals.length;
-      const availableAngleForBeads = 360 - totalGapAngles;
-
-      // 計算每毫米對應的角度（不包含間距）
-      const anglePerMm = availableAngleForBeads / wristCircumference;
-
-      // 計算位置
-      let currentAngle = 0;
+      // 計算每個水晶的位置
+      let accumulatedLength = 0;
       const positions = currentDesign.crystals.map((crystal, index) => {
-        // 計算這個水晶需要的角度
-        const beadAngle = crystal.size * anglePerMm;
+        // 計算每個水晶在手環上的位置
+        accumulatedLength += crystal.size / 2; // 加上當前水晶的一半尺寸
         
-        // 設定水晶位置（加上間距）
-        const angle = currentAngle;
+        // 計算角度 (0度在頂部，順時針增加)
+        const angle = (accumulatedLength / wristCircumference) * 360;
         
-        // 更新下一個水晶的起始角度（加上本水晶的角度和間距）
-        currentAngle = currentAngle + beadAngle + FIXED_GAP_ANGLE;
-
         // 計算顯示尺寸
         const displaySize = crystal.size * MM_TO_PIXEL;
-
+        
+        // 加上當前水晶的另一半尺寸，為下一個水晶做準備
+        accumulatedLength += crystal.size / 2;
+        
         return {
           ...crystal,
           angle,
-          radius: BRACELET_RADIUS,
-          displaySize,
-          arcAngle: beadAngle
+          radius: BRACELET_RADIUS, // 固定半徑
+          displaySize
         };
       });
       
@@ -425,35 +526,66 @@ const ProductDisplay = ({ onCrystalClick }) => {
     setInputValue(currentSizeInCm.toString());
   }, [currentSizeInCm]);
 
-  const handleBeadClick = (bead, index, e) => {
-    e.preventDefault();
+  // 監聽窗口大小變化
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 767);
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  const handleBeadClick = (bead, index, event) => {
+    // 如果事件對象存在，則阻止默認行為
+    if (event) {
+      event.preventDefault();
+    }
     
+    // 如果處於移動模式
     if (moveMode) {
-      if (sourceIndex === null) {
-        setSourceIndex(index);
-      } else if (index !== sourceIndex) {
+      // 如果已經選擇了源水晶（即 sourceIndex 不為 null）
+      if (sourceIndex !== null) {
+        // 移動水晶
         const newCrystals = [...currentDesign.crystals];
         const temp = newCrystals[sourceIndex];
         newCrystals[sourceIndex] = newCrystals[index];
         newCrystals[index] = temp;
-        setCurrentDesign(prev => ({
-          ...prev,
+        
+        // 更新設計
+        setCurrentDesign({
+          ...currentDesign,
           crystals: newCrystals
-        }));
-        setMoveMode(false);
+        });
+        
+        // 重置移動模式
         setSourceIndex(null);
+        setMoveMode(false);
+        return;
       }
+      
+      // 如果還沒有選擇源水晶
+      setSourceIndex(index);
       return;
     }
-
-    if (window.innerWidth > 768) {
-      console.log('Setting selected crystal:', bead);
-      setSelectedCrystal(bead);
-      setShowModal(true);
-    } else {
+    
+    // 檢查是否為移動設備
+    if (isMobile) {
+      // 在移動設備上，選擇水晶並顯示操作菜單
       setSelectedBeadIndex(index);
       setShowMobileMenu(true);
+      return;
     }
+    
+    // 桌面版的原有邏輯（非移動模式）
+    // 設置選中的水晶索引
+    setSelectedBeadIndex(index);
+    
+    // 設置選中的水晶，用於在 ProductInfo 中顯示
+    setSelectedCrystal(currentDesign.crystals[index]);
+    
+    // 顯示模態框
+    setShowModal(true);
   };
 
   const handleBeadDragStart = (e, index) => {
@@ -466,48 +598,45 @@ const ProductDisplay = ({ onCrystalClick }) => {
     setIsDragging(false);
   };
 
-  const handleDragOver = (e) => {
-    if (isSpaceFull) {
-      e.preventDefault();
-      e.stopPropagation();
-      return false;
-    }
+  const handleBeadDragOver = (e, index) => {
     e.preventDefault();
-    e.dataTransfer.dropEffect = 'move';
+    if (moveMode && index !== sourceIndex) {
+      setSelectedBeadIndex(index);
+    }
   };
 
-  const handleDrop = (e) => {
+  const handleBeadDrop = (e, index) => {
     e.preventDefault();
     
+    if (moveMode && sourceIndex !== null && index !== sourceIndex) {
+      // 交換位置
+      const newCrystals = [...currentDesign.crystals];
+      const temp = newCrystals[sourceIndex];
+      newCrystals[sourceIndex] = newCrystals[index];
+      newCrystals[index] = temp;
+
+      setCurrentDesign(prev => ({
+        ...prev,
+        crystals: newCrystals
+      }));
+      
+      setMoveMode(false);
+      setSourceIndex(null);
+      setSelectedBeadIndex(null);
+      return;
+    }
+    
+    // 處理拖放水晶的邏輯
     const moveBeadIndex = e.dataTransfer.getData('moveBeadIndex');
     if (moveBeadIndex) {
       const fromIndex = parseInt(moveBeadIndex);
       
-      // 計算拖放位置對應的角度
-      const rect = e.currentTarget.getBoundingClientRect();
-      const centerX = rect.left + rect.width / 2;
-      const centerY = rect.top + rect.height / 2;
-      const dropX = e.clientX - centerX;
-      const dropY = e.clientY - centerY;
-      const dropAngle = (Math.atan2(dropY, dropX) * 180 / Math.PI + 360) % 360;
-
-      // 找出最接近拖放角度的水晶位置
-      let toIndex = 0;
-      let minAngleDiff = 360;
-      beadPositions.forEach((bead, index) => {
-        const angleDiff = Math.abs(bead.angle - dropAngle);
-        if (angleDiff < minAngleDiff) {
-          minAngleDiff = angleDiff;
-          toIndex = index;
-        }
-      });
-
-      // 交換位置
-      if (fromIndex !== toIndex) {
+      // 直接交換位置，不再計算角度
+      if (fromIndex !== index) {
         const newCrystals = [...currentDesign.crystals];
         const temp = newCrystals[fromIndex];
-        newCrystals[fromIndex] = newCrystals[toIndex];
-        newCrystals[toIndex] = temp;
+        newCrystals[fromIndex] = newCrystals[index];
+        newCrystals[index] = temp;
 
         setCurrentDesign(prev => ({
           ...prev,
@@ -516,20 +645,6 @@ const ProductDisplay = ({ onCrystalClick }) => {
       }
       
       setIsDragging(false);
-      return;
-    }
-
-    // 處理從水晶選擇區拖入新水晶的情況
-    try {
-      const crystal = JSON.parse(e.dataTransfer.getData('crystal'));
-      if (crystal && remainingLength >= crystal.size) {
-        setCurrentDesign(prev => ({
-          ...prev,
-          crystals: [...prev.crystals, crystal]
-        }));
-      }
-    } catch (error) {
-      console.log('非有效的拖放數據');
     }
   };
 
@@ -541,7 +656,7 @@ const ProductDisplay = ({ onCrystalClick }) => {
     setSelectedCrystal(null);
   };
 
-  const handleTrashDragOver = (e) => {
+  const handleTrashDragEnter = (e) => {
     e.preventDefault();
     e.currentTarget.classList.add('drag-over');
   };
@@ -595,21 +710,20 @@ const ProductDisplay = ({ onCrystalClick }) => {
 
   const handleCustomSize = (e) => {
     const value = e.target.value;
-    setInputValue(value);
-    
-    const valueInCm = parseFloat(value);
-    if (value === '') {
-      setSizeError('');
-    } else if (isNaN(valueInCm)) {
-      setSizeError('請輸入有效的數字');
-    } else if (valueInCm < 8) {
-      setSizeError('手圍尺寸不得小於 8 cm');
-    } else if (valueInCm > 30) {
-      setSizeError('手圍尺寸不得大於 30 cm');
-    } else {
-      setSizeError('');
+    setCustomValue(value);
+  };
+
+  const handleCustomSubmit = () => {
+    const valueInCm = parseFloat(customValue);
+    if (!isNaN(valueInCm) && valueInCm >= 8 && valueInCm <= 30) {
       handleSizeChange(valueInCm);
     }
+    setShowCustomInput(false);
+  };
+
+  const handleCustomClick = () => {
+    setShowCustomInput(true);
+    setCustomValue(currentSizeInCm.toString());
   };
 
   const handleClearAll = () => {
@@ -622,24 +736,32 @@ const ProductDisplay = ({ onCrystalClick }) => {
   };
 
   const handleMobileActionClick = (action) => {
-    setShowMobileMenu(false);
-    
     switch(action) {
       case 'info':
-        // 設置選中的水晶並顯示 Modal
+        // 顯示水晶詳情
+        // 設置選中的水晶，用於在 ProductInfo 中顯示
         setSelectedCrystal(currentDesign.crystals[selectedBeadIndex]);
         setShowModal(true);
         break;
       case 'move':
+        // 進入移動模式
         setMoveMode(true);
         setSourceIndex(selectedBeadIndex);
-        break;
+        setShowMobileMenu(false); // 關閉菜單，但保持移動模式
+        return; // 提前返回，不執行下面的 setShowMobileMenu(false)
       case 'delete':
+        // 刪除選中的水晶
         handleBeadRemove(selectedBeadIndex);
+        break;
+      case 'clearAll':
+        // 清除所有水晶
+        handleClearAll();
         break;
       default:
         break;
     }
+    // 關閉操作菜單
+    setShowMobileMenu(false);
   };
 
   const handleCancelMove = () => {
@@ -648,92 +770,135 @@ const ProductDisplay = ({ onCrystalClick }) => {
     setSelectedBeadIndex(null);
   };
 
+  const handleSave = () => {
+    if (currentDesign.crystals.length > 0) {
+      // 儲存到 localStorage
+      const newDesign = {
+        ...currentDesign,
+        id: Date.now(),
+        timestamp: new Date()
+      };
+      
+      const updatedDesigns = [...savedDesigns, newDesign];
+      setSavedDesigns(updatedDesigns);
+      localStorage.setItem('savedDesigns', JSON.stringify(updatedDesigns));
+    }
+  };
+
+  const handleMoveBeadClick = () => {
+    // 進入移動模式
+    setMoveMode(true);
+    // 關閉模態框
+    setShowModal(false);
+  };
+
   return (
     <>
       <DisplayContainer>
-        <SizeSelectorContainer>
-          <Title>
-            手圍尺寸
-            <Unit>cm</Unit>
-          </Title>
-          <SizeOptions>
-            {sizesInCm.map(size => (
-              <SizeButton
-                key={size}
-                active={currentSizeInCm === size}
-                onClick={() => handleSizeChange(size)}
-              >
-                {size}
-              </SizeButton>
-            ))}
-            <CustomInput
-              type="number"
-              step="0.1"
-              min="0"
-              max="30"
-              value={inputValue}
-              onChange={handleCustomSize}
-              placeholder="自訂"
-            />
-          </SizeOptions>
-          {sizeError && <ErrorMessage>{sizeError}</ErrorMessage>}
-        </SizeSelectorContainer>
-        
         <ImageContainer>
-          <SizeDisplay style={{ 
-            color: isSpaceFull ? '#ff4444' : 'inherit' 
-          }}>
-            剩餘：{(remainingLength / 10).toFixed(1)} cm
-          </SizeDisplay>
-          {beadPositions.length > 0 && (
-            <ClearAllButton onClick={handleClearAll}>
-              清除全部
-            </ClearAllButton>
-          )}
+          <SaveButtonContainer>
+            <SaveButton onClick={handleSave}>
+              ♡
+            </SaveButton>
+          </SaveButtonContainer>
+          <ClearAllButton onClick={handleClearAll}>
+            清除全部
+          </ClearAllButton>
+          
+          {/* 添加移動模式提示和取消按鈕 */}
           {moveMode && (
-            <MovePrompt>
-              {sourceIndex === null ? '請選擇要移動的水晶' : '請選擇目標位置'}
-            </MovePrompt>
+            <MoveModeTip>
+              請選擇要交換位置的水晶
+              <CancelMoveButton onClick={handleCancelMove}>
+                取消移動
+              </CancelMoveButton>
+            </MoveModeTip>
           )}
-          <BraceletContainer 
-            onDragOver={isSpaceFull ? null : handleDragOver}
-            onDrop={isSpaceFull ? null : handleDrop}
-            style={{
-              cursor: isSpaceFull ? 'not-allowed' : 'default',
-              pointerEvents: isSpaceFull ? 'none' : 'auto'
-            }}
-          >
-            {beadPositions.map((bead, index) => (
-              <div key={`${bead.id}-${index}`} style={{ position: 'relative' }}>
-                <CrystalBead
-                  src={bead.image}
-                  alt={bead.name}
-                  displaySize={bead.displaySize}
-                  angle={bead.angle}
-                  radius={bead.radius}
-                  onClick={(e) => handleBeadClick(bead, index, e)}
-                  draggable={!moveMode}
-                  onDragStart={(e) => handleBeadDragStart(e, index)}
-                  onDragEnd={handleBeadDragEnd}
-                  moveMode={moveMode}
-                  isSource={moveMode && index === sourceIndex}
-                  isTarget={moveMode && index !== sourceIndex}
-                  style={{
-                    cursor: moveMode ? (
-                      index === sourceIndex ? 'default' : 'pointer'
-                    ) : 'grab',
-                    opacity: moveMode ? (
-                      index === sourceIndex ? 1 : 0.7
-                    ) : 1
-                  }}
-                />
-              </div>
+          
+          <BraceletContainer>
+            {/* 添加一個圓形背景，模擬手環 */}
+            <svg width="250" height="250" style={{ position: 'absolute', top: 0, left: 0 }}>
+              <circle 
+                cx="125" 
+                cy="125" 
+                r="120" 
+                fill="none" 
+                stroke="#e0e0e0" 
+                strokeWidth="1" 
+                strokeDasharray="5,5" 
+              />
+            </svg>
+            
+            {beadPositions.map((position, index) => (
+              <CrystalBead
+                key={`${position.id}-${index}`}
+                src={position.image}
+                alt={position.name}
+                displaySize={position.displaySize}
+                angle={position.angle}
+                radius={position.radius}
+                draggable={!moveMode}
+                moveMode={moveMode}
+                isSource={moveMode && index === sourceIndex}
+                isTarget={moveMode && index === selectedBeadIndex}
+                onClick={(e) => handleBeadClick(position, index, e)}
+                onDragStart={(e) => handleBeadDragStart(e, index)}
+                onDragEnd={handleBeadDragEnd}
+                onDragOver={(e) => handleBeadDragOver(e, index)}
+                onDrop={(e) => handleBeadDrop(e, index)}
+                onError={(e) => {
+                  e.target.src = '/assets/placeholder.jpg';
+                }}
+              />
             ))}
           </BraceletContainer>
           
-          <TrashIcon
-            show={isDragging}
-            onDragOver={handleTrashDragOver}
+          {/* 手圍尺寸選擇器 */}
+          <ProductSizeContainer>
+            <ProductSizeTitle>
+              手圍尺寸
+              <ProductUnitLabel>(cm)</ProductUnitLabel>
+            </ProductSizeTitle>
+            <ProductSizeOptions>
+              {sizesInCm.map(size => (
+                <ProductSizeButton
+                  key={size}
+                  active={currentSizeInCm === size}
+                  onClick={() => handleSizeChange(size)}
+                >
+                  {size}
+                </ProductSizeButton>
+              ))}
+              
+              <ProductCustomButton onClick={handleCustomClick}>
+                自訂
+              </ProductCustomButton>
+            </ProductSizeOptions>
+            
+            {showCustomInput && (
+              <ProductCustomInputContainer>
+                <ProductCustomInput
+                  type="number"
+                  step="0.1"
+                  min="8"
+                  max="30"
+                  value={customValue}
+                  onChange={handleCustomSize}
+                  onBlur={handleCustomSubmit}
+                  autoFocus
+                />
+                <ProductUnit>cm</ProductUnit>
+              </ProductCustomInputContainer>
+            )}
+            
+            <RemainingLength isLow={remainingLength < 10}>
+              剩餘：{(remainingLength / 10).toFixed(1)}
+            </RemainingLength>
+          </ProductSizeContainer>
+          
+          <TrashIcon 
+            show={isDragging} 
+            onDragEnter={handleTrashDragEnter}
             onDragLeave={handleTrashDragLeave}
             onDrop={handleTrashDrop}
           >
@@ -742,13 +907,14 @@ const ProductDisplay = ({ onCrystalClick }) => {
         </ImageContainer>
       </DisplayContainer>
       
-      <FloatingPreview show={showFloating}>
+      {/* 桌面版的浮動預覽 */}
+      <FloatingPreview show={showFloating && !isMobile}>
         <MiniPreviewContainer>
           {beadPositions.map((bead, index) => {
             const position = calculateMiniBeadPosition(
               index,
               beadPositions.length,
-              30 // 調整這個值來改變水晶到中心的距離
+              30
             );
             
             return (
@@ -757,10 +923,9 @@ const ProductDisplay = ({ onCrystalClick }) => {
                 src={bead.image}
                 displaySize={bead.displaySize}
                 angle={position.angle}
-                radius={30} // 固定半徑
+                radius={30}
                 alt={bead.name}
                 draggable={false}
-                onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
                 style={{
                   transform: `
                     translate(-50%, -50%)
@@ -774,31 +939,47 @@ const ProductDisplay = ({ onCrystalClick }) => {
         </MiniPreviewContainer>
       </FloatingPreview>
       
-      <Backdrop show={showMobileMenu} onClick={handleCancelMove} />
-      <MobileActionMenu show={showMobileMenu}>
-        <ActionButton 
-          onClick={() => handleMobileActionClick('info')}
-        >
-          查看資訊
-        </ActionButton>
-        <ActionButton 
-          onClick={() => handleMobileActionClick('move')}
-        >
-          移動位置
-        </ActionButton>
-        <ActionButton 
-          variant="danger"
-          onClick={() => handleMobileActionClick('delete')}
-        >
-          刪除水晶
-        </ActionButton>
-      </MobileActionMenu>
+      {/* 移動設備操作菜單 */}
+      {showMobileMenu && selectedBeadIndex !== null && !moveMode && (
+        <MobileActionMenu>
+          <MobileActionButton onClick={() => handleMobileActionClick('info')}>
+            顯示資訊
+          </MobileActionButton>
+          <MobileActionButton onClick={() => handleMobileActionClick('move')}>
+            移動位置
+          </MobileActionButton>
+          <MobileActionButton onClick={() => handleMobileActionClick('delete')}>
+            刪除水晶
+          </MobileActionButton>
+          <MobileActionButton onClick={() => handleMobileActionClick('clearAll')}>
+            全部刪除
+          </MobileActionButton>
+          <MobileActionButton onClick={() => setShowMobileMenu(false)}>
+            取消
+          </MobileActionButton>
+        </MobileActionMenu>
+      )}
+      
+      {/* 背景遮罩 */}
+      <Backdrop show={showMobileMenu && !moveMode} onClick={() => setShowMobileMenu(false)} />
 
-      {/* 添加 Modal */}
-      <Modal show={showModal} onClick={() => setShowModal(false)}>
+      <Modal show={showModal}>
         <ModalContent onClick={e => e.stopPropagation()}>
           <CloseButton onClick={() => setShowModal(false)}>×</CloseButton>
           <ProductInfo />
+          
+          {/* 添加移動按鈕 */}
+          <ModalActions>
+            <ActionButton onClick={handleMoveBeadClick}>
+              移動位置
+            </ActionButton>
+            <ActionButton onClick={() => {
+              handleBeadRemove(selectedBeadIndex);
+              setShowModal(false);
+            }}>
+              刪除水晶
+            </ActionButton>
+          </ModalActions>
         </ModalContent>
       </Modal>
     </>

@@ -2,7 +2,10 @@ import styled from 'styled-components';
 import { useDesign } from '../../contexts/DesignContext';
 
 const SavedContainer = styled.div`
-  margin-top: 20px;
+  padding: 16px;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 `;
 
 const Title = styled.h3`
@@ -63,19 +66,6 @@ const PreviewBead = styled.img`
   object-fit: cover;
 `;
 
-const SaveButton = styled.button`
-  width: 100%;
-  padding: 10px;
-  background: #333;
-  color: white;
-  border-radius: 4px;
-  margin-bottom: 16px;
-  
-  &:hover {
-    background: #444;
-  }
-`;
-
 const DeleteButton = styled.button`
   position: absolute;
   top: 5px;
@@ -105,21 +95,6 @@ const SavedDesigns = () => {
     savedDesigns = [], 
     setSavedDesigns 
   } = useDesign();
-
-  const handleSave = () => {
-    if (currentDesign.crystals.length > 0) {
-      // 儲存到 localStorage
-      const newDesign = {
-        ...currentDesign,
-        id: Date.now(),
-        timestamp: new Date()
-      };
-      
-      const updatedDesigns = [...savedDesigns, newDesign];
-      setSavedDesigns(updatedDesigns);
-      localStorage.setItem('savedDesigns', JSON.stringify(updatedDesigns));
-    }
-  };
 
   const handleLoad = (design) => {
     setCurrentDesign({
@@ -165,10 +140,6 @@ const SavedDesigns = () => {
 
   return (
     <SavedContainer>
-      <SaveButton onClick={handleSave}>
-        儲存目前設計
-      </SaveButton>
-      
       <Title>已儲存設計</Title>
       <SavedList>
         {(savedDesigns || []).map(design => (

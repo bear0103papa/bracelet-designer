@@ -8,6 +8,8 @@ import { useDesign } from '../contexts/DesignContext';
 import CrystalPage from './CrystalPage';
 import AccessoryPage from './AccessoryPage';
 import HelperPage from './HelperPage';
+import ProfilePage from './ProfilePage';
+import MobileNavigation from '../components/MobileNavigation';
 
 const PageLayout = styled.div`
   display: grid;
@@ -21,6 +23,7 @@ const PageLayout = styled.div`
   
   @media (max-width: 767px) {
     grid-template-columns: 1fr;
+    padding-bottom: 70px; /* 為底部導航留出空間 */
   }
 `;
 
@@ -30,7 +33,7 @@ const LeftPanel = styled.div`
   gap: 20px;
   
   @media (max-width: 767px) {
-    order: 1;
+    display: ${props => props.isMobile && props.currentCategory !== 'profile' ? 'none' : 'flex'};
   }
 `;
 
@@ -42,7 +45,6 @@ const RightPanel = styled.div`
   max-height: calc(100vh - 100px);
   
   @media (max-width: 767px) {
-    order: 2;
     max-height: none;
   }
 `;
@@ -52,6 +54,10 @@ const SavedDesignsWrapper = styled.div`
   border-radius: 12px;
   padding: 20px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  
+  @media (max-width: 767px) {
+    display: none;
+  }
 `;
 
 const OrderSection = styled.div`
@@ -108,6 +114,16 @@ const MainPage = () => {
   const [showOrderForm, setShowOrderForm] = useState(false);
   const [orderSuccess, setOrderSuccess] = useState(false);
   const { currentDesign } = useDesign();
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 767);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 767);
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   const calculateTotal = () => {
     return currentDesign.crystals.reduce((sum, crystal) => sum + crystal.price, 0);
@@ -125,7 +141,26 @@ const MainPage = () => {
     setShowOrderForm(false);
   };
 
-  const renderContent = () => {
+  const renderMobileContent = () => {
+    switch (currentCategory) {
+      case 'profile':
+        return <ProfilePage />;
+      case 'crystal':
+        return (
+          <>
+            <CrystalPage />
+          </>
+        );
+      case 'accessory':
+        return <AccessoryPage />;
+      case 'helper':
+        return <HelperPage />;
+      default:
+        return <CrystalPage />;
+    }
+  };
+
+  const renderDesktopContent = () => {
     switch (currentCategory) {
       case 'crystal':
         return <CrystalPage />;
@@ -139,61 +174,76 @@ const MainPage = () => {
   };
 
   return (
-    <PageLayout>
-      <LeftPanel>
-        <ProductDisplay />
-        <SavedDesignsWrapper>
-          <SavedDesigns />
-          <TotalPrice>
-            總金額: NT$ {calculateTotal()}
-          </TotalPrice>
-          <OrderButton onClick={handleOrder}>
-            下單
-          </OrderButton>
-          
-          {showOrderForm && (
-            <OrderForm onSubmit={handleSubmitOrder}>
-              <Input 
-                name="name" 
-                placeholder="姓名" 
-                required 
+    <>
+      <PageLayout>
+        <LeftPanel isMobile={isMobile} currentCategory={currentCategory}>
+          <ProductDisplay />
+          <SavedDesignsWrapper>
+            <SavedDesigns />
+            <TotalPrice>
+              總金額: NT$ {calculateTotal()}
+            </TotalPrice>
+            <OrderButton onClick={handleOrder}>
+              下單
+            </OrderButton>
+            
+            {showOrderForm && (
+              <OrderForm onSubmit={handleSubmitOrder}>
+                <Input 
+                  name="name" 
+                  placeholder="姓名" 
+                  required 
+                />
+                <Input 
+                  name="email" 
+                  type="email" 
+                  placeholder="Email" 
+                  required 
+                />
+                <TextArea 
+                  name="address" 
+                  placeholder="送貨地址" 
+                  required 
+                />
+                <OrderButton type="submit">
+                  確認送出
+                </OrderButton>
+              </OrderForm>
+            )}
+            
+            {orderSuccess && (
+              <div style={{ 
+                color: '#4CAF50', 
+                textAlign: 'center', 
+                marginTop: '10px' 
+              }}>
+                訂購成功！
+              </div>
+            )}
+          </SavedDesignsWrapper>
+        </LeftPanel>
+        <RightPanel>
+          {isMobile ? (
+            renderMobileContent()
+          ) : (
+            <>
+              <CategoryTabs 
+                currentCategory={currentCategory} 
+                onCategoryChange={setCurrentCategory} 
               />
-              <Input 
-                name="email" 
-                type="email" 
-                placeholder="Email" 
-                required 
-              />
-              <TextArea 
-                name="address" 
-                placeholder="送貨地址" 
-                required 
-              />
-              <OrderButton type="submit">
-                確認送出
-              </OrderButton>
-            </OrderForm>
+              {renderDesktopContent()}
+            </>
           )}
-          
-          {orderSuccess && (
-            <div style={{ 
-              color: '#4CAF50', 
-              textAlign: 'center', 
-              marginTop: '10px' 
-            }}>
-              訂購成功！
-            </div>
-          )}
-        </SavedDesignsWrapper>
-      </LeftPanel>
-      <RightPanel>
-        <CategoryTabs 
+        </RightPanel>
+      </PageLayout>
+      
+      {isMobile && (
+        <MobileNavigation 
           currentCategory={currentCategory} 
           onCategoryChange={setCurrentCategory} 
         />
-        {renderContent()}
-      </RightPanel>
-    </PageLayout>
+      )}
+    </>
   );
 };
 

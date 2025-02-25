@@ -10,52 +10,6 @@ const TableContainer = styled.div`
   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 `;
 
-const Table = styled.table`
-  width: 100%;
-  border-collapse: collapse;
-`;
-
-const Th = styled.th`
-  background: #f5f5f5;
-  padding: 12px;
-  text-align: left;
-  position: sticky;
-  top: 0;
-`;
-
-const Td = styled.td`
-  padding: 12px;
-  border-bottom: 1px solid #eee;
-`;
-
-const CrystalImage = styled.img`
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  object-fit: cover;
-  cursor: pointer;
-`;
-
-const ViewToggle = styled.div`
-  display: flex;
-  gap: 10px;
-  margin-bottom: 16px;
-`;
-
-const ToggleButton = styled.button`
-  padding: 8px 16px;
-  background: ${props => props.active ? '#4a90e2' : '#fff'};
-  color: ${props => props.active ? '#fff' : '#333'};
-  border: 1px solid #4a90e2;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  
-  &:hover {
-    background: ${props => props.active ? '#357abd' : '#f5f5f5'};
-  }
-`;
-
 const GridView = styled.div`
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
@@ -79,6 +33,14 @@ const CrystalCard = styled.div`
   }
 `;
 
+const CrystalImage = styled.img`
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  object-fit: cover;
+  cursor: pointer;
+`;
+
 const FilterContainer = styled.div`
   display: flex;
   gap: 16px;
@@ -93,9 +55,20 @@ const FilterSelect = styled.select`
   min-width: 120px;
 `;
 
+const CrystalName = styled.div`
+  margin-top: 8px;
+  font-size: 12px;
+  text-align: center;
+`;
+
+const CrystalInfo = styled.div`
+  font-size: 10px;
+  color: #666;
+  text-align: center;
+`;
+
 const CrystalTable = () => {
   const { currentDesign, setCurrentDesign } = useDesign();
-  const [viewMode, setViewMode] = useState('table'); // 'table' or 'grid'
   const [sortField, setSortField] = useState(null);
   const [sortDirection, setSortDirection] = useState('asc');
   const [filters, setFilters] = useState({
@@ -172,21 +145,6 @@ const CrystalTable = () => {
 
   return (
     <>
-      <ViewToggle>
-        <ToggleButton 
-          active={viewMode === 'table'} 
-          onClick={() => setViewMode('table')}
-        >
-          表格檢視
-        </ToggleButton>
-        <ToggleButton 
-          active={viewMode === 'grid'} 
-          onClick={() => setViewMode('grid')}
-        >
-          圖片檢視
-        </ToggleButton>
-      </ViewToggle>
-
       <FilterContainer>
         {Object.entries(filterOptions).map(([key, options]) => (
           <FilterSelect
@@ -204,85 +162,35 @@ const CrystalTable = () => {
         ))}
       </FilterContainer>
 
-      {viewMode === 'table' ? (
-        <TableContainer>
-          <Table>
-            <thead>
-              <tr>
-                <Th>顯示</Th>
-                <Th onClick={() => handleSort('name')}>名稱 {sortField === 'name' && (sortDirection === 'asc' ? '↑' : '↓')}</Th>
-                <Th onClick={() => handleSort('color')}>色系 {sortField === 'color' && (sortDirection === 'asc' ? '↑' : '↓')}</Th>
-                <Th onClick={() => handleSort('size')}>尺寸(MM) {sortField === 'size' && (sortDirection === 'asc' ? '↑' : '↓')}</Th>
-                <Th onClick={() => handleSort('power')}>能量 {sortField === 'power' && (sortDirection === 'asc' ? '↑' : '↓')}</Th>
-                <Th onClick={() => handleSort('price')}>單價(NT$) {sortField === 'price' && (sortDirection === 'asc' ? '↑' : '↓')}</Th>
-              </tr>
-            </thead>
-            <tbody>
-              {filteredAndSortedCrystals.map(crystal => {
-                const remainingSpace = calculateRemainingSpace();
-                const isDisabled = remainingSpace < crystal.size;
-                
-                return (
-                  <tr key={crystal.id}>
-                    <Td>
-                      <CrystalImage
-                        src={crystal.image}
-                        alt={crystal.name}
-                        draggable={!isDisabled}
-                        onDragStart={handleDragStart(crystal)}
-                        onClick={() => handleCrystalClick(crystal)}
-                        onError={(e) => {
-                          e.target.src = '/placeholder.jpg';
-                        }}
-                        style={{
-                          opacity: isDisabled ? 0.5 : 1,
-                          cursor: isDisabled ? 'not-allowed' : 'pointer'
-                        }}
-                      />
-                    </Td>
-                    <Td>{crystal.name}</Td>
-                    <Td>{crystal.color}</Td>
-                    <Td>{crystal.size}</Td>
-                    <Td>{crystal.power}</Td>
-                    <Td>{crystal.price}</Td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </Table>
-        </TableContainer>
-      ) : (
-        <GridView>
-          {filteredAndSortedCrystals.map(crystal => {
-            const remainingSpace = calculateRemainingSpace();
-            const isDisabled = remainingSpace < crystal.size;
-            
-            return (
-              <CrystalCard
-                key={crystal.id}
-                onClick={() => !isDisabled && handleCrystalClick(crystal)}
-                style={{
-                  opacity: isDisabled ? 0.5 : 1,
-                  cursor: isDisabled ? 'not-allowed' : 'pointer'
+      <GridView>
+        {filteredAndSortedCrystals.map(crystal => {
+          const remainingSpace = calculateRemainingSpace();
+          const isDisabled = remainingSpace < crystal.size;
+          
+          return (
+            <CrystalCard
+              key={crystal.id}
+              onClick={() => !isDisabled && handleCrystalClick(crystal)}
+              style={{
+                opacity: isDisabled ? 0.5 : 1,
+                cursor: isDisabled ? 'not-allowed' : 'pointer'
+              }}
+            >
+              <CrystalImage
+                src={crystal.image}
+                alt={crystal.name}
+                draggable={!isDisabled}
+                onDragStart={handleDragStart(crystal)}
+                onError={(e) => {
+                  e.target.src = '/placeholder.jpg';
                 }}
-              >
-                <CrystalImage
-                  src={crystal.image}
-                  alt={crystal.name}
-                  draggable={!isDisabled}
-                  onDragStart={handleDragStart(crystal)}
-                  onError={(e) => {
-                    e.target.src = '/placeholder.jpg';
-                  }}
-                />
-                <div>{crystal.name}</div>
-                <div>{crystal.size}mm</div>
-                <div>NT${crystal.price}</div>
-              </CrystalCard>
-            );
-          })}
-        </GridView>
-      )}
+              />
+              <CrystalName>{crystal.name}</CrystalName>
+              <CrystalInfo>{crystal.color} | {crystal.size}mm | {crystal.price}元</CrystalInfo>
+            </CrystalCard>
+          );
+        })}
+      </GridView>
     </>
   );
 };
