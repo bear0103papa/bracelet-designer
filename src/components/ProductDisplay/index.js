@@ -19,7 +19,7 @@ const ImageContainer = styled.div`
 
 const BraceletContainer = styled.div`
   position: absolute;
-  top: calc(50% + 40px);
+  top: calc(50% + 90px);
   left: 50%;
   transform: translate(-50%, -50%);
   width: 250px;
@@ -469,7 +469,7 @@ const ProductDisplay = ({ onCrystalClick }) => {
     if (currentDesign.crystals.length > 0) {
       const wristCircumference = currentDesign.size;
       const BRACELET_RADIUS = 120; // 增加手環半徑
-      const MM_TO_PIXEL = 5;
+      const MM_TO_PIXEL = 6;
       
       // 計算實際使用的長度
       const usedLength = currentDesign.crystals.reduce((sum, crystal) => {
