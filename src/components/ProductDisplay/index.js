@@ -28,36 +28,76 @@ const BraceletContainer = styled.div`
   transition: all 0.3s ease;
 `;
 
-const CrystalBead = styled.img`
+const ConnectionLine = styled.div`
+  position: absolute;
+  background-color: rgba(255, 255, 255, 0.7);
+  height: 2px;
+  transform-origin: left center;
+  z-index: 0;
+  box-shadow: 0 0 2px rgba(0, 0, 0, 0.2);
+`;
+
+const CrystalBead = styled.div`
   position: absolute;
   width: ${props => props.displaySize}px;
   height: ${props => props.displaySize}px;
-  border-radius: 50%;
   left: 50%;
   top: 50%;
   transform-origin: center;
   transform: 
     translate(-50%, -50%)
     rotate(${props => props.angle}deg)
-    translateX(${props => props.radius}px);
+    translateX(${props => props.radius}px)
+    rotate(-${props => props.angle}deg);
   transition: all 0.3s ease;
-  z-index: ${props => props.moveMode ? (props.isSource ? 3 : 2) : 1};
+  z-index: ${props => props.moveMode ? (props.isSource ? 3 : 2) : (props.size > 10 ? 2 : 1)};
   pointer-events: auto;
+  border-radius: 50%;
+  overflow: hidden;
+  
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 40%;
+    border-radius: 50% 50% 0 0 / 100% 100% 0 0;
+    pointer-events: none;
+  }
   
   ${props => props.moveMode && `
     filter: brightness(${props.isSource ? '1.2' : props.isTarget ? '1' : '0.7'});
     transform: translate(-50%, -50%)
       rotate(${props.angle}deg)
       translateX(${props.radius}px)
+      rotate(-${props.angle}deg)
       scale(${props.isSource || props.isTarget ? '1.1' : '1'});
-    border: ${props.isTarget ? '2px solid #4a90e2' : 'none'};
+    ${props.isTarget ? 'outline: 2px solid #4a90e2;' : ''}
   `}
-
-  &:hover {
-    z-index: 2;
-    filter: brightness(1.1);
-  }
 `;
+
+const BeadImage = styled.img`
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+  position: relative;
+  display: block;
+`;
+
+const BeadGloss = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border-radius: 50%;
+  box-shadow: inset 0 0 10px rgba(255, 255, 255, 0.5);
+  background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.3), transparent 70%);
+  pointer-events: none;
+`;
+
 const TrashIcon = styled.div`
   position: absolute;
   bottom: -20px;
@@ -365,21 +405,6 @@ const ProductUnit = styled.span`
   font-size: 14px;
 `;
 
-const RemainingLength = styled.div`
-  text-align: center;
-  margin-top: 10px;
-  font-size: 14px;
-  color: ${props => props.isLow ? '#ff6b6b' : '#666'};
-  display: flex;
-  align-items: center;
-  justify-content: center;
-`;
-
-const HeartIcon = styled.span`
-  color: #ff6b6b;
-  margin-left: 5px;
-`;
-
 const MoveModeTip = styled.div`
   position: absolute;
   top: 10px;
@@ -441,11 +466,25 @@ const ActionButton = styled.button`
   }
 `;
 
+// 修正 processImageUrl 函數
+const processImageUrl = (url) => {
+  // 如果 URL 為空或未定義，返回空字符串
+  if (!url) return '';
+  
+  // 如果 URL 已經是完整的 URL，則直接返回
+  if (url.startsWith('http://') || url.startsWith('https://')) {
+    return url;
+  }
+  
+  // 如果 URL 是相對路徑，則直接返回，不添加任何前綴
+  // React 會自動從 public 目錄加載
+  return url;
+};
+
 const ProductDisplay = ({ onCrystalClick }) => {
   const { currentDesign, setCurrentDesign, setSelectedCrystal, savedDesigns, setSavedDesigns } = useDesign();
   const [beadPositions, setBeadPositions] = useState([]);
   const [displaySize, setDisplaySize] = useState(200);
-  const [remainingLength, setRemainingLength] = useState(currentDesign.size);
   const [draggedBead, setDraggedBead] = useState(null);
   const [isSpaceFull, setIsSpaceFull] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
@@ -464,50 +503,122 @@ const ProductDisplay = ({ onCrystalClick }) => {
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 767);
   const [showCustomInput, setShowCustomInput] = useState(false);
   const [customValue, setCustomValue] = useState('');
+  const [usedLength, setUsedLength] = useState(0);
 
   useEffect(() => {
     if (currentDesign.crystals.length > 0) {
       const wristCircumference = currentDesign.size;
-      const BRACELET_RADIUS = 120; // 增加手環半徑
-      const MM_TO_PIXEL = 6;
       
-      // 計算實際使用的長度
-      const usedLength = currentDesign.crystals.reduce((sum, crystal) => {
+      // 計算實際使用的長度（水晶長度加總）
+      const totalUsedLength = currentDesign.crystals.reduce((sum, crystal) => {
         return sum + crystal.size;
       }, 0);
+      
+      // 更新使用的長度狀態
+      setUsedLength(totalUsedLength);
+      
 
-      // 計算實際剩餘長度
-      const remaining = Math.max(0, wristCircumference - usedLength);
-      setRemainingLength(remaining);
-      setIsSpaceFull(remaining <= 0);
+      // 如果水晶總長度超出手圍尺寸，自動調整手圍尺寸
+      if (totalUsedLength > wristCircumference) {
+        // 設置新的手圍尺寸，稍微大於水晶總長度
+        const newSize = Math.ceil(totalUsedLength / 10) * 10; // 向上取整到最接近的整數厘米
+        
+        console.log(`自動調整手圍尺寸：從 ${wristCircumference}mm 到 ${newSize}mm`);
+        
+        // 更新設計的手圍尺寸
+        setCurrentDesign(prev => ({
+          ...prev,
+          size: newSize
+        }));
+        
+        // 提前返回，等待下一次渲染
+        return;
+      }
 
-      // 計算每個水晶的位置
-      let accumulatedLength = 0;
-      const positions = currentDesign.crystals.map((crystal, index) => {
-        // 計算每個水晶在手環上的位置
-        accumulatedLength += crystal.size / 2; // 加上當前水晶的一半尺寸
+      // 根據手圍尺寸優化水晶大小與排列
+      const totalBeads = currentDesign.crystals.length;
+      
+      // 計算手圍尺寸與標準尺寸的比例
+      const standardWristSize = 160; // 標準手圍尺寸(mm)
+      const sizeRatio = wristCircumference / standardWristSize;
+      
+      // 使用反比例關係調整水晶大小 - 手圍越大，水晶相對越小
+      // 這樣可以確保水晶數量增加時，整體效果更加美觀
+      const sizeAdjustFactor = 1 / Math.sqrt(sizeRatio);
+      
+      // 根據手圍尺寸調整半徑 - 手圍越大，半徑越大
+      const adjustedRadius = 120 * Math.sqrt(sizeRatio);
+      
+      // 計算每個水晶的位置和大小
+      const positions = [];
+      
+      // 計算水晶在圓上的均勻分佈角度 - 但要考慮水晶大小
+      // 首先計算所有水晶的總角度佔用
+      let totalAngleOccupation = 0;
+      const angleOccupations = [];
+      
+      for (let i = 0; i < totalBeads; i++) {
+        const crystal = currentDesign.crystals[i];
         
-        // 計算角度 (0度在頂部，順時針增加)
-        const angle = (accumulatedLength / wristCircumference) * 360;
+        // 根據水晶大小計算顯示尺寸
+        const baseDisplaySize = 45; // 基準顯示尺寸(px)
+        const sizeFactor = crystal.size / 8; // 相對於基準水晶大小(8mm)的比例
         
-        // 計算顯示尺寸
-        const displaySize = crystal.size * MM_TO_PIXEL;
+        // 計算顯示尺寸 - 手圍越大，水晶相對越小
+        let displaySize = baseDisplaySize * sizeFactor * sizeAdjustFactor;
         
-        // 加上當前水晶的另一半尺寸，為下一個水晶做準備
-        accumulatedLength += crystal.size / 2;
+        // 限制在合理範圍內
+        const minSize = 25 * sizeAdjustFactor;
+        const maxSize = 60 * sizeAdjustFactor;
+        displaySize = Math.max(minSize, Math.min(displaySize, maxSize));
         
-        return {
+        // 計算水晶在圓上的角度佔用 - 根據水晶大小和半徑
+        // 使用弧長公式：角度(弧度) = 弧長 / 半徑
+        // 弧長近似為水晶直徑
+        const arcLength = displaySize;
+        const angleOccupation = (arcLength / adjustedRadius) * (180 / Math.PI);
+        
+        angleOccupations.push({
+          crystal,
+          displaySize,
+          angleOccupation
+        });
+        
+        totalAngleOccupation += angleOccupation;
+      }
+      
+      // 計算重疊係數 - 使水晶看起來緊密串連
+      // 重疊係數越大，水晶重疊越多
+      const overlapFactor = 1.25;
+      
+      // 調整總角度佔用，考慮重疊
+      const adjustedTotalAngleOccupation = totalAngleOccupation / overlapFactor;
+      
+      // 計算每個水晶的角度位置
+      let currentAngle = 0;
+      
+      for (let i = 0; i < angleOccupations.length; i++) {
+        const { crystal, displaySize, angleOccupation } = angleOccupations[i];
+        
+        // 計算角度 - 考慮水晶大小和重疊
+        const angle = currentAngle + (angleOccupation / 2);
+        
+        // 更新當前角度
+        currentAngle += angleOccupation / overlapFactor;
+        
+        positions.push({
           ...crystal,
-          angle,
-          radius: BRACELET_RADIUS, // 固定半徑
-          displaySize
-        };
-      });
+          angle: (angle * 360) / adjustedTotalAngleOccupation,
+          radius: adjustedRadius,
+          displaySize,
+          sizeAdjustFactor
+        });
+      }
       
       setBeadPositions(positions);
     } else {
       setBeadPositions([]);
-      setRemainingLength(currentDesign.size);
+      setUsedLength(0);
       setIsSpaceFull(false);
     }
   }, [currentDesign]);
@@ -703,9 +814,6 @@ const ProductDisplay = ({ onCrystalClick }) => {
       size: newSizeInMm,
       crystals: currentCrystals
     }));
-
-    // 更新剩餘長度
-    setRemainingLength(newSizeInMm - totalCrystalLength);
   };
 
   const handleCustomSize = (e) => {
@@ -732,7 +840,6 @@ const ProductDisplay = ({ onCrystalClick }) => {
       crystals: []
     }));
     setBeadPositions([]);
-    setRemainingLength(currentDesign.size);
   };
 
   const handleMobileActionClick = (action) => {
@@ -792,6 +899,111 @@ const ProductDisplay = ({ onCrystalClick }) => {
     setShowModal(false);
   };
 
+  // 修改添加水晶的函數，確保自動調整手圍尺寸
+  const handleAddCrystal = (crystal) => {
+    // 檢查是否還有剩餘空間
+    const currentCrystals = [...currentDesign.crystals];
+    const currentUsedLength = currentCrystals.reduce((sum, c) => sum + c.size, 0);
+    const remainingSpace = currentDesign.size - currentUsedLength;
+    
+    // 如果剩餘空間不足，自動調整手圍尺寸
+    if (crystal.size > remainingSpace) {
+      const newSize = currentDesign.size + (crystal.size - remainingSpace) + 2; // 加2mm作為緩衝
+      
+      // 更新設計，同時添加新水晶和調整手圍尺寸
+      setCurrentDesign(prev => ({
+        ...prev,
+        size: newSize,
+        crystals: [...prev.crystals, crystal]
+      }));
+      
+      console.log(`添加水晶後自動調整手圍尺寸：從 ${currentDesign.size}mm 到 ${newSize}mm`);
+    } else {
+      // 如果空間足夠，直接添加水晶
+      setCurrentDesign(prev => ({
+        ...prev,
+        crystals: [...prev.crystals, crystal]
+      }));
+    }
+  };
+
+  // 修改 renderConnectionLines 函數，使連接線更加隱蔽
+  const renderConnectionLines = () => {
+    if (beadPositions.length < 2) return null;
+    
+    return beadPositions.map((bead, index) => {
+      const nextIndex = (index + 1) % beadPositions.length;
+      const nextBead = beadPositions[nextIndex];
+      
+      // 計算兩個水晶的位置
+      const angle1 = bead.angle * Math.PI / 180;
+      const angle2 = nextBead.angle * Math.PI / 180;
+      
+      // 計算水晶邊緣的位置，而不是中心點
+      const radius1 = bead.radius;
+      const radius2 = nextBead.radius;
+      
+      const x1 = Math.cos(angle1) * radius1;
+      const y1 = Math.sin(angle1) * radius1;
+      const x2 = Math.cos(angle2) * radius2;
+      const y2 = Math.sin(angle2) * radius2;
+      
+      // 計算連線長度和角度
+      const length = Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
+      const angle = Math.atan2(y2 - y1, x2 - x1) * 180 / Math.PI;
+      
+      // 根據手圍尺寸調整連接線的粗細
+      const lineThickness = bead.sizeAdjustFactor ? 1 * bead.sizeAdjustFactor : 1;
+      
+      return (
+        <ConnectionLine 
+          key={`connection-${index}`}
+          style={{
+            width: `${length}px`,
+            height: `${lineThickness}px`,
+            left: `calc(50% + ${x1}px)`,
+            top: `calc(50% + ${y1}px)`,
+            transform: `rotate(${angle}deg)`,
+            opacity: 0.3, // 降低透明度，使連接線更加隱蔽
+            background: 'linear-gradient(to right, rgba(255,255,255,0.7), rgba(220,220,220,0.7))'
+          }}
+        />
+      );
+    });
+  };
+
+  // 修改 renderCrystals 函數，確保水晶圖片正確顯示
+  const renderCrystals = () => {
+    return beadPositions.map((bead, index) => (
+      <CrystalBead
+        key={index}
+        displaySize={bead.displaySize}
+        angle={bead.angle}
+        radius={bead.radius}
+        size={bead.size}
+        moveMode={moveMode}
+        isSource={sourceIndex === index}
+        isTarget={moveMode && selectedBeadIndex === index && sourceIndex !== index}
+        onClick={(e) => handleBeadClick(bead, index, e)}
+        draggable={isDraggingEnabled}
+        onDragStart={(e) => handleBeadDragStart(e, index)}
+        onDragEnd={handleBeadDragEnd}
+        onDragOver={(e) => handleBeadDragOver(e, index)}
+        onDrop={(e) => handleBeadDrop(e, index)}
+      >
+        <BeadImage 
+          src={bead.image} 
+          alt={`Crystal ${index}`} 
+          onError={(e) => {
+            console.error(`Failed to load image: ${bead.image}`);
+            e.target.src = 'default-crystal.png';
+          }}
+        />
+        <BeadGloss />
+      </CrystalBead>
+    ));
+  };
+
   return (
     <>
       <DisplayContainer>
@@ -816,41 +1028,11 @@ const ProductDisplay = ({ onCrystalClick }) => {
           )}
           
           <BraceletContainer>
-            {/* 添加一個圓形背景，模擬手環 */}
-            <svg width="250" height="250" style={{ position: 'absolute', top: 0, left: 0 }}>
-              <circle 
-                cx="125" 
-                cy="125" 
-                r="120" 
-                fill="none" 
-                stroke="#e0e0e0" 
-                strokeWidth="1" 
-                strokeDasharray="5,5" 
-              />
-            </svg>
+            {/* 渲染連接線 */}
+            {renderConnectionLines()}
             
-            {beadPositions.map((position, index) => (
-              <CrystalBead
-                key={`${position.id}-${index}`}
-                src={position.image}
-                alt={position.name}
-                displaySize={position.displaySize}
-                angle={position.angle}
-                radius={position.radius}
-                draggable={!moveMode}
-                moveMode={moveMode}
-                isSource={moveMode && index === sourceIndex}
-                isTarget={moveMode && index === selectedBeadIndex}
-                onClick={(e) => handleBeadClick(position, index, e)}
-                onDragStart={(e) => handleBeadDragStart(e, index)}
-                onDragEnd={handleBeadDragEnd}
-                onDragOver={(e) => handleBeadDragOver(e, index)}
-                onDrop={(e) => handleBeadDrop(e, index)}
-                onError={(e) => {
-                  e.target.src = '/assets/placeholder.jpg';
-                }}
-              />
-            ))}
+            {/* 渲染水晶 */}
+            {renderCrystals()}
           </BraceletContainer>
           
           {/* 手圍尺寸選擇器 */}
@@ -891,9 +1073,9 @@ const ProductDisplay = ({ onCrystalClick }) => {
               </ProductCustomInputContainer>
             )}
             
-            <RemainingLength isLow={remainingLength < 10}>
-              剩餘：{(remainingLength / 10).toFixed(1)}
-            </RemainingLength>
+            <totalUsedLength>
+              目前長度：{(usedLength / 10).toFixed(1)} cm
+            </totalUsedLength>
           </ProductSizeContainer>
           
           <TrashIcon 

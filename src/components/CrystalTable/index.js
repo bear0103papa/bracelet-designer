@@ -95,8 +95,31 @@ const CrystalTable = () => {
     }
   };
 
+  // 計算目前已使用的長度
+  const calculateUsedLength = () => {
+    return currentDesign.crystals.reduce((sum, crystal) => sum + crystal.size, 0);
+  };
+
+  // 檢查是否超出最大限制 (30cm = 300mm)
+  const isExceedingMaxLimit = () => {
+    const usedLength = calculateUsedLength();
+    return usedLength >= 300; // 30cm 轉換為 mm
+  };
+
+  // 檢查添加特定水晶後是否會超出最大限制
+  const wouldExceedMaxLimit = (crystal) => {
+    const usedLength = calculateUsedLength();
+    return usedLength + crystal.size > 300; // 30cm 轉換為 mm
+  };
+
   const filteredAndSortedCrystals = crystals
     .filter(crystal => {
+      // 首先檢查是否會超出最大限制
+      if (wouldExceedMaxLimit(crystal)) {
+        return false;
+      }
+      
+      // 然後應用其他篩選條件
       return (
         (!filters.color || crystal.color === filters.color) &&
         (!filters.power || crystal.power === filters.power) &&
@@ -120,25 +143,39 @@ const CrystalTable = () => {
 
   const calculateRemainingSpace = () => {
     const wristCircumference = currentDesign.size;
-    const usedLength = currentDesign.crystals.reduce((sum, crystal) => sum + crystal.size, 0);
+    const usedLength = calculateUsedLength();
     return Math.max(0, wristCircumference - usedLength);
   };
 
   const handleDragStart = (crystal) => (e) => {
-    const remainingSpace = calculateRemainingSpace();
-    if (remainingSpace < crystal.size) {
-      e.preventDefault();
-      return false;
-    }
     e.dataTransfer.setData('crystal', JSON.stringify(crystal));
   };
 
   const handleCrystalClick = (crystal) => {
-    const remainingSpace = calculateRemainingSpace();
-    if (remainingSpace >= crystal.size) {
+    const currentCrystals = [...currentDesign.crystals, crystal];
+    const totalLength = currentCrystals.reduce((sum, c) => sum + c.size, 0);
+    
+    // 增加 30cm (300mm) 的最大限制
+    const MAX_SIZE = 300; // 30cm 轉換為 mm
+    
+    // 如果總長度超過最大限制，則不添加水晶
+    if (totalLength > MAX_SIZE) {
+      return; // 超過最大限制，不執行任何操作
+    }
+    
+    // 如果總長度超過當前手圍尺寸但未超過最大限制
+    if (totalLength > currentDesign.size) {
       setCurrentDesign(prev => ({
         ...prev,
-        crystals: [...prev.crystals, crystal]
+        size: totalLength,
+        crystals: currentCrystals
+      }));
+    } 
+    // 如果沒有超過當前手圍尺寸，則正常添加水晶
+    else {
+      setCurrentDesign(prev => ({
+        ...prev,
+        crystals: currentCrystals
       }));
     }
   };
@@ -165,21 +202,20 @@ const CrystalTable = () => {
       <GridView>
         {filteredAndSortedCrystals.map(crystal => {
           const remainingSpace = calculateRemainingSpace();
-          const isDisabled = remainingSpace < crystal.size;
           
           return (
             <CrystalCard
               key={crystal.id}
-              onClick={() => !isDisabled && handleCrystalClick(crystal)}
+              onClick={() => handleCrystalClick(crystal)}
               style={{
-                opacity: isDisabled ? 0.5 : 1,
-                cursor: isDisabled ? 'not-allowed' : 'pointer'
+                opacity: 1,
+                cursor: 'pointer'
               }}
             >
               <CrystalImage
                 src={crystal.image}
                 alt={crystal.name}
-                draggable={!isDisabled}
+                draggable={true}
                 onDragStart={handleDragStart(crystal)}
                 onError={(e) => {
                   e.target.src = '/placeholder.jpg';
