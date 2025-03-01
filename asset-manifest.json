@@ -1,17 +1,22 @@
 {
   "files": {
     "main.css": "/bracelet-designer/static/css/main.e6c13ad2.css",
-    "main.js": "/bracelet-designer/static/js/main.2f1ee4f6.js",
+    "main.js": "/bracelet-designer/static/js/main.40d3bbc5.js",
     "static/js/453.363571e7.chunk.js": "/bracelet-designer/static/js/453.363571e7.chunk.js",
-    "static/media/cat-pearl.png": "/bracelet-designer/static/media/cat-pearl.8765430c38d6c50a203e.png",
     "static/media/Logo.jpg": "/bracelet-designer/static/media/Logo.a8fedd51f375bc0c76b4.jpg",
+    "static/media/oil-painting-blue-crystal.png": "/bracelet-designer/static/media/oil-painting-blue-crystal.053cebbc3c966e1fac35.png",
+    "static/media/hair-crystal.png": "/bracelet-designer/static/media/hair-crystal.21c25c33843b590834f9.png",
+    "static/media/red-phantom.png": "/bracelet-designer/static/media/red-phantom.60a746fa65c01e452952.png",
+    "static/media/dragon-agate.png": "/bracelet-designer/static/media/dragon-agate.1004c8a60d756660e5d7.png",
+    "static/media/violent-yellow-crystal.png": "/bracelet-designer/static/media/violent-yellow-crystal.bd908b832500e0d6859b.png",
+    "static/media/black-gold.png": "/bracelet-designer/static/media/black-gold.e070e2deea82db3791da.png",
     "index.html": "/bracelet-designer/index.html",
     "main.e6c13ad2.css.map": "/bracelet-designer/static/css/main.e6c13ad2.css.map",
-    "main.2f1ee4f6.js.map": "/bracelet-designer/static/js/main.2f1ee4f6.js.map",
+    "main.40d3bbc5.js.map": "/bracelet-designer/static/js/main.40d3bbc5.js.map",
     "453.363571e7.chunk.js.map": "/bracelet-designer/static/js/453.363571e7.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.e6c13ad2.css",
-    "static/js/main.2f1ee4f6.js"
+    "static/js/main.40d3bbc5.js"
   ]
 }
