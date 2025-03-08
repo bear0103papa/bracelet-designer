@@ -24,7 +24,7 @@ import cauliflowerJade from '../assets/crystals/cauliflower-jade.png';
 import greenVeinStone from '../assets/crystals/green-vein-stone.png';
 import blueEyebig from '../assets/crystals/blue-eye-big.png';
 import aquamarine from '../assets/crystals/aquamarine.png';
-
+import redEye from '../assets/crystals/red-eye.png';
 export const crystals = [
   {
     id: 'c3',
@@ -571,6 +571,27 @@ export const crystals = [
     shape: '圓形',
     healing: '緩解喉輪阻塞，表達真實',
     energy: '平靜、溝通'
+  },
+  {
+    id: 'c21',
+    name: '紅虎眼',
+    image: redEye,
+    size: 10.5, // mm
+    category: 'crystal',
+    color: '紅色系',
+    power: '熱情',
+    price: 16,
+    description: [
+      '紅虎眼具有熱情與保護能量',
+      '提升活力與生命力',
+      '防止負能量侵襲',
+      '適合需要活力與保護的人使用'
+    ],
+    zodiac: ['牡羊座', '獅子座'],
+    chakra: '海底輪、太陽神經叢輪',
+    shape: '圓形',
+    healing: '提升活力，防負能量侵襲',
+    energy: '熱情、保護'
   }
 ];
 
