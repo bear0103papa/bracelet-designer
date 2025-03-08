@@ -1,71 +1,50 @@
 import styled from 'styled-components';
-import { useState } from 'react';
-import { categories } from '../../data/crystals';
-import { useNavigate } from 'react-router-dom';
 
-const TabContainer = styled.div`
-  margin-bottom: 20px;
-`;
-
-const TabList = styled.div`
+const TabsContainer = styled.div`
   display: flex;
-  justify-content: center;
-  gap: 8px;
-  margin-bottom: 16px;
-  border-bottom: 1px solid #eee;
-  padding-bottom: 16px;
+  background: white;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 `;
 
-const Tab = styled.button`
-  padding: 8px 24px;
-  border-radius: 20px;
-  background: ${props => props.$active ? '#D4C4B4' : '#f0f0f0'};
-  color: ${props => props.$active ? '#fff' : '#333'};
+const Tab = styled.div`
+  flex: 1;
+  padding: 15px;
+  text-align: center;
+  cursor: pointer;
+  background: ${props => props.active ? '#f0f0f0' : 'white'};
+  font-weight: ${props => props.active ? 'bold' : 'normal'};
+  border-bottom: 2px solid ${props => props.active ? '#4a90e2' : 'transparent'};
   transition: all 0.3s ease;
   
   &:hover {
-    background: ${props => props.$active ? '#D4C4B4' : '#e0e0e0'};
+    background: #f5f5f5;
   }
 `;
 
-const CategoryTabs = () => {
-  const navigate = useNavigate();
-  const [activeCategory, setActiveCategory] = useState('crystal');
-
-  const handleCategoryChange = (categoryId) => {
-    setActiveCategory(categoryId);
-    switch(categoryId) {
-      case 'toolbox':
-        navigate('/');
-        break;
-      case 'crystal':
-        navigate('/crystal');
-        break;
-      case 'accessory':
-        navigate('/accessory');
-        break;
-      case 'helper':
-        navigate('/helper');
-        break;
-      default:
-        navigate('/');
-    }
-  };
-
+const CategoryTabs = ({ currentCategory, onCategoryChange }) => {
   return (
-    <TabContainer>
-      <TabList>
-        {categories.map(category => (
-          <Tab
-            key={category.id}
-            $active={activeCategory === category.id}
-            onClick={() => handleCategoryChange(category.id)}
-          >
-            {category.name}
-          </Tab>
-        ))}
-      </TabList>
-    </TabContainer>
+    <TabsContainer>
+      <Tab 
+        active={currentCategory === 'crystal'} 
+        onClick={() => onCategoryChange('crystal')}
+      >
+        水晶
+      </Tab>
+      <Tab 
+        active={currentCategory === 'accessory'} 
+        onClick={() => onCategoryChange('accessory')}
+      >
+        配件
+      </Tab>
+      <Tab 
+        active={currentCategory === 'helper'} 
+        onClick={() => onCategoryChange('helper')}
+      >
+        小幫手
+      </Tab>
+    </TabsContainer>
   );
 };
 

@@ -49,6 +49,11 @@ const RightPanel = styled.div`
   }
 `;
 
+const TabsContainer = styled.div`
+  width: 100%;
+  margin-bottom: 20px;
+`;
+
 const SavedDesignsWrapper = styled.div`
   background: white;
   border-radius: 12px;
@@ -125,7 +130,14 @@ const MainPage = () => {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
+  useEffect(() => {
+    console.log('Current category changed to:', currentCategory);
+  }, [currentCategory]);
+
   const calculateTotal = () => {
+    if (!currentDesign || !currentDesign.crystals) {
+      return 0;
+    }
     return currentDesign.crystals.reduce((sum, crystal) => sum + crystal.price, 0);
   };
 
@@ -141,16 +153,18 @@ const MainPage = () => {
     setShowOrderForm(false);
   };
 
+  const handleCategoryChange = (category) => {
+    console.log('Changing category to:', category);
+    setCurrentCategory(category);
+  };
+
   const renderMobileContent = () => {
+    console.log('Rendering mobile content for category:', currentCategory);
     switch (currentCategory) {
       case 'profile':
         return <ProfilePage />;
       case 'crystal':
-        return (
-          <>
-            <CrystalPage />
-          </>
-        );
+        return <CrystalPage />;
       case 'accessory':
         return <AccessoryPage />;
       case 'helper':
@@ -161,6 +175,7 @@ const MainPage = () => {
   };
 
   const renderDesktopContent = () => {
+    console.log('Rendering desktop content for category:', currentCategory);
     switch (currentCategory) {
       case 'crystal':
         return <CrystalPage />;
@@ -227,10 +242,12 @@ const MainPage = () => {
             renderMobileContent()
           ) : (
             <>
-              <CategoryTabs 
-                currentCategory={currentCategory} 
-                onCategoryChange={setCurrentCategory} 
-              />
+              <TabsContainer>
+                <CategoryTabs 
+                  currentCategory={currentCategory} 
+                  onCategoryChange={handleCategoryChange} 
+                />
+              </TabsContainer>
               {renderDesktopContent()}
             </>
           )}
@@ -240,7 +257,7 @@ const MainPage = () => {
       {isMobile && (
         <MobileNavigation 
           currentCategory={currentCategory} 
-          onCategoryChange={setCurrentCategory} 
+          onCategoryChange={handleCategoryChange} 
         />
       )}
     </>

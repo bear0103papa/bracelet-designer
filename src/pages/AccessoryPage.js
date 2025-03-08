@@ -4,10 +4,15 @@ const PageContainer = styled.div`
   padding: 20px;
 `;
 
+const PageTitle = styled.h2`
+  margin-bottom: 20px;
+  color: #333;
+  text-align: center;
+`;
+
 const AccessoryPage = () => {
   return (
     <PageContainer>
-      <h2>配件</h2>
       {/* 配件頁面內容 */}
     </PageContainer>
   );

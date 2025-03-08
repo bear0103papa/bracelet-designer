@@ -3,6 +3,7 @@ import { useDesign } from '../../contexts/DesignContext';
 import { useState, useEffect } from 'react';
 import React from 'react';
 import ProductInfo from '../ProductInfo';
+import heartIcon from '../../assets/Logo/heart.png';
 
 const DisplayContainer = styled.div`
   padding: 20px;
@@ -298,15 +299,16 @@ const SaveButtonContainer = styled.div`
 const SaveButton = styled.button`
   background: transparent;
   border: none;
-  font-size: 24px;
   cursor: pointer;
   color: #666;
   transition: all 0.3s ease;
   position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   
   &:hover {
     transform: scale(1.1);
-    color: #ff6b6b;
   }
   
   &:hover::after {
@@ -323,8 +325,14 @@ const SaveButton = styled.button`
     white-space: nowrap;
   }
   
-  @media (min-width: 768px) {
-    font-size: 28px; /* 在桌面版上稍微大一點 */
+  img {
+    width: 24px;
+    height: 24px;
+    
+    @media (min-width: 768px) {
+      width: 28px;
+      height: 28px;
+    }
   }
 `;
 
@@ -1010,7 +1018,7 @@ const ProductDisplay = ({ onCrystalClick }) => {
         <ImageContainer>
           <SaveButtonContainer>
             <SaveButton onClick={handleSave}>
-              ♡
+              <img src={heartIcon} alt="儲存樣式" />
             </SaveButton>
           </SaveButtonContainer>
           <ClearAllButton onClick={handleClearAll}>

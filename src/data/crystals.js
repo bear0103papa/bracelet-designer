@@ -23,6 +23,8 @@ import phoenixStone from '../assets/crystals/phoenix-stone.png';
 import cauliflowerJade from '../assets/crystals/cauliflower-jade.png';
 import greenVeinStone from '../assets/crystals/green-vein-stone.png';
 import blueEyebig from '../assets/crystals/blue-eye-big.png';
+import aquamarine from '../assets/crystals/aquamarine.png';
+
 export const crystals = [
   {
     id: 'c3',
@@ -548,6 +550,27 @@ export const crystals = [
     shape: '圓形',
     healing: '促進愛情、支持情感穩定',
     energy: '愛、平衡'
+  },
+  {
+    id: 'c28',
+    name: '海藍寶',
+    image: aquamarine,
+    size: 4.3, // mm
+    category: 'crystal',
+    color: '藍色系',
+    power: '溝通',
+    price: 15,
+    description: [
+      '海藍寶具有平靜與溝通能量',
+      '緩解喉輪阻塞，促進表達',
+      '支持清晰溝通與真實表達',
+      '適合需要溝通與平靜的人使用'
+    ],
+    zodiac: ['雙魚座', '水瓶座'],
+    chakra: '喉輪',
+    shape: '圓形',
+    healing: '緩解喉輪阻塞，表達真實',
+    energy: '平靜、溝通'
   }
 ];
 
