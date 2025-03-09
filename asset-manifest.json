@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/bracelet-designer/static/css/main.e6c13ad2.css",
-    "main.js": "/bracelet-designer/static/js/main.b9d65d4b.js",
+    "main.js": "/bracelet-designer/static/js/main.421da516.js",
     "static/js/453.363571e7.chunk.js": "/bracelet-designer/static/js/453.363571e7.chunk.js",
     "static/media/Logo.jpg": "/bracelet-designer/static/media/Logo.a8fedd51f375bc0c76b4.jpg",
     "static/media/numerology.png": "/bracelet-designer/static/media/numerology.041e685ee1c3ce10081d.png",
@@ -23,11 +23,11 @@
     "static/media/green-phantom.png": "/bracelet-designer/static/media/green-phantom.d9a31cdfc24c76a0731a.png",
     "index.html": "/bracelet-designer/index.html",
     "main.e6c13ad2.css.map": "/bracelet-designer/static/css/main.e6c13ad2.css.map",
-    "main.b9d65d4b.js.map": "/bracelet-designer/static/js/main.b9d65d4b.js.map",
+    "main.421da516.js.map": "/bracelet-designer/static/js/main.421da516.js.map",
     "453.363571e7.chunk.js.map": "/bracelet-designer/static/js/453.363571e7.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.e6c13ad2.css",
-    "static/js/main.b9d65d4b.js"
+    "static/js/main.421da516.js"
   ]
 }
