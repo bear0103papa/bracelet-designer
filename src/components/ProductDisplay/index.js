@@ -474,6 +474,61 @@ const ActionButton = styled.button`
   }
 `;
 
+const DeleteConfirmDialog = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(255, 255, 255, 0.95);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border-radius: 12px;
+  z-index: 10;
+`;
+
+const DeleteConfirmMessage = styled.p`
+  font-size: 16px;
+  color: #333;
+  margin-bottom: 20px;
+  text-align: center;
+`;
+
+const DeleteConfirmButtons = styled.div`
+  display: flex;
+  gap: 15px;
+`;
+
+const ConfirmButton = styled.button`
+  padding: 8px 20px;
+  background: #ff6b6b;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 14px;
+  cursor: pointer;
+  
+  &:hover {
+    background: #ff5252;
+  }
+`;
+
+const CancelButton = styled.button`
+  padding: 8px 20px;
+  background: #f0f0f0;
+  color: #333;
+  border: none;
+  border-radius: 4px;
+  font-size: 14px;
+  cursor: pointer;
+  
+  &:hover {
+    background: #e0e0e0;
+  }
+`;
+
 // 修正 processImageUrl 函數
 const processImageUrl = (url) => {
   // 如果 URL 為空或未定義，返回空字符串
@@ -512,6 +567,7 @@ const ProductDisplay = ({ onCrystalClick }) => {
   const [showCustomInput, setShowCustomInput] = useState(false);
   const [customValue, setCustomValue] = useState('');
   const [usedLength, setUsedLength] = useState(0);
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
 
   useEffect(() => {
     if (currentDesign.crystals.length > 0) {
@@ -869,9 +925,9 @@ const ProductDisplay = ({ onCrystalClick }) => {
         handleBeadRemove(selectedBeadIndex);
         break;
       case 'clearAll':
-        // 清除所有水晶
-        handleClearAll();
-        break;
+        // 顯示確認對話框而不是直接刪除
+        setShowDeleteConfirm(true);
+        return; // 提前返回，不關閉菜單
       default:
         break;
     }
@@ -879,25 +935,14 @@ const ProductDisplay = ({ onCrystalClick }) => {
     setShowMobileMenu(false);
   };
 
-  const handleCancelMove = () => {
-    setMoveMode(false);
-    setSourceIndex(null);
-    setSelectedBeadIndex(null);
+  const handleConfirmClearAll = () => {
+    handleClearAll();
+    setShowDeleteConfirm(false);
+    setShowMobileMenu(false);
   };
 
-  const handleSave = () => {
-    if (currentDesign.crystals.length > 0) {
-      // 儲存到 localStorage
-      const newDesign = {
-        ...currentDesign,
-        id: Date.now(),
-        timestamp: new Date()
-      };
-      
-      const updatedDesigns = [...savedDesigns, newDesign];
-      setSavedDesigns(updatedDesigns);
-      localStorage.setItem('savedDesigns', JSON.stringify(updatedDesigns));
-    }
+  const handleCancelClearAll = () => {
+    setShowDeleteConfirm(false);
   };
 
   const handleMoveBeadClick = () => {
@@ -1010,6 +1055,29 @@ const ProductDisplay = ({ onCrystalClick }) => {
         <BeadGloss />
       </CrystalBead>
     ));
+  };
+
+  // 添加 handleSave 函數
+  const handleSave = () => {
+    // 生成唯一ID
+    const designId = Date.now().toString();
+    
+    // 創建新的設計對象
+    const designToSave = {
+      ...currentDesign,
+      id: designId,
+      savedAt: new Date().toISOString()
+    };
+    
+    // 更新已保存的設計列表
+    setSavedDesigns([...savedDesigns, designToSave]);
+  };
+
+  // 添加 handleCancelMove 函數
+  const handleCancelMove = () => {
+    setMoveMode(false);
+    setSourceIndex(null);
+    setSelectedBeadIndex(null);
   };
 
   return (
@@ -1147,6 +1215,17 @@ const ProductDisplay = ({ onCrystalClick }) => {
           <MobileActionButton onClick={() => setShowMobileMenu(false)}>
             取消
           </MobileActionButton>
+          
+          {/* 確認刪除對話框 */}
+          {showDeleteConfirm && (
+            <DeleteConfirmDialog>
+              <DeleteConfirmMessage>確定要刪除所有水晶嗎？</DeleteConfirmMessage>
+              <DeleteConfirmButtons>
+                <ConfirmButton onClick={handleConfirmClearAll}>確定</ConfirmButton>
+                <CancelButton onClick={handleCancelClearAll}>取消</CancelButton>
+              </DeleteConfirmButtons>
+            </DeleteConfirmDialog>
+          )}
         </MobileActionMenu>
       )}
       

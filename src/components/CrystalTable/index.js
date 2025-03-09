@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import { crystals } from '../../data/crystals';
 import { useDesign } from '../../contexts/DesignContext';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 const TableContainer = styled.div`
   overflow-y: auto;
@@ -46,6 +46,7 @@ const FilterContainer = styled.div`
   gap: 16px;
   margin-bottom: 16px;
   flex-wrap: wrap;
+  align-items: center;
 `;
 
 const FilterSelect = styled.select`
@@ -53,6 +54,19 @@ const FilterSelect = styled.select`
   border: 1px solid #ddd;
   border-radius: 4px;
   min-width: 120px;
+`;
+
+const ClearFilterButton = styled.button`
+  padding: 8px 16px;
+  background: #f0f0f0;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  
+  &:hover {
+    background: #e0e0e0;
+  }
 `;
 
 const CrystalName = styled.div`
@@ -71,12 +85,21 @@ const CrystalTable = () => {
   const { currentDesign, setCurrentDesign } = useDesign();
   const [sortField, setSortField] = useState(null);
   const [sortDirection, setSortDirection] = useState('asc');
-  const [filters, setFilters] = useState({
-    color: '',
-    size: '',
-    power: '',
-    price: ''
+  const [filters, setFilters] = useState(() => {
+    // 從 localStorage 讀取保存的篩選條件
+    const savedFilters = localStorage.getItem('crystalFilters');
+    return savedFilters ? JSON.parse(savedFilters) : {
+      color: '',
+      size: '',
+      power: '',
+      price: ''
+    };
   });
+
+  // 當篩選條件變化時，保存到 localStorage
+  useEffect(() => {
+    localStorage.setItem('crystalFilters', JSON.stringify(filters));
+  }, [filters]);
 
   // 獲取所有唯一的篩選選項
   const filterOptions = {
@@ -93,6 +116,18 @@ const CrystalTable = () => {
       setSortField(field);
       setSortDirection('asc');
     }
+  };
+
+  // 清除所有篩選條件
+  const handleClearFilters = () => {
+    const emptyFilters = {
+      color: '',
+      size: '',
+      power: '',
+      price: ''
+    };
+    setFilters(emptyFilters);
+    localStorage.setItem('crystalFilters', JSON.stringify(emptyFilters));
   };
 
   // 計算目前已使用的長度
@@ -197,6 +232,9 @@ const CrystalTable = () => {
             ))}
           </FilterSelect>
         ))}
+        <ClearFilterButton onClick={handleClearFilters}>
+          清除篩選
+        </ClearFilterButton>
       </FilterContainer>
 
       <GridView>
