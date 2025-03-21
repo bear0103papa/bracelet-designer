@@ -7,6 +7,7 @@ import numerologyIcon from '../assets/Logo/numerology.png';
 import crystalBallIcon from '../assets/Logo/crystal-ball.png';
 import solutionIcon from '../assets/Logo/solution (1).png';
 import surpriseBoxIcon from '../assets/Logo/surprise-box.png';
+import aiIcon from '../assets/Logo/ai.svg';
 
 // 導入生命靈數計算器組件
 import NumerologyCalculator from '../components/NumerologyCalculator';
@@ -111,6 +112,8 @@ const HelperPage = () => {
         return <div>來點靈感內容</div>;
       case 'surprise':
         return <div>來些驚喜內容</div>;
+      case 'ai-advisor':
+        return <div>功能開發中，敬請期待</div>;
       default:
         return (
           <>

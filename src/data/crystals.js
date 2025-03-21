@@ -33,14 +33,7 @@ export const crystals = [
     size: 7.2, // mm
     category: 'crystal',
     color: '白色系',
-    power: '招財',
-    price: 17,
-    description: [
-      '白阿賽具有強大的招財能量',
-      '能夠吸引財運和機會',
-      '增強個人魅力與自信',
-      '適合需要事業發展的人使用'
-    ],
+    price: 12,
     zodiac: ['雙魚座'],
     chakra: '頂輪',
     shape: '圓形',
@@ -54,14 +47,7 @@ export const crystals = [
     size: 10.5, // mm
     category: 'crystal',
     color: '綠色系',
-    power: '愛與和諧',
-    price: 15,
-    description: [
-      '綠幽靈帶來愛與和諧能量',
-      '有助於情感療癒與平衡',
-      '促進愛情關係的發展',
-      '適合需要情感支持的人使用'
-    ],
+    price: 110,
     zodiac: ['天秤座'],
     chakra: '心輪',
     shape: '圓形',
@@ -75,14 +61,7 @@ export const crystals = [
     size: 5.2, // mm
     category: 'crystal',
     color: '白色系',
-    power: '溝通',
-    price: 14,
-    description: [
-      '白貝母具有清新溝通能量',
-      '改善表達能力與溝通技巧',
-      '支持喉嚨健康',
-      '適合需要提升表達力的人使用'
-    ],
+    price: 6,
     zodiac: ['巨蟹座'],
     chakra: '喉輪',
     shape: '圓形',
@@ -96,14 +75,7 @@ export const crystals = [
     size: 9.7, // mm
     category: 'crystal',
     color: '藍色系',
-    power: '安靜',
-    price: 16,
-    description: [
-      '藍月光帶來安靜與洞察力',
-      '增強溝通能力',
-      '有助於緩解焦慮',
-      '適合需要心靈平靜的人使用'
-    ],
+    price: 25,
     zodiac: ['水瓶座'],
     chakra: '喉輪',
     shape: '圓形',
@@ -117,14 +89,7 @@ export const crystals = [
     size: 12.2, // mm
     category: 'crystal',
     color: '藍色系',
-    power: '保護',
-    price: 18,
-    description: [
-      '藍髮晶具有保護與聚焦能量',
-      '增強專注力與集中力',
-      '支持喉嚨健康',
-      '適合需要提升專注力的人使用'
-    ],
+    price: 139,
     zodiac: ['天蠍座'],
     chakra: '喉輪',
     shape: '圓形',
@@ -138,14 +103,7 @@ export const crystals = [
     size: 10.7, // mm
     category: 'crystal',
     color: '紅色系',
-    power: '活力',
-    price: 17,
-    description: [
-      '紅幽靈帶來活力與激情',
-      '提升能量與生命力',
-      '促進行動力與決斷力',
-      '適合需要動力的人使用'
-    ],
+    price: 141,
     zodiac: ['牡羊座'],
     chakra: '海底輪',
     shape: '圓形',
@@ -159,14 +117,7 @@ export const crystals = [
     size: 12.8, // mm
     category: 'crystal',
     color: '多色系',
-    power: '接地',
-    price: 15,
-    description: [
-      '髮晶具有強大的接地與保護能量',
-      '增強穩定性與安全感',
-      '保護免受負能量影響',
-      '適合需要穩定與保護的人使用'
-    ],
+    price: 220,
     zodiac: ['處女座'],
     chakra: '海底輪',
     shape: '圓形',
@@ -180,14 +131,7 @@ export const crystals = [
     size: 12.2, // mm
     category: 'crystal',
     color: '黑色系',
-    power: '力量',
-    price: 16,
-    description: [
-      '黑金超具有強大的力量與保護能量',
-      '增強自信與內在力量',
-      '保護免受負能量影響',
-      '適合需要力量與保護的人使用'
-    ],
+    price: 88,
     zodiac: ['魔羯座'],
     chakra: '海底輪',
     shape: '圓形',
@@ -201,14 +145,7 @@ export const crystals = [
     size: 8.3, // mm
     category: 'crystal',
     color: '藍色系',
-    power: '洞察',
-    price: 14,
-    description: [
-      '藍虎眼具有洞察與清晰能量',
-      '增強決策力與判斷力',
-      '支持溝通與表達',
-      '適合需要清晰思考的人使用'
-    ],
+    price: 26,
     zodiac: ['水瓶座'],
     chakra: '喉輪',
     shape: '圓形',
@@ -222,14 +159,7 @@ export const crystals = [
     size: 12.4, // mm
     category: 'crystal',
     color: '藍色系',
-    power: '洞察',
-    price: 17,
-    description: [
-      '藍虎眼具有洞察與清晰能量',
-      '增強決策力與判斷力',
-      '支持溝通與表達',
-      '適合需要清晰思考的人使用'
-    ],
+    price: 50,
     zodiac: ['水瓶座'],
     chakra: '喉輪',
     shape: '圓形',
@@ -243,14 +173,7 @@ export const crystals = [
     size: 10.4, // mm
     category: 'crystal',
     color: '白色系',
-    power: '結構',
-    price: 15,
-    description: [
-      '骨幹具有結構與支持能量',
-      '增強骨骼健康與身體穩定',
-      '提供穩定感與支持',
-      '適合需要身體支持的人使用'
-    ],
+    price: 36,
     zodiac: ['魔羯座'],
     chakra: '海底輪',
     shape: '圓形',
@@ -264,14 +187,7 @@ export const crystals = [
     size: 12.2, // mm
     category: 'crystal',
     color: '黃色系',
-    power: '財富',
-    price: 16,
-    description: [
-      '黃虎眼具有自信與財富能量',
-      '吸引財運與機會',
-      '提升自尊與個人力量',
-      '適合需要財運與自信的人使用'
-    ],
+    price: 52,
     zodiac: ['獅子座'],
     chakra: '太陽神經叢輪',
     shape: '圓形',
@@ -285,14 +201,7 @@ export const crystals = [
     size: 12.3, // mm
     category: 'crystal',
     color: '橙色系',
-    power: '創造力',
-    price: 16,
-    description: [
-      '橙雪花幽靈具有創造力與快樂能量',
-      '促進樂觀情緒與積極思考',
-      '支持消化系統健康',
-      '適合需要創意靈感的人使用'
-    ],
+    price: 99,
     zodiac: ['射手座'],
     chakra: '生殖輪',
     shape: '圓形',
@@ -306,41 +215,27 @@ export const crystals = [
     size: 11.7, // mm
     category: 'crystal',
     color: '橙色系',
-    power: '保護',
-    price: 17,
-    description: [
-      '龍紋瑪瑙具有保護與力量能量',
-      '增強決心與意志力',
-      '保護旅途安全',
-      '適合需要勇氣與保護的人使用'
-    ],
+    price: 136,
     zodiac: ['雙子座'],
     chakra: '海底輪',
     shape: '圓形',
     healing: '增強決心、保護旅途安全',
     energy: '保護、力量'
   },
-  {
-    id: 'c26',
-    name: '暴力黃水晶',
-    image: violentYellowCrystal,
-    size: 8.0, // mm
-    category: 'crystal',
-    color: '黃色系',
-    power: '自信',
-    price: 14,
-    description: [
-      '暴力黃水晶具有自信與活力能量',
-      '吸引成功與機會',
-      '提升個人魅力與自信',
-      '適合需要自信與活力的人使用'
-    ],
-    zodiac: ['獅子座'],
-    chakra: '太陽神經叢輪',
-    shape: '圓形',
-    healing: '吸引成功、提升個人魅力',
-    energy: '自信、活力'
-  },
+  // {
+  //   id: 'c26',
+  //   name: '暴力黃水晶',
+  //   image: violentYellowCrystal,
+  //   size: 8.0, // mm
+  //   category: 'crystal',
+  //   color: '黃色系',
+  //   price: 14,
+  //   zodiac: ['獅子座'],
+  //   chakra: '太陽神經叢輪',
+  //   shape: '圓形',
+  //   healing: '吸引成功、提升個人魅力',
+  //   energy: '自信、活力'
+  // },
   {
     id: 'c27',
     name: '黃水晶',
@@ -348,14 +243,7 @@ export const crystals = [
     size: 10.1, // mm
     category: 'crystal',
     color: '黃色系',
-    power: '財富',
-    price: 15,
-    description: [
-      '黃水晶具有財富與智慧能量',
-      '促進財運與機會',
-      '增強學習能力與智慧',
-      '適合需要財運與智慧的人使用'
-    ],
+    price: 20,
     zodiac: ['獅子座'],
     chakra: '太陽神經叢輪',
     shape: '圓形',
@@ -369,14 +257,7 @@ export const crystals = [
     size: 8.3, // mm
     category: 'crystal',
     color: '藍色系',
-    power: '保護',
-    price: 14,
-    description: [
-      '藍磷輝具有保護與聚焦能量',
-      '增強專注力與集中力',
-      '支持情緒穩定與平靜',
-      '適合需要專注與情緒穩定的人使用'
-    ],
+    price: 48,
     zodiac: ['天蠍座'],
     chakra: '喉輪',
     shape: '圓形',
@@ -390,14 +271,7 @@ export const crystals = [
     size: 11.7, // mm
     category: 'crystal',
     color: '藍色系',
-    power: '創造力',
-    price: 16,
-    description: [
-      '油畫藍晶具有創造力與寧靜能量',
-      '促進藝術創作與靈感',
-      '緩解焦慮與壓力',
-      '適合需要創意與平靜的人使用'
-    ],
+    price: 103,
     zodiac: ['水瓶座'],
     chakra: '喉輪',
     shape: '圓形',
@@ -411,14 +285,7 @@ export const crystals = [
     size: 10.3, // mm
     category: 'crystal',
     color: '綠色系',
-    power: '和諧',
-    price: 16,
-    description: [
-      '東陵玉具有和諧與平衡能量',
-      '促進愛情與人際關係',
-      '支持心臟健康與情感平衡',
-      '適合需要和諧與平衡的人使用'
-    ],
+    price: 14,
     zodiac: ['天秤座'],
     chakra: '心輪',
     shape: '圓形',
@@ -432,14 +299,7 @@ export const crystals = [
     size: 10.3, // mm
     category: 'crystal',
     color: '綠色系',
-    power: '再生',
-    price: 16,
-    description: [
-      '鳳凰石具有再生與活力能量',
-      '促進身體復原與能量提升',
-      '支持生命力與活力',
-      '適合需要恢復與活力的人使用'
-    ],
+    price: 118,
     zodiac: ['牡羊座'],
     chakra: '海底輪',
     shape: '圓形',
@@ -453,14 +313,7 @@ export const crystals = [
     size: 11.6, // mm
     category: 'crystal',
     color: '藍色系',
-    power: '溝通',
-    price: 17,
-    description: [
-      '天河石具有溝通與寧靜能量',
-      '提升表達能力與溝通技巧',
-      '支持情緒平衡與內心平靜',
-      '適合需要溝通與平靜的人使用'
-    ],
+    price: 42,
     zodiac: ['水瓶座'],
     chakra: '喉輪',
     shape: '圓形',
@@ -474,14 +327,7 @@ export const crystals = [
     size: 12.0, // mm
     category: 'crystal',
     color: '黃色系',
-    power: '財富',
-    price: 17,
-    description: [
-      '菜花玉具有財富與快樂能量',
-      '吸引財運與機會',
-      '促進樂觀情緒與積極思考',
-      '適合需要財運與快樂的人使用'
-    ],
+    price: 43,
     zodiac: ['獅子座'],
     chakra: '太陽神經叢輪',
     shape: '圓形',
@@ -495,14 +341,7 @@ export const crystals = [
     size: 11.6, // mm
     category: 'crystal',
     color: '綠色系',
-    power: '愛',
-    price: 16,
-    description: [
-      '綠紋石具有愛與和諧能量',
-      '促進關係與情感連接',
-      '支持情感療癒與平衡',
-      '適合需要愛與和諧的人使用'
-    ],
+    price: 37,
     zodiac: ['天秤座'],
     chakra: '心輪',
     shape: '圓形',
@@ -516,14 +355,7 @@ export const crystals = [
     size: 10.0, // mm
     category: 'crystal',
     color: '紫色系',
-    power: '靈性',
-    price: 15,
-    description: [
-      '紫阿賽具有靈性與智慧能量',
-      '提升直覺與精神意識',
-      '促進冥想與靈性成長',
-      '適合需要靈性發展的人使用'
-    ],
+    price: 52,
     zodiac: ['射手座'],
     chakra: '眉心輪',
     shape: '圓形',
@@ -537,14 +369,7 @@ export const crystals = [
     size: 11.1, // mm
     category: 'crystal',
     color: '粉紅色系',
-    power: '愛',
-    price: 16,
-    description: [
-      '梅花碧璽具有愛與平衡能量',
-      '促進愛情與情感連接',
-      '支持情感穩定與平衡',
-      '適合需要愛與平衡的人使用'
-    ],
+    price: 78,
     zodiac: ['天秤座'],
     chakra: '心輪',
     shape: '圓形',
@@ -558,14 +383,7 @@ export const crystals = [
     size: 4.3, // mm
     category: 'crystal',
     color: '藍色系',
-    power: '溝通',
-    price: 15,
-    description: [
-      '海藍寶具有平靜與溝通能量',
-      '緩解喉輪阻塞，促進表達',
-      '支持清晰溝通與真實表達',
-      '適合需要溝通與平靜的人使用'
-    ],
+    price: 6,
     zodiac: ['雙魚座', '水瓶座'],
     chakra: '喉輪',
     shape: '圓形',
@@ -579,14 +397,7 @@ export const crystals = [
     size: 10.5, // mm
     category: 'crystal',
     color: '紅色系',
-    power: '熱情',
-    price: 16,
-    description: [
-      '紅虎眼具有熱情與保護能量',
-      '提升活力與生命力',
-      '防止負能量侵襲',
-      '適合需要活力與保護的人使用'
-    ],
+    price: 41,
     zodiac: ['牡羊座', '獅子座'],
     chakra: '海底輪、太陽神經叢輪',
     shape: '圓形',
