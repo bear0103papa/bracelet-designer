@@ -172,7 +172,7 @@ export const crystals = [
     image: backbone,
     size: 10.4, // mm
     category: 'crystal',
-    color: '白色系',
+    color: '白、灰色系',
     price: 36,
     zodiac: ['魔羯座'],
     chakra: '海底輪',
@@ -403,6 +403,20 @@ export const crystals = [
     shape: '圓形',
     healing: '提升活力，防負能量侵襲',
     energy: '熱情、保護'
+  },
+  {
+    id: 'c29',
+    name: '青金石',
+    image: dragonAgate,
+    size: 9.5, // mm
+    category: 'crystal',
+    color: '黃色系',
+    price: 48,
+    zodiac: ['獅子座'],
+    chakra: '太陽神經叢輪',
+    shape: '圓形',
+    healing: '吸引成功、提升個人魅力',
+    energy: '自信、活力'
   }
 ];
 
