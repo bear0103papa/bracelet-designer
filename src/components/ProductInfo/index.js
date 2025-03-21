@@ -48,9 +48,9 @@ const ProductInfo = () => {
       <Section>
         <SectionTitle>基本資訊</SectionTitle>
         <PropertyList>
-          <PropertyItem>尺寸：{selectedCrystal.size} mm</PropertyItem>
           <PropertyItem>色系：{selectedCrystal.color}</PropertyItem>
-          <PropertyItem>能量：{selectedCrystal.power}</PropertyItem>
+          <PropertyItem>尺寸：{selectedCrystal.size} mm</PropertyItem>
+          <PropertyItem>能量：{selectedCrystal.energy}</PropertyItem>
           <PropertyItem>價格：NT$ {selectedCrystal.price}</PropertyItem>
           {selectedCrystal.zodiac && (
             <PropertyItem>適合星座：{selectedCrystal.zodiac.join('、')}</PropertyItem>

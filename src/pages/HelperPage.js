@@ -7,10 +7,14 @@ import numerologyIcon from '../assets/Logo/numerology.png';
 import crystalBallIcon from '../assets/Logo/crystal-ball.png';
 import solutionIcon from '../assets/Logo/solution (1).png';
 import surpriseBoxIcon from '../assets/Logo/surprise-box.png';
-import aiIcon from '../assets/Logo/ai.svg';
+import SurpriseGenerator from '../components/SurpriseGenerator';
+
 
 // 導入生命靈數計算器組件
 import NumerologyCalculator from '../components/NumerologyCalculator';
+
+// 導入靈感範本組件
+import InspirationTemplates from '../components/InspirationTemplates';
 
 const PageContainer = styled.div`
   padding: 20px;
@@ -109,9 +113,9 @@ const HelperPage = () => {
       case 'guidance':
         return <div>引導方向內容</div>;
       case 'inspiration':
-        return <div>來點靈感內容</div>;
+        return <InspirationTemplates />;
       case 'surprise':
-        return <div>來些驚喜內容</div>;
+        return <SurpriseGenerator />;
       case 'ai-advisor':
         return <div>功能開發中，敬請期待</div>;
       default:

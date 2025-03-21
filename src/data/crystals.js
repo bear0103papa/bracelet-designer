@@ -14,7 +14,7 @@ import backbone from '../assets/crystals/backbone.png';
 import yellowEye from '../assets/crystals/yellow-eye.png';
 import orangeSnowflakePhantom from '../assets/crystals/orange-snowflake-phantom.png';
 import dragonAgate from '../assets/crystals/dragon-agate.png';
-import violentYellowCrystal from '../assets/crystals/violent-yellow-crystal.png';
+// import violentYellowCrystal from '../assets/crystals/violent-yellow-crystal.png';
 import yellowCrystal from '../assets/crystals/yellow-crystal.png';
 import bluePhosphor from '../assets/crystals/blue-phosphor.png';
 import oilPaintingBlueCrystal from '../assets/crystals/oil-painting-blue-crystal.png';

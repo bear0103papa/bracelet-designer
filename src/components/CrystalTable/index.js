@@ -91,7 +91,7 @@ const CrystalTable = () => {
     return savedFilters ? JSON.parse(savedFilters) : {
       color: '',
       size: '',
-      power: '',
+      energy: '',
       price: ''
     };
   });
@@ -104,8 +104,8 @@ const CrystalTable = () => {
   // 獲取所有唯一的篩選選項
   const filterOptions = {
     color: [...new Set(crystals.map(c => c.color))],
-    power: [...new Set(crystals.map(c => c.power))],
     size: ['小(≤8mm)', '中(8-12mm)', '大(≥12mm)'],
+    energy: [...new Set(crystals.map(c => c.energy))],
     price: ['0-10', '11-15', '16-20']
   };
 
@@ -225,8 +225,9 @@ const CrystalTable = () => {
             onChange={(e) => setFilters({...filters, [key]: e.target.value})}
           >
             <option value="">{key === 'color' ? '色系' : 
-                            key === 'power' ? '能量' :
-                            key === 'size' ? '尺寸' : '價格'}</option>
+            key === 'size' ? '尺寸' :
+            key === 'energy' ? '能量' :
+            '價格'}</option>
             {options.map(option => (
               <option key={option} value={option}>{option}</option>
             ))}
