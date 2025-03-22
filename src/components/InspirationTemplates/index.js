@@ -235,10 +235,152 @@ const DetailsRow = styled.div`
   color: #666;
 `;
 
+const FilterIndicator = styled.div`
+  background: #f5f5f5;
+  padding: 10px 15px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+`;
+
+const ClearFilterButton = styled.button`
+  background: none;
+  border: none;
+  color: #4a90e2;
+  cursor: pointer;
+  padding: 5px 10px;
+  
+  &:hover {
+    text-decoration: underline;
+  }
+`;
+
+const EmptyMessage = styled.div`
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 40px;
+  background: #f9f9f9;
+  border-radius: 8px;
+  color: #666;
+`;
+
 const InspirationTemplates = () => {
   const navigate = useNavigate();
   const { setCurrentDesign } = useDesign();
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 767);
+  const [filteredTemplates, setFilteredTemplates] = useState(templates);
+  const [activeColorFilter, setActiveColorFilter] = useState('');
+  
+  // 修改 InspirationTemplates 組件中的篩選邏輯
+  useEffect(() => {
+    // 使用和 NumerologyCalculator 相同的鍵名
+    const selectedColor = localStorage.getItem('crystal_color_filter');
+    const timestamp = localStorage.getItem('filter_timestamp');
+    
+    console.log(`檢查顏色過濾器: ${selectedColor}, 時間戳: ${timestamp}`);
+    console.log(`當前組件已載入，URL: ${window.location.href}`);
+    
+    if (selectedColor) {
+      setActiveColorFilter(selectedColor); // 保存當前過濾顏色
+      const filterColor = selectedColor.toLowerCase();
+      
+      console.log(`開始過濾 ${filterColor} 系水晶...`);
+      
+      // 更全面且更寬鬆的顏色映射
+      const colorMap = {
+        '紅色': ['紅色系', '紅', '紅色', '多色系'],
+        '黑色': ['黑色系', '黑', '黑色', '多色系'],
+        '白色': ['白色系', '白', '白色', '多色系'],
+        '黃色': ['黃色系', '黃', '黃色', '橙色系', '橘色系', '多色系'],
+        '橙色': ['橙色系', '橙', '橙色', '橘色系', '橘', '橘色', '黃色系', '多色系'],
+        '藍色': ['藍色系', '藍', '藍色', '多色系'],
+        '綠色': ['綠色系', '綠', '綠色', '多色系'],
+        '粉紅': ['粉紅系', '粉紅', '粉紅色', '粉色系', '粉色', '粉紅', '多色系'],
+        '紫色': ['紫色系', '紫', '紫色', '多色系']
+      };
+      
+      // 列出所有可用模板的顏色，幫助調試
+      console.log('可用模板顏色:');
+      templates.forEach(t => console.log(`- ${t.name}: ${t.color}`));
+      
+      // 使用更寬鬆的匹配方式
+      const filtered = templates.filter(template => {
+        const templateColor = template.color.toLowerCase();
+        
+        // 檢查顏色是否匹配映射表中的任何一個顏色
+        if (colorMap[filterColor]) {
+          return colorMap[filterColor].some(c => 
+            templateColor.includes(c.toLowerCase())
+          );
+        }
+        
+        // 直接檢查顏色名稱是否包含在模板顏色中
+        return templateColor.includes(filterColor);
+      });
+      
+      console.log(`過濾後找到 ${filtered.length} 個模板`);
+      
+      // 當沒有找到匹配的模板時，使用更寬鬆的方法
+      if (filtered.length === 0) {
+        console.log('沒有找到精確匹配，嘗試更寬鬆的匹配...');
+        
+        // 更寬鬆的匹配 - 檢查可能的顏色關聯
+        const relatedTemplates = templates.filter(template => {
+          const tColor = template.color.toLowerCase();
+          
+          // 檢查所有可能的相關顏色
+          if (filterColor === '黃色' || filterColor === '橙色' || filterColor === '橘色') {
+            return tColor.includes('黃') || tColor.includes('橙') || 
+                   tColor.includes('橘') || tColor.includes('多色');
+          }
+          
+          if (filterColor === '綠色' || filterColor === '藍色') {
+            return tColor.includes('綠') || tColor.includes('藍') || 
+                   tColor.includes('多色');
+          }
+          
+          if (filterColor === '紅色' || filterColor === '粉紅' || filterColor === '紫色') {
+            return tColor.includes('紅') || tColor.includes('粉') || 
+                   tColor.includes('紫') || tColor.includes('多色');
+          }
+          
+          // 默認包括多色系
+          return tColor.includes('多色');
+        });
+        
+        if (relatedTemplates.length > 0) {
+          console.log(`找到 ${relatedTemplates.length} 個相關模板`);
+          setFilteredTemplates(relatedTemplates);
+        } else {
+          console.log('沒有找到相關模板，顯示所有模板');
+          setFilteredTemplates(templates);
+        }
+      } else {
+        setFilteredTemplates(filtered);
+      }
+    } else {
+      console.log('沒有找到顏色過濾條件，顯示所有模板');
+      setFilteredTemplates(templates);
+      setActiveColorFilter('');
+    }
+    
+    // 清除篩選器標記以避免下次載入時仍然生效
+    return () => {
+      // 可選：僅在卸載組件時清除
+      // localStorage.removeItem('crystal_color_filter');
+      // localStorage.removeItem('filter_timestamp');
+    };
+  }, []);
+  
+  // 增加一個清除過濾器的功能
+  const clearColorFilter = () => {
+    localStorage.removeItem('crystal_color_filter');
+    localStorage.removeItem('filter_timestamp');
+    setFilteredTemplates(templates);
+    setActiveColorFilter('');
+  };
   
   // 監聽視窗大小變化
   useEffect(() => {
@@ -309,8 +451,19 @@ const InspirationTemplates = () => {
   return (
     <Container>
       <Title>來點靈感 - 水晶手鍊範本</Title>
+      
+      {/* 添加一個顯示當前過濾條件的區域 */}
+      {activeColorFilter && (
+        <FilterIndicator>
+          <span>當前顯示: {activeColorFilter}系水晶</span>
+          <ClearFilterButton onClick={clearColorFilter}>
+            清除過濾
+          </ClearFilterButton>
+        </FilterIndicator>
+      )}
+      
       <TemplatesGrid>
-        {templates.map(template => {
+        {filteredTemplates.map(template => {
           // 計算每個範本的水晶位置
           const beadPositions = calculateBeadPositions(template.crystals);
           
@@ -355,6 +508,12 @@ const InspirationTemplates = () => {
             </TemplateCard>
           );
         })}
+        
+        {filteredTemplates.length === 0 && (
+          <EmptyMessage>
+            沒有找到符合 {activeColorFilter} 系的水晶範本。
+          </EmptyMessage>
+        )}
       </TemplatesGrid>
     </Container>
   );

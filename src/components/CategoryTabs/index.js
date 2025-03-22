@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { useNavigate } from 'react-router-dom';
 
 const TabsContainer = styled.div`
   display: flex;
@@ -24,23 +25,38 @@ const Tab = styled.div`
 `;
 
 const CategoryTabs = ({ currentCategory, onCategoryChange }) => {
+  const navigate = useNavigate();
+  
+  const handleTabClick = (category) => {
+    if (category === 'helper') {
+      navigate('/helper', { replace: true });
+      
+      localStorage.removeItem('crystal_color_filter');
+      localStorage.removeItem('filter_timestamp');
+      localStorage.removeItem('redirect_to_helper');
+      localStorage.removeItem('helper_page');
+    }
+    
+    onCategoryChange(category);
+  };
+  
   return (
     <TabsContainer>
       <Tab 
         active={currentCategory === 'crystal'} 
-        onClick={() => onCategoryChange('crystal')}
+        onClick={() => handleTabClick('crystal')}
       >
         水晶
       </Tab>
       <Tab 
         active={currentCategory === 'accessory'} 
-        onClick={() => onCategoryChange('accessory')}
+        onClick={() => handleTabClick('accessory')}
       >
         配件
       </Tab>
       <Tab 
         active={currentCategory === 'helper'} 
-        onClick={() => onCategoryChange('helper')}
+        onClick={() => handleTabClick('helper')}
       >
         小幫手
       </Tab>

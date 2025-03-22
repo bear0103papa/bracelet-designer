@@ -5,6 +5,7 @@ import userIcon from '../../assets/Logo/user.png';
 import crystalIcon from '../../assets/Logo/freeze.png';
 import accessoryIcon from '../../assets/Logo/jewel.png';
 import helperIcon from '../../assets/Logo/witch.png';
+import { useNavigate } from 'react-router-dom';
 
 const NavContainer = styled.div`
   display: none;
@@ -151,6 +152,7 @@ const MiniCrystalBead = styled.img`
 const MobileNavigation = ({ currentCategory, onCategoryChange }) => {
   const { currentDesign } = useDesign();
   const [beadPositions, setBeadPositions] = useState([]);
+  const navigate = useNavigate();
 
   // 根據當前類別決定是否顯示預覽
   const showPreview = currentCategory === 'crystal' || currentCategory === 'accessory';
@@ -183,6 +185,19 @@ const MobileNavigation = ({ currentCategory, onCategoryChange }) => {
   const calculateMiniBeadPosition = (index, total, radius) => {
     const angle = ((index / total) * 360) - 90;
     return { angle };
+  };
+
+  const handleCategoryChange = (category) => {
+    if (category === 'helper') {
+      navigate('/helper', { replace: true });
+      
+      localStorage.removeItem('crystal_color_filter');
+      localStorage.removeItem('filter_timestamp');
+      localStorage.removeItem('redirect_to_helper');
+      localStorage.removeItem('helper_page');
+    }
+    
+    onCategoryChange(category);
   };
 
   return (
@@ -250,7 +265,7 @@ const MobileNavigation = ({ currentCategory, onCategoryChange }) => {
         
         <NavItem 
           active={currentCategory === 'helper'} 
-          onClick={() => onCategoryChange('helper')}
+          onClick={() => handleCategoryChange('helper')}
         >
           <HelperIcon active={currentCategory === 'helper'}>
             <img src={helperIcon} alt="小幫手" />

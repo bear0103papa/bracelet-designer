@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
+import { useNavigate } from 'react-router-dom';
+import { useDesign } from '../contexts/DesignContext';
 
 const PageTitle = styled.h2`
   margin-bottom: 30px;
@@ -76,6 +78,8 @@ const ResultText = styled.p`
 `;
 
 const NumerologyCalculator = () => {
+  const navigate = useNavigate();
+  const { setCurrentDesign } = useDesign();
   const [year, setYear] = useState('');
   const [month, setMonth] = useState('');
   const [day, setDay] = useState('');
@@ -226,6 +230,33 @@ const NumerologyCalculator = () => {
     };
   };
 
+  const handleColorCrystalClick = (color) => {
+    // 保存篩選顏色和時間戳
+    localStorage.setItem('crystal_color_filter', color);
+    localStorage.setItem('filter_timestamp', Date.now().toString());
+    
+    console.log(`選擇了 ${color} 系水晶，即將跳轉...`);
+    
+    try {
+      // 直接使用導航到 HelperPage 並顯式設置 URL 參數
+      const baseUrl = window.location.origin + (process.env.PUBLIC_URL || '');
+      // 使用完整 URL 確保正確導航
+      const targetUrl = `${baseUrl}/helper?page=inspiration`;
+      console.log("跳轉目標URL:", targetUrl);
+      
+      // 保存當前狀態以備重定向失敗時使用
+      localStorage.setItem('redirect_to_helper', 'true');
+      localStorage.setItem('helper_page', 'inspiration');
+      
+      // 強制重新加載頁面以確保狀態重置
+      window.location.href = targetUrl;
+    } catch (error) {
+      console.error("跳轉失敗:", error);
+      // 回退方案: 使用 navigate
+      navigate('/helper?page=inspiration');
+    }
+  };
+
   return (
     <>
       <PageTitle>開始探索生命靈數</PageTitle>
@@ -272,7 +303,7 @@ const NumerologyCalculator = () => {
           <ResultTitle>您的生命靈數是</ResultTitle>
           <h1 style={{ fontSize: '60px', margin: '10px 0' }}>{result}</h1>
           <div style={{ margin: '20px 0', fontWeight: 'bold' }}>
-            熱情・無限・富足
+            {getLifeNumberMeaning(result).title.split('｜')[1] || ''}
           </div>
           
           <ResultText>{getLifeNumberMeaning(result).title}</ResultText>
@@ -289,14 +320,18 @@ const NumerologyCalculator = () => {
           
           {getLifeNumberMeaning(result).colors.map((color, index) => (
             <div key={index} style={{ margin: '10px 0' }}>
-              <a href={`/crystals/${color}`} style={{ 
-                display: 'inline-block',
-                padding: '10px 20px',
-                border: '1px solid #ddd',
-                borderRadius: '30px',
-                textDecoration: 'none',
-                color: '#333'
-              }}>
+              <a 
+                onClick={() => handleColorCrystalClick(color)}
+                style={{ 
+                  display: 'inline-block',
+                  padding: '10px 20px',
+                  border: '1px solid #ddd',
+                  borderRadius: '30px',
+                  textDecoration: 'none',
+                  color: '#333',
+                  cursor: 'pointer'
+                }}
+              >
                 查看{color}系相關水晶飾品
               </a>
             </div>
