@@ -85,7 +85,7 @@
   &:hover {
     background: #f5f5f5;
   }
-`,l=e=>{let{currentCategory:t,onCategoryChange:r}=e;(0,n.Zp)();const i=e=>{"helper"===e&&(localStorage.removeItem("crystal_color_filter"),localStorage.removeItem("filter_timestamp"),localStorage.removeItem("redirect_to_helper"),localStorage.removeItem("helper_page")),r(e)};return(0,a.jsxs)(s,{children:[(0,a.jsx)(d,{active:"crystal"===t,onClick:()=>i("crystal"),children:"\u6c34\u6676"}),(0,a.jsx)(d,{active:"accessory"===t,onClick:()=>i("accessory"),children:"\u914d\u4ef6"}),(0,a.jsx)(d,{active:"helper"===t,onClick:()=>i("helper"),children:"\u5c0f\u5e6b\u624b"})]})};var c=r(667),p=r(276);o.Ay.div`
+`,l=e=>{let{currentCategory:t,onCategoryChange:r}=e;(0,n.Zp)();const i=e=>{"helper"===e&&(localStorage.removeItem("crystal_color_filter"),localStorage.removeItem("filter_timestamp"),localStorage.removeItem("redirect_to_helper"),localStorage.removeItem("helper_page")),r(e)};return(0,a.jsxs)(s,{children:[(0,a.jsx)(d,{active:"crystal"===t,onClick:()=>i("crystal"),children:"\u6c34\u6676"}),(0,a.jsx)(d,{active:"accessory"===t,onClick:()=>i("accessory"),children:"\u914d\u4ef6"}),(0,a.jsx)(d,{active:"helper"===t,onClick:()=>i("helper"),children:"\u5c0f\u5e6b\u624b"})]})};var c=r(250),p=r(276);o.Ay.div`
   overflow-y: auto;
   background: white;
   border-radius: 8px;
@@ -908,4 +908,4 @@
   border-radius: 4px;
   min-height: 100px;
 `,m=()=>{const{currentDesign:e}=(0,a.c)(),[t,r]=(0,i.useState)(!1),[o,d]=(0,i.useState)(!1);return(0,s.jsxs)(l,{children:[(0,s.jsx)(c,{children:(0,s.jsx)(n.A,{})}),(0,s.jsxs)(c,{children:[(0,s.jsx)(p,{children:"\u8a02\u8cfc\u8cc7\u8a0a"}),(0,s.jsxs)(x,{children:["\u7e3d\u91d1\u984d: NT$ ",e.crystals.reduce(((e,t)=>e+t.price),0)]}),(0,s.jsx)(g,{onClick:()=>{r(!0)},children:"\u4e0b\u55ae"}),t&&(0,s.jsxs)(h,{onSubmit:e=>{e.preventDefault();new FormData(e.target);d(!0),r(!1)},children:[(0,s.jsx)(u,{name:"name",placeholder:"\u59d3\u540d",required:!0}),(0,s.jsx)(u,{name:"email",type:"email",placeholder:"Email",required:!0}),(0,s.jsx)(f,{name:"address",placeholder:"\u9001\u8ca8\u5730\u5740",required:!0}),(0,s.jsx)(g,{type:"submit",children:"\u78ba\u8a8d\u9001\u51fa"})]}),o&&(0,s.jsx)("div",{style:{color:"#4CAF50",textAlign:"center",marginTop:"10px"},children:"\u8a02\u8cfc\u6210\u529f\uff01"})]})]})}}}]);
-//# sourceMappingURL=48.5c394bec.chunk.js.map
+//# sourceMappingURL=48.288603e5.chunk.js.map
