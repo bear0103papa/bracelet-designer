@@ -612,13 +612,37 @@ const InspirationTemplates = () => {
     
     // 根據裝置類型決定導航目標
     if (isMobile) {
-      // 手機版導航到個人頁面
-      navigate('/profile');
+      // 手機版導航到個人頁面，並添加一個狀態標記表示來自範本
+      navigate('/', { state: { fromTemplate: true } });
+      
+      // 可以嘗試添加一個本地存儲標記，確保在頁面刷新後也能保持狀態
+      localStorage.setItem('fromTemplate', 'true');
+      localStorage.setItem('template_selected_time', Date.now().toString());
+      
+      // 確保切換到「個人」頁籤
+      if (typeof window.setMobileCategory === 'function') {
+        window.setMobileCategory('profile');
+      }
+      
+      console.log('手機版：已選擇範本，導航到個人頁面');
     } else {
       // 桌面版導航到主編輯頁面
       navigate('/');
+      console.log('桌面版：已選擇範本，導航到主頁面');
     }
   };
+  
+  // 添加監聽窗口大小變化，更新 isMobile 狀態
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 767);
+    };
+    
+    window.addEventListener('resize', handleResize);
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
   
   return (
     <Container>

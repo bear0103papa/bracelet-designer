@@ -199,6 +199,33 @@ const MobileNavigation = ({ currentCategory, onCategoryChange }) => {
     onCategoryChange(category);
   };
 
+  useEffect(() => {
+    // 將切換分類的函數暴露為全局函數，允許其他組件調用
+    window.setMobileCategory = (category) => {
+      onCategoryChange(category);
+    };
+    
+    // 檢查是否有來自範本的跳轉請求
+    const fromTemplate = localStorage.getItem('fromTemplate');
+    const templateTime = localStorage.getItem('template_selected_time');
+    
+    if (fromTemplate === 'true' && templateTime) {
+      // 檢查時間戳，確保這是最近的選擇（比如在過去5分鐘內）
+      const now = Date.now();
+      const selectTime = parseInt(templateTime, 10);
+      if (now - selectTime < 5 * 60 * 1000) { // 5分鐘
+        onCategoryChange('profile');
+        // 使用後清除，避免重複觸發
+        localStorage.removeItem('fromTemplate');
+        localStorage.removeItem('template_selected_time');
+      }
+    }
+    
+    return () => {
+      delete window.setMobileCategory;
+    };
+  }, [onCategoryChange]);
+
   return (
     <NavContainer>
       <NavItems>
