@@ -189,8 +189,7 @@ const MobileNavigation = ({ currentCategory, onCategoryChange }) => {
 
   const handleCategoryChange = (category) => {
     if (category === 'helper') {
-      navigate('/helper', { replace: true });
-      
+      // 只清除過濾器，不進行導航
       localStorage.removeItem('crystal_color_filter');
       localStorage.removeItem('filter_timestamp');
       localStorage.removeItem('redirect_to_helper');

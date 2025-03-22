@@ -238,22 +238,23 @@ const NumerologyCalculator = () => {
     console.log(`選擇了 ${color} 系水晶，即將跳轉...`);
     
     try {
-      // 直接使用導航到 HelperPage 並顯式設置 URL 參數
-      const baseUrl = window.location.origin + (process.env.PUBLIC_URL || '');
-      // 使用完整 URL 確保正確導航
-      const targetUrl = `${baseUrl}/helper?page=inspiration`;
-      console.log("跳轉目標URL:", targetUrl);
-      
-      // 保存當前狀態以備重定向失敗時使用
+      // 不使用網址導航，改為使用本地狀態
       localStorage.setItem('redirect_to_helper', 'true');
       localStorage.setItem('helper_page', 'inspiration');
       
-      // 強制重新加載頁面以確保狀態重置
-      window.location.href = targetUrl;
+      // 如果在同一頁面內，直接調用函數切換
+      if (window.location.href.includes('/helper')) {
+        // 可以嘗試呼叫本頁面的函數
+        if (typeof window.setSelectedOption === 'function') {
+          window.setSelectedOption('inspiration');
+          return;
+        }
+      }
+      
+      // 否則回到主頁面，由主頁面處理重定向
+      window.location.href = window.location.origin + (process.env.PUBLIC_URL || '');
     } catch (error) {
       console.error("跳轉失敗:", error);
-      // 回退方案: 使用 navigate
-      navigate('/helper?page=inspiration');
     }
   };
 

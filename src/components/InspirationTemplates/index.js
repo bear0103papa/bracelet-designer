@@ -266,6 +266,105 @@ const EmptyMessage = styled.div`
   color: #666;
 `;
 
+// 添加篩選相關樣式組件
+const FiltersContainer = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 20px;
+  padding: 15px;
+  background: #f5f5f5;
+  border-radius: 8px;
+  
+  @media (max-width: 767px) {
+    flex-direction: column;
+    gap: 15px;
+  }
+`;
+
+const FilterGroup = styled.div`
+  display: flex;
+  flex-direction: column;
+  
+  @media (min-width: 768px) {
+    flex: 1;
+    min-width: 120px;
+  }
+`;
+
+const FilterLabel = styled.label`
+  font-size: 14px;
+  color: #333;
+  margin-bottom: 5px;
+  font-weight: bold;
+`;
+
+const FilterSelect = styled.select`
+  padding: 8px 12px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  background: #fff;
+  font-size: 14px;
+  
+  &:focus {
+    outline: none;
+    border-color: #4a90e2;
+  }
+`;
+
+const ClearAllButton = styled.button`
+  background: #f0f0f0;
+  border: none;
+  padding: 8px 15px;
+  border-radius: 4px;
+  font-size: 14px;
+  color: #333;
+  cursor: pointer;
+  margin-top: auto; /* 將按鈕推到底部 */
+  align-self: flex-start;
+  
+  &:hover {
+    background: #e0e0e0;
+  }
+  
+  @media (max-width: 767px) {
+    align-self: stretch;
+    text-align: center;
+  }
+`;
+
+const TagsSelect = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin-top: 5px;
+  max-height: 80px;
+  overflow-y: auto;
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  padding: 5px;
+`;
+
+const TagOption = styled.div`
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 12px;
+  cursor: pointer;
+  background: ${props => props.selected ? '#4a90e2' : '#f0f0f0'};
+  color: ${props => props.selected ? 'white' : '#666'};
+  
+  &:hover {
+    background: ${props => props.selected ? '#3a80d2' : '#e0e0e0'};
+  }
+`;
+
+const FilteredCount = styled.div`
+  margin-bottom: 10px;
+  font-size: 14px;
+  color: #666;
+`;
+
 const InspirationTemplates = () => {
   const navigate = useNavigate();
   const { setCurrentDesign } = useDesign();
@@ -273,22 +372,140 @@ const InspirationTemplates = () => {
   const [filteredTemplates, setFilteredTemplates] = useState(templates);
   const [activeColorFilter, setActiveColorFilter] = useState('');
   
-  // 修改 InspirationTemplates 組件中的篩選邏輯
+  // 添加篩選狀態
+  const [filters, setFilters] = useState({
+    color: '',
+    size: '',
+    tag: '', // 能量標籤
+    price: ''
+  });
+  
+  // 提取所有可用的篩選選項
+  const filterOptions = {
+    color: [...new Set(templates.map(t => t.color))],
+    size: ['14cm以下', '14-15cm', '15cm以上'],
+    tags: [...new Set(templates.flatMap(t => t.tags))],
+    price: ['1000元以下', '1000-1500元', '1500元以上']
+  };
+  
+  // 處理篩選變更
+  const handleFilterChange = (filterType, value) => {
+    setFilters({
+      ...filters,
+      [filterType]: value
+    });
+  };
+  
+  // 處理標籤篩選
+  const handleTagFilter = (e) => {
+    // 直接使用 e.target.value 作為選定的標籤值
+    setFilters({
+      ...filters,
+      tag: e.target.value
+    });
+  };
+  
+  // 清除所有篩選條件
+  const clearAllFilters = () => {
+    setFilters({
+      color: '',
+      size: '',
+      tag: '',
+      price: ''
+    });
+    
+    localStorage.removeItem('crystal_color_filter');
+    localStorage.removeItem('filter_timestamp');
+    setActiveColorFilter('');
+  };
+  
+  // 添加缺失的 clearColorFilter 函數
+  const clearColorFilter = () => {
+    localStorage.removeItem('crystal_color_filter');
+    localStorage.removeItem('filter_timestamp');
+    setFilteredTemplates(templates);
+    setActiveColorFilter('');
+  };
+  
+  // 從 localStorage 更新顏色篩選器
   useEffect(() => {
-    // 使用和 NumerologyCalculator 相同的鍵名
+    const selectedColor = localStorage.getItem('crystal_color_filter');
+    
+    if (selectedColor) {
+      setActiveColorFilter(selectedColor);
+      setFilters(prev => ({
+        ...prev,
+        color: selectedColor + '系' // 添加"系"字以匹配下拉選項
+      }));
+    }
+  }, []);
+  
+  // 應用篩選器
+  useEffect(() => {
+    let results = [...templates];
+    
+    // 篩選顏色
+    if (filters.color) {
+      const colorToFilter = filters.color.toLowerCase();
+      results = results.filter(template => {
+        const templateColor = template.color.toLowerCase();
+        return templateColor.includes(colorToFilter);
+      });
+    }
+    
+    // 篩選尺寸
+    if (filters.size) {
+      switch(filters.size) {
+        case '14cm以下':
+          results = results.filter(t => t.size < 140);
+          break;
+        case '14-15cm':
+          results = results.filter(t => t.size >= 140 && t.size <= 150);
+          break;
+        case '15cm以上':
+          results = results.filter(t => t.size > 150);
+          break;
+        default:
+          break;
+      }
+    }
+    
+    // 篩選標籤（能量）
+    if (filters.tag) {
+      results = results.filter(t => 
+        t.tags.some(tag => tag.toLowerCase() === filters.tag.toLowerCase())
+      );
+    }
+    
+    // 篩選價格
+    if (filters.price) {
+      switch(filters.price) {
+        case '1000元以下':
+          results = results.filter(t => t.price < 1000);
+          break;
+        case '1000-1500元':
+          results = results.filter(t => t.price >= 1000 && t.price <= 1500);
+          break;
+        case '1500元以上':
+          results = results.filter(t => t.price > 1500);
+          break;
+        default:
+          break;
+      }
+    }
+    
+    setFilteredTemplates(results);
+  }, [filters]);
+  
+  // 原有的顏色篩選邏輯
+  useEffect(() => {
     const selectedColor = localStorage.getItem('crystal_color_filter');
     const timestamp = localStorage.getItem('filter_timestamp');
     
-    console.log(`檢查顏色過濾器: ${selectedColor}, 時間戳: ${timestamp}`);
-    console.log(`當前組件已載入，URL: ${window.location.href}`);
-    
-    if (selectedColor) {
-      setActiveColorFilter(selectedColor); // 保存當前過濾顏色
+    if (selectedColor && !filters.color) {
+      // 只在沒有其他篩選條件時應用從其他頁面帶來的篩選條件
       const filterColor = selectedColor.toLowerCase();
       
-      console.log(`開始過濾 ${filterColor} 系水晶...`);
-      
-      // 更全面且更寬鬆的顏色映射
       const colorMap = {
         '紅色': ['紅色系', '紅', '紅色', '多色系'],
         '黑色': ['黑色系', '黑', '黑色', '多色系'],
@@ -301,36 +518,22 @@ const InspirationTemplates = () => {
         '紫色': ['紫色系', '紫', '紫色', '多色系']
       };
       
-      // 列出所有可用模板的顏色，幫助調試
-      console.log('可用模板顏色:');
-      templates.forEach(t => console.log(`- ${t.name}: ${t.color}`));
-      
-      // 使用更寬鬆的匹配方式
       const filtered = templates.filter(template => {
         const templateColor = template.color.toLowerCase();
         
-        // 檢查顏色是否匹配映射表中的任何一個顏色
         if (colorMap[filterColor]) {
           return colorMap[filterColor].some(c => 
             templateColor.includes(c.toLowerCase())
           );
         }
         
-        // 直接檢查顏色名稱是否包含在模板顏色中
         return templateColor.includes(filterColor);
       });
       
-      console.log(`過濾後找到 ${filtered.length} 個模板`);
-      
-      // 當沒有找到匹配的模板時，使用更寬鬆的方法
       if (filtered.length === 0) {
-        console.log('沒有找到精確匹配，嘗試更寬鬆的匹配...');
-        
-        // 更寬鬆的匹配 - 檢查可能的顏色關聯
         const relatedTemplates = templates.filter(template => {
           const tColor = template.color.toLowerCase();
           
-          // 檢查所有可能的相關顏色
           if (filterColor === '黃色' || filterColor === '橙色' || filterColor === '橘色') {
             return tColor.includes('黃') || tColor.includes('橙') || 
                    tColor.includes('橘') || tColor.includes('多色');
@@ -346,50 +549,19 @@ const InspirationTemplates = () => {
                    tColor.includes('紫') || tColor.includes('多色');
           }
           
-          // 默認包括多色系
           return tColor.includes('多色');
         });
         
         if (relatedTemplates.length > 0) {
-          console.log(`找到 ${relatedTemplates.length} 個相關模板`);
           setFilteredTemplates(relatedTemplates);
         } else {
-          console.log('沒有找到相關模板，顯示所有模板');
           setFilteredTemplates(templates);
         }
       } else {
         setFilteredTemplates(filtered);
       }
-    } else {
-      console.log('沒有找到顏色過濾條件，顯示所有模板');
-      setFilteredTemplates(templates);
-      setActiveColorFilter('');
     }
     
-    // 清除篩選器標記以避免下次載入時仍然生效
-    return () => {
-      // 可選：僅在卸載組件時清除
-      // localStorage.removeItem('crystal_color_filter');
-      // localStorage.removeItem('filter_timestamp');
-    };
-  }, []);
-  
-  // 增加一個清除過濾器的功能
-  const clearColorFilter = () => {
-    localStorage.removeItem('crystal_color_filter');
-    localStorage.removeItem('filter_timestamp');
-    setFilteredTemplates(templates);
-    setActiveColorFilter('');
-  };
-  
-  // 監聽視窗大小變化
-  useEffect(() => {
-    const handleResize = () => {
-      setIsMobile(window.innerWidth <= 767);
-    };
-    
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
   }, []);
   
   // 更新計算水晶位置的函數，參考 SurpriseGenerator 的實現方式
@@ -452,8 +624,74 @@ const InspirationTemplates = () => {
     <Container>
       <Title>來點靈感 - 水晶手鍊範本</Title>
       
-      {/* 添加一個顯示當前過濾條件的區域 */}
-      {activeColorFilter && (
+      {/* 篩選器控制面板 */}
+      <FiltersContainer>
+        <FilterGroup>
+          <FilterLabel>色系</FilterLabel>
+          <FilterSelect 
+            value={filters.color}
+            onChange={(e) => handleFilterChange('color', e.target.value)}
+          >
+            <option value="">所有色系</option>
+            {filterOptions.color.map(color => (
+              <option key={color} value={color}>{color}</option>
+            ))}
+          </FilterSelect>
+        </FilterGroup>
+        
+        <FilterGroup>
+          <FilterLabel>尺寸</FilterLabel>
+          <FilterSelect 
+            value={filters.size}
+            onChange={(e) => handleFilterChange('size', e.target.value)}
+          >
+            <option value="">所有尺寸</option>
+            {filterOptions.size.map(size => (
+              <option key={size} value={size}>{size}</option>
+            ))}
+          </FilterSelect>
+        </FilterGroup>
+        
+        <FilterGroup>
+          <FilterLabel>能量</FilterLabel>
+          <FilterSelect 
+            value={filters.tag}
+            onChange={handleTagFilter}
+          >
+            <option value="">所有能量</option>
+            {filterOptions.tags.map(tag => (
+              <option key={tag} value={tag}>{tag}</option>
+            ))}
+          </FilterSelect>
+        </FilterGroup>
+        
+        <FilterGroup>
+          <FilterLabel>價格</FilterLabel>
+          <FilterSelect 
+            value={filters.price}
+            onChange={(e) => handleFilterChange('price', e.target.value)}
+          >
+            <option value="">所有價格</option>
+            {filterOptions.price.map(price => (
+              <option key={price} value={price}>{price}</option>
+            ))}
+          </FilterSelect>
+        </FilterGroup>
+        
+        <FilterGroup>
+          <ClearAllButton onClick={clearAllFilters}>
+            清除所有篩選
+          </ClearAllButton>
+        </FilterGroup>
+      </FiltersContainer>
+      
+      {/* 顯示篩選結果計數 */}
+      <FilteredCount>
+        找到 {filteredTemplates.length} 個符合條件的範本
+      </FilteredCount>
+      
+      {/* 已經存在的顏色篩選指示器，當來自其他頁面的篩選活躍時顯示 */}
+      {activeColorFilter && !filters.color && (
         <FilterIndicator>
           <span>當前顯示: {activeColorFilter}系水晶</span>
           <ClearFilterButton onClick={clearColorFilter}>
@@ -511,7 +749,7 @@ const InspirationTemplates = () => {
         
         {filteredTemplates.length === 0 && (
           <EmptyMessage>
-            沒有找到符合 {activeColorFilter} 系的水晶範本。
+            沒有找到符合篩選條件的水晶範本。
           </EmptyMessage>
         )}
       </TemplatesGrid>

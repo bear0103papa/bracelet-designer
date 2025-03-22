@@ -25,6 +25,7 @@ import greenVeinStone from '../assets/crystals/green-vein-stone.png';
 import blueEyebig from '../assets/crystals/blue-eye-big.png';
 import aquamarine from '../assets/crystals/aquamarine.png';
 import redEye from '../assets/crystals/red-eye.png';
+import blueCrystal from '../assets/crystals/blue-crystal.png';
 export const crystals = [
   {
     id: 'c3',
@@ -407,7 +408,7 @@ export const crystals = [
   {
     id: 'c29',
     name: '青金石',
-    image: dragonAgate,
+    image: blueCrystal,
     size: 9.5, // mm
     category: 'crystal',
     color: '黃色系',

@@ -102,27 +102,8 @@ const HelperPage = () => {
   const navigate = useNavigate();
   const location = useLocation();
   
-  // 先從 URL 獲取參數
-  const getPageFromURL = () => {
-    // 直接從 URL 獲取參數
-    const currentURL = window.location.href;
-    console.log("完整URL:", currentURL);
-    
-    const urlParams = new URLSearchParams(window.location.search);
-    const page = urlParams.get('page');
-    console.log("URL 參數中的頁面:", page);
-    
-    return page;
-  };
-  
   // 三種來源的優先順序: URL 參數 > localStorage > null
   const [selectedOption, setSelectedOption] = useState(() => {
-    const urlPage = getPageFromURL();
-    if (urlPage) {
-      console.log("從 URL 取得頁面類型:", urlPage);
-      return urlPage;
-    }
-    
     const savedPage = localStorage.getItem('helper_page');
     if (savedPage) {
       // 用完即刪
@@ -135,14 +116,16 @@ const HelperPage = () => {
     return null;
   });
   
-  // 當 URL 變化時更新選項
+  // 提供一個全局函數用於外部組件調用
   useEffect(() => {
-    const urlPage = getPageFromURL();
-    if (urlPage && urlPage !== selectedOption) {
-      console.log("URL 參數變化，更新頁面類型:", urlPage);
-      setSelectedOption(urlPage);
-    }
-  }, [location.search]);
+    // 全局函數用於外部組件設置選項
+    window.setSelectedOption = setSelectedOption;
+    
+    return () => {
+      // 組件卸載時清除全局函數
+      window.setSelectedOption = undefined;
+    };
+  }, []);
   
   // 重置選擇的選項
   const resetSelectedOption = useCallback(() => {
@@ -153,17 +136,6 @@ const HelperPage = () => {
     localStorage.removeItem('redirect_to_helper');
     localStorage.removeItem('helper_page');
   }, []);
-  
-  // 監聽 URL 變化
-  useEffect(() => {
-    const path = location.pathname;
-    const search = location.search;
-    
-    // 當 URL 是純 /helper 沒有參數時，重置選項
-    if (path === '/helper' && !search) {
-      resetSelectedOption();
-    }
-  }, [location, resetSelectedOption]);
   
   const handleOptionClick = (option) => {
     setSelectedOption(option);
@@ -190,14 +162,11 @@ const HelperPage = () => {
   
   const handleBackClick = () => {
     resetSelectedOption();
-    navigate('/helper', { replace: true });
+    // 不需要導航
   };
   
   return (
-    <PageContainer>
-      <PageTitle>設計助手</PageTitle>
-      <PageSubtitle>選擇一種方式來幫助您設計完美的水晶手鍊</PageSubtitle>
-      
+    <PageContainer>    
       {selectedOption ? (
         <>
           <BackButton onClick={handleBackClick}>返回選項</BackButton>

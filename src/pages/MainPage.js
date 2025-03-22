@@ -141,8 +141,6 @@ const MainPage = () => {
     const redirectToHelper = localStorage.getItem('redirect_to_helper');
     const helperPage = localStorage.getItem('helper_page');
     
-    console.log("檢查重定向需求:", redirectToHelper, helperPage);
-    
     if (redirectToHelper === 'true') {
       // 清除重定向標記，防止循環
       localStorage.removeItem('redirect_to_helper');
@@ -150,25 +148,9 @@ const MainPage = () => {
       // 設置當前類別為 helper
       setCurrentCategory('helper');
       
-      // 關鍵修改：直接使用 navigate 強制跳轉到正確的 URL
-      // 使用 URL 參數來確保 HelperPage 可以獲取到正確的頁面參數
-      if (helperPage) {
-        const currentUrl = window.location.pathname;
-        console.log("當前路徑:", currentUrl);
-        
-        // 避免循環重定向
-        if (!currentUrl.includes('helper')) {
-          const targetUrl = `/helper?page=${helperPage}`;
-          console.log("嘗試在 MainPage 中重定向到:", targetUrl);
-          navigate(targetUrl, { replace: true });
-        }
-        
-        localStorage.removeItem('helper_page');
-      }
-      
-      console.log("已重定向到 helper 頁面，頁面類型:", helperPage);
+      console.log("已切換到 helper 頁面，頁面類型:", helperPage);
     }
-  }, [navigate]);
+  }, []);
 
   const calculateTotal = () => {
     if (!currentDesign || !currentDesign.crystals) {

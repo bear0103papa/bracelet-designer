@@ -1,7 +1,8 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import React from 'react';
+import { HashRouter, Routes, Route, useRoutes } from 'react-router-dom';
 import styled from 'styled-components';
 import { DesignProvider } from './contexts/DesignContext';
-import MainPage from './pages/MainPage';
+import routes from './routes';
 import Header from './components/Header';
 
 const AppContainer = styled.div`
@@ -19,18 +20,22 @@ const ContentContainer = styled.div`
   }
 `;
 
+function AppRoutes() {
+  return useRoutes(routes);
+}
+
 function App() {
   return (
-    <Router>
+    <HashRouter>
       <DesignProvider>
         <AppContainer>
           <Header />
           <ContentContainer>
-            <MainPage />
+            <AppRoutes />
           </ContentContainer>
         </AppContainer>
       </DesignProvider>
-    </Router>
+    </HashRouter>
   );
 }
 
