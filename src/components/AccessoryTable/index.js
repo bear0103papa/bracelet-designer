@@ -1,16 +1,13 @@
 import styled from 'styled-components';
-import { Accessories } from '../data/crystals';
+import { crystals } from '../../data/crystals';
+import { useDesign } from '../../contexts/DesignContext';
 import { useState, useEffect } from 'react';
-import { useDesign } from '../contexts/DesignContext';
 
-const PageContainer = styled.div`
-  padding: 20px;
-`;
-
-const PageTitle = styled.h2`
-  margin-bottom: 20px;
-  color: #333;
-  text-align: center;
+const TableContainer = styled.div`
+  overflow-y: auto;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 `;
 
 const GridView = styled.div`
@@ -84,8 +81,8 @@ const AccessoryInfo = styled.div`
   text-align: center;
 `;
 
-const AccessoryPage = () => {
-  const { setCurrentDesign, setSelectedCrystal } = useDesign();
+const AccessoryTable = () => {
+  const { currentDesign, setCurrentDesign, setSelectedCrystal } = useDesign();
   const [sortField, setSortField] = useState(null);
   const [sortDirection, setSortDirection] = useState('asc');
   const [filters, setFilters] = useState(() => {
@@ -104,11 +101,14 @@ const AccessoryPage = () => {
     localStorage.setItem('accessoryFilters', JSON.stringify(filters));
   }, [filters]);
 
+  // 篩選出所有配件
+  const accessories = crystals.filter(item => item.category === 'accessory');
+
   // 獲取所有唯一的篩選選項
   const filterOptions = {
-    color: [...new Set(Accessories.map(a => a.color))],
-    type: [...new Set(Accessories.map(a => a.type).filter(Boolean))],
-    material: [...new Set(Accessories.map(a => a.material).filter(Boolean))],
+    color: [...new Set(accessories.map(a => a.color))],
+    type: [...new Set(accessories.map(a => a.type).filter(Boolean))],
+    material: [...new Set(accessories.map(a => a.material).filter(Boolean))],
     price: ['0-10', '11-15', '16-20']
   };
 
@@ -134,7 +134,7 @@ const AccessoryPage = () => {
   };
 
   // 篩選及排序配件
-  const filteredAndSortedAccessories = Accessories
+  const filteredAndSortedAccessories = accessories
     .filter(accessory => {
       return (
         (!filters.color || accessory.color === filters.color) &&
@@ -158,10 +158,10 @@ const AccessoryPage = () => {
   };
 
   const handleAccessoryClick = (accessory) => {
-    // 設置選中的配件
+    // 首先設置選中的配件
     setSelectedCrystal(accessory);
     
-    // 添加到設計中
+    // 然後添加到設計中
     setCurrentDesign(prev => ({
       ...prev,
       crystals: [...prev.crystals, accessory]
@@ -169,9 +169,7 @@ const AccessoryPage = () => {
   };
 
   return (
-    <PageContainer>
-      <PageTitle>精美配件，點綴手鍊</PageTitle>
-      
+    <>
       <FilterContainer>
         {Object.entries(filterOptions).map(([key, options]) => (
           <FilterSelect
@@ -215,8 +213,8 @@ const AccessoryPage = () => {
           );
         })}
       </GridView>
-    </PageContainer>
+    </>
   );
 };
 
-export default AccessoryPage; 
+export default AccessoryTable; 

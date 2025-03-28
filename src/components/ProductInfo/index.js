@@ -31,6 +31,15 @@ const PropertyItem = styled.li`
   color: #333;
 `;
 
+const DescriptionItem = styled.li`
+  margin-bottom: 8px;
+  color: #333;
+`;
+
+const Description = styled.div`
+  margin-bottom: 24px;
+`;
+
 const ProductInfo = () => {
   const { selectedCrystal } = useDesign();
 
@@ -40,6 +49,21 @@ const ProductInfo = () => {
 
   // 確保 description 存在，如果不存在則提供默認值
   const descriptions = selectedCrystal.description || [];
+
+  const renderDescription = (descriptions) => {
+    // 檢查 descriptions 是否為陣列
+    if (Array.isArray(descriptions)) {
+      return descriptions.map((desc, index) => (
+        <DescriptionItem key={index}>
+          {desc}
+        </DescriptionItem>
+      ));
+    } else if (descriptions) {
+      // 如果是字串，直接顯示
+      return <DescriptionItem>{descriptions}</DescriptionItem>;
+    }
+    return null;
+  };
 
   return (
     <InfoContainer>
@@ -61,16 +85,9 @@ const ProductInfo = () => {
         </PropertyList>
       </Section>
 
-      {descriptions.length > 0 && (
-        <Section>
-          <SectionTitle>詳細說明</SectionTitle>
-          <PropertyList>
-            {descriptions.map((desc, index) => (
-              <PropertyItem key={index}>{desc}</PropertyItem>
-            ))}
-          </PropertyList>
-        </Section>
-      )}
+      <Description>
+        {renderDescription(selectedCrystal.description)}
+      </Description>
     </InfoContainer>
   );
 };

@@ -154,6 +154,36 @@ import accessory130 from '../assets/Accessories/PIc136.png';
 import accessory131 from '../assets/Accessories/PIc137.png';
 import accessory132 from '../assets/Accessories/PIc138.png';
 
+import accessory133 from '../assets/Accessories/PIc139.png';
+import accessory134 from '../assets/Accessories/PIc140.png';
+import accessory135 from '../assets/Accessories/PIc141.png';
+import accessory136 from '../assets/Accessories/PIc142.png';
+import accessory137 from '../assets/Accessories/PIc143.png';
+import accessory138 from '../assets/Accessories/PIc144.png';
+import accessory139 from '../assets/Accessories/PIc145.png';
+import accessory140 from '../assets/Accessories/PIc146.png';
+import accessory141 from '../assets/Accessories/PIc147.png';
+import accessory142 from '../assets/Accessories/PIc148.png';
+import accessory143 from '../assets/Accessories/PIc149.png';
+import accessory144 from '../assets/Accessories/PIc150.png';
+import accessory145 from '../assets/Accessories/PIc151.png';
+import accessory146 from '../assets/Accessories/PIc152.png';
+import accessory147 from '../assets/Accessories/PIc153.png';
+import accessory148 from '../assets/Accessories/PIc154.png';
+import accessory149 from '../assets/Accessories/PIc155.png';
+import accessory150 from '../assets/Accessories/PIc156.png';
+import accessory151 from '../assets/Accessories/PIc157.png';
+import accessory152 from '../assets/Accessories/PIc158.png';
+import accessory153 from '../assets/Accessories/PIc159.png';
+import accessory154 from '../assets/Accessories/PIc160.png';
+import accessory155 from '../assets/Accessories/PIc161.png';
+import accessory156 from '../assets/Accessories/PIc162.png';
+import accessory157 from '../assets/Accessories/PIc163.png';
+import accessory158 from '../assets/Accessories/PIc164.png';
+import accessory159 from '../assets/Accessories/PIc165.png';
+import accessory160 from '../assets/Accessories/PIc166.png';
+
+
 
 
 export const crystals = [
@@ -2215,6 +2245,384 @@ export const categories = [
     id: 'helper',
     name: '小幫手',
   }
+]; 
+
+export const Accessories = [
+  {
+    id: 'a1',
+    name: '手鍊配件-金色心形',
+    image: accessory133,
+    size: 15.0, // mm
+    category: 'accessory',
+    material: '合金',
+    color: '金色',
+    price: 15,
+    type: '手鍊配件',
+    compatible: ['手鍊'],
+    description: '精緻金色心形配件，適合搭配各種水晶手鍊'
+  },
+  {
+    id: 'a1',
+    name: '手鍊配件-金色心形',
+    image: accessory134,
+    size: 15.0, // mm
+    category: 'accessory',
+    material: '合金',
+    color: '金色',
+    price: 15,
+    type: '手鍊配件',
+    compatible: ['手鍊'],
+    description: '精緻金色心形配件，適合搭配各種水晶手鍊'
+  },
+  {
+    id: 'a1',
+    name: '手鍊配件-金色心形',
+    image: accessory135,
+    size: 15.0, // mm
+    category: 'accessory',
+    material: '合金',
+    color: '金色',
+    price: 15,
+    type: '手鍊配件',
+    compatible: ['手鍊'],
+    description: '精緻金色心形配件，適合搭配各種水晶手鍊'
+  },
+  {
+    id: 'a1',
+    name: '手鍊配件-金色心形',
+    image: accessory133,
+    size: 15.0, // mm
+    category: 'accessory',
+    material: '合金',
+    color: '金色',
+    price: 15,
+    type: '手鍊配件',
+    compatible: ['手鍊'],
+    description: '精緻金色心形配件，適合搭配各種水晶手鍊'
+  },
+  {
+    id: 'a1',
+    name: '手鍊配件-金色心形',
+    image: accessory136,
+    size: 15.0, // mm
+    category: 'accessory',
+    material: '合金',
+    color: '金色',
+    price: 15,
+    type: '手鍊配件',
+    compatible: ['手鍊'],
+    description: '精緻金色心形配件，適合搭配各種水晶手鍊'
+  },
+  {
+    id: 'a1',
+    name: '手鍊配件-金色心形',
+    image: accessory137,
+    size: 15.0, // mm
+    category: 'accessory',
+    material: '合金',
+    color: '金色',
+    price: 15,
+    type: '手鍊配件',
+    compatible: ['手鍊'],
+    description: '精緻金色心形配件，適合搭配各種水晶手鍊'
+  },
+  {
+    id: 'a1',
+    name: '手鍊配件-金色心形',
+    image: accessory138,
+    size: 15.0, // mm
+    category: 'accessory',
+    material: '合金',
+    color: '金色',
+    price: 15,
+    type: '手鍊配件',
+    compatible: ['手鍊'],
+    description: '精緻金色心形配件，適合搭配各種水晶手鍊'
+  },
+  {
+    id: 'a1',
+    name: '手鍊配件-金色心形',
+    image: accessory139,
+    size: 15.0, // mm
+    category: 'accessory',
+    material: '合金',
+    color: '金色',
+    price: 15,
+    type: '手鍊配件',
+    compatible: ['手鍊'],
+    description: '精緻金色心形配件，適合搭配各種水晶手鍊'
+  },
+  {
+    id: 'a1',
+    name: '手鍊配件-金色心形',
+    image: accessory140,
+    size: 15.0, // mm
+    category: 'accessory',
+    material: '合金',
+    color: '金色',
+    price: 15,
+    type: '手鍊配件',
+    compatible: ['手鍊'],
+    description: '精緻金色心形配件，適合搭配各種水晶手鍊'
+  },
+  {
+    id: 'a1',
+    name: '手鍊配件-金色心形',
+    image: accessory141,
+    size: 15.0, // mm
+    category: 'accessory',
+    material: '合金',
+    color: '金色',
+    price: 15,
+    type: '手鍊配件',
+    compatible: ['手鍊'],
+    description: '精緻金色心形配件，適合搭配各種水晶手鍊'
+  },
+  {
+    id: 'a1',
+    name: '手鍊配件-金色心形',
+    image: accessory142,
+    size: 15.0, // mm
+    category: 'accessory',
+    material: '合金',
+    color: '金色',
+    price: 15,
+    type: '手鍊配件',
+    compatible: ['手鍊'],
+    description: '精緻金色心形配件，適合搭配各種水晶手鍊'
+  },
+  {
+    id: 'a1',
+    name: '手鍊配件-金色心形',
+    image: accessory143,
+    size: 15.0, // mm
+    category: 'accessory',
+    material: '合金',
+    color: '金色',
+    price: 15,
+    type: '手鍊配件',
+    compatible: ['手鍊'],
+    description: '精緻金色心形配件，適合搭配各種水晶手鍊'
+  },
+  {
+    id: 'a1',
+    name: '手鍊配件-金色心形',
+    image: accessory144,
+    size: 15.0, // mm
+    category: 'accessory',
+    material: '合金',
+    color: '金色',
+    price: 15,
+    type: '手鍊配件',
+    compatible: ['手鍊'],
+    description: '精緻金色心形配件，適合搭配各種水晶手鍊'
+  },
+  {
+    id: 'a1',
+    name: '手鍊配件-金色心形',
+    image: accessory145,
+    size: 15.0, // mm
+    category: 'accessory',
+    material: '合金',
+    color: '金色',
+    price: 15,
+    type: '手鍊配件',
+    compatible: ['手鍊'],
+    description: '精緻金色心形配件，適合搭配各種水晶手鍊'
+  },
+  {
+    id: 'a1',
+    name: '手鍊配件-金色心形',
+    image: accessory146,
+    size: 15.0, // mm
+    category: 'accessory',
+    material: '合金',
+    color: '金色',
+    price: 15,
+    type: '手鍊配件',
+    compatible: ['手鍊'],
+    description: '精緻金色心形配件，適合搭配各種水晶手鍊'
+  },
+  {
+    id: 'a1',
+    name: '手鍊配件-金色心形',
+    image: accessory147,
+    size: 15.0, // mm
+    category: 'accessory',
+    material: '合金',
+    color: '金色',
+    price: 15,
+    type: '手鍊配件',
+    compatible: ['手鍊'],
+    description: '精緻金色心形配件，適合搭配各種水晶手鍊'
+  },
+  {
+    id: 'a1',
+    name: '手鍊配件-金色心形',
+    image: accessory148,
+    size: 15.0, // mm
+    category: 'accessory',
+    material: '合金',
+    color: '金色',
+    price: 15,
+    type: '手鍊配件',
+    compatible: ['手鍊'],
+    description: '精緻金色心形配件，適合搭配各種水晶手鍊'
+  },
+  {
+    id: 'a1',
+    name: '手鍊配件-金色心形',
+    image: accessory149,
+    size: 15.0, // mm
+    category: 'accessory',
+    material: '合金',
+    color: '金色',
+    price: 15,
+    type: '手鍊配件',
+    compatible: ['手鍊'],
+    description: '精緻金色心形配件，適合搭配各種水晶手鍊'
+  },
+  {
+    id: 'a1',
+    name: '手鍊配件-金色心形',
+    image: accessory150,
+    size: 15.0, // mm
+    category: 'accessory',
+    material: '合金',
+    color: '金色',
+    price: 15,
+    type: '手鍊配件',
+    compatible: ['手鍊'],
+    description: '精緻金色心形配件，適合搭配各種水晶手鍊'
+  },
+  {
+    id: 'a1',
+    name: '手鍊配件-金色心形',
+    image: accessory151,
+    size: 15.0, // mm
+    category: 'accessory',
+    material: '合金',
+    color: '金色',
+    price: 15,
+    type: '手鍊配件',
+    compatible: ['手鍊'],
+    description: '精緻金色心形配件，適合搭配各種水晶手鍊'
+  },
+  {
+    id: 'a1',
+    name: '手鍊配件-金色心形',
+    image: accessory152,
+    size: 15.0, // mm
+    category: 'accessory',
+    material: '合金',
+    color: '金色',
+    price: 15,
+    type: '手鍊配件',
+    compatible: ['手鍊'],
+    description: '精緻金色心形配件，適合搭配各種水晶手鍊'
+  },
+  {
+    id: 'a1',
+    name: '手鍊配件-金色心形',
+    image: accessory153,
+    size: 15.0, // mm
+    category: 'accessory',
+    material: '合金',
+    color: '金色',
+    price: 15,
+    type: '手鍊配件',
+    compatible: ['手鍊'],
+    description: '精緻金色心形配件，適合搭配各種水晶手鍊'
+  },
+  {
+    id: 'a1',
+    name: '手鍊配件-金色心形',
+    image: accessory154,
+    size: 15.0, // mm
+    category: 'accessory',
+    material: '合金',
+    color: '金色',
+    price: 15,
+    type: '手鍊配件',
+    compatible: ['手鍊'],
+    description: '精緻金色心形配件，適合搭配各種水晶手鍊'
+  },
+  {
+    id: 'a1',
+    name: '手鍊配件-金色心形',
+    image: accessory155,
+    size: 15.0, // mm
+    category: 'accessory',
+    material: '合金',
+    color: '金色',
+    price: 15,
+    type: '手鍊配件',
+    compatible: ['手鍊'],
+    description: '精緻金色心形配件，適合搭配各種水晶手鍊'
+  },
+  {
+    id: 'a1',
+    name: '手鍊配件-金色心形',
+    image: accessory156,
+    size: 15.0, // mm
+    category: 'accessory',
+    material: '合金',
+    color: '金色',
+    price: 15,
+    type: '手鍊配件',
+    compatible: ['手鍊'],
+    description: '精緻金色心形配件，適合搭配各種水晶手鍊'
+  },
+  {
+    id: 'a1',
+    name: '手鍊配件-金色心形',
+    image: accessory157,
+    size: 15.0, // mm
+    category: 'accessory',
+    material: '合金',
+    color: '金色',
+    price: 15,
+    type: '手鍊配件',
+    compatible: ['手鍊'],
+    description: '精緻金色心形配件，適合搭配各種水晶手鍊'
+  },
+  {
+    id: 'a1',
+    name: '手鍊配件-金色心形',
+    image: accessory158,
+    size: 15.0, // mm
+    category: 'accessory',
+    material: '合金',
+    color: '金色',
+    price: 15,
+    type: '手鍊配件',
+    compatible: ['手鍊'],
+    description: '精緻金色心形配件，適合搭配各種水晶手鍊'
+  },
+  {
+    id: 'a1',
+    name: '手鍊配件-金色心形',
+    image: accessory159,
+    size: 15.0, // mm
+    category: 'accessory',
+    material: '合金',
+    color: '金色',
+    price: 15,
+    type: '手鍊配件',
+    compatible: ['手鍊'],
+    description: '精緻金色心形配件，適合搭配各種水晶手鍊'
+  },
+  {
+    id: 'a1',
+    name: '手鍊配件-金色心形',
+    image: accessory160,
+    size: 15.0, // mm
+    category: 'accessory',
+    material: '合金',
+    color: '金色',
+    price: 15,
+    type: '手鍊配件',
+    compatible: ['手鍊'],
+    description: '精緻金色心形配件，適合搭配各種水晶手鍊'
+  },
 ];
-
-

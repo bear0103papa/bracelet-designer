@@ -49,11 +49,13 @@ const CrystalBead = styled.div`
     translate(-50%, -50%)
     rotate(${props => props.angle}deg)
     translateX(${props => props.radius}px)
-    rotate(-${props => props.angle}deg);
+    rotate(${props => props.isAccessory ? 
+      (props.angle > 180 ? '270deg' : '90deg') : // 根據角度調整配件朝向
+      `-${props.angle}deg`});
   transition: all 0.3s ease;
   z-index: ${props => props.moveMode ? (props.isSource ? 3 : 2) : (props.size > 10 ? 2 : 1)};
   pointer-events: auto;
-  border-radius: 50%;
+  border-radius: ${props => props.isAccessory ? '10%' : '50%'};
   overflow: hidden;
   
   &::before {
@@ -63,7 +65,7 @@ const CrystalBead = styled.div`
     left: 0;
     right: 0;
     height: 40%;
-    border-radius: 50% 50% 0 0 / 100% 100% 0 0;
+    border-radius: ${props => props.isAccessory ? '10% 10% 0 0 / 20% 20% 0 0' : '50% 50% 0 0 / 100% 100% 0 0'};
     pointer-events: none;
   }
   
@@ -72,7 +74,7 @@ const CrystalBead = styled.div`
     transform: translate(-50%, -50%)
       rotate(${props.angle}deg)
       translateX(${props.radius}px)
-      rotate(-${props.angle}deg)
+      rotate(${props.isAccessory ? '90deg' : `-${props.angle}`}deg)
       scale(${props.isSource || props.isTarget ? '1.1' : '1'});
     ${props.isTarget ? 'outline: 2px solid #4a90e2;' : ''}
   `}
@@ -82,7 +84,7 @@ const BeadImage = styled.img`
   width: 100%;
   height: 100%;
   object-fit: cover;
-  border-radius: 50%;
+  border-radius: ${props => props.isAccessory ? '10%' : '50%'};
   position: relative;
   display: block;
 `;
@@ -670,12 +672,16 @@ const ProductDisplay = ({ onCrystalClick }) => {
         // 更新當前角度
         currentAngle += angleOccupation / overlapFactor;
         
+        // 判斷是否為配件
+        const isAccessory = crystal.category === 'Accessories';
+        
         positions.push({
           ...crystal,
           angle: (angle * 360) / adjustedTotalAngleOccupation,
           radius: adjustedRadius,
           displaySize,
-          sizeAdjustFactor
+          sizeAdjustFactor,
+          isAccessory
         });
       }
       
@@ -1025,36 +1031,43 @@ const ProductDisplay = ({ onCrystalClick }) => {
     });
   };
 
-  // 修改 renderCrystals 函數，確保水晶圖片正確顯示
+  // 修改 renderCrystals 函數，確保配件長邊朝外
   const renderCrystals = () => {
-    return beadPositions.map((bead, index) => (
-      <CrystalBead
-        key={index}
-        displaySize={bead.displaySize}
-        angle={bead.angle}
-        radius={bead.radius}
-        size={bead.size}
-        moveMode={moveMode}
-        isSource={sourceIndex === index}
-        isTarget={moveMode && selectedBeadIndex === index && sourceIndex !== index}
-        onClick={(e) => handleBeadClick(bead, index, e)}
-        draggable={isDraggingEnabled}
-        onDragStart={(e) => handleBeadDragStart(e, index)}
-        onDragEnd={handleBeadDragEnd}
-        onDragOver={(e) => handleBeadDragOver(e, index)}
-        onDrop={(e) => handleBeadDrop(e, index)}
-      >
-        <BeadImage 
-          src={bead.image} 
-          alt={`Crystal ${index}`} 
-          onError={(e) => {
-            console.error(`Failed to load image: ${bead.image}`);
-            e.target.src = 'default-crystal.png';
-          }}
-        />
-        <BeadGloss />
-      </CrystalBead>
-    ));
+    return beadPositions.map((bead, index) => {
+      // 判斷是否為配件 - 修正category識別
+      const isAccessory = bead.category === 'accessory';
+      
+      return (
+        <CrystalBead
+          key={index}
+          displaySize={bead.displaySize}
+          angle={bead.angle}
+          radius={bead.radius}
+          size={bead.size}
+          moveMode={moveMode}
+          isSource={sourceIndex === index}
+          isTarget={moveMode && selectedBeadIndex === index && sourceIndex !== index}
+          onClick={(e) => handleBeadClick(bead, index, e)}
+          draggable={isDraggingEnabled}
+          onDragStart={(e) => handleBeadDragStart(e, index)}
+          onDragEnd={handleBeadDragEnd}
+          onDragOver={(e) => handleBeadDragOver(e, index)}
+          onDrop={(e) => handleBeadDrop(e, index)}
+          isAccessory={isAccessory}
+        >
+          <BeadImage 
+            src={bead.image} 
+            alt={`${isAccessory ? 'Accessory' : 'Crystal'} ${index}`}
+            isAccessory={isAccessory}
+            onError={(e) => {
+              console.error(`Failed to load image: ${bead.image}`);
+              e.target.src = 'default-crystal.png';
+            }}
+          />
+          <BeadGloss />
+        </CrystalBead>
+      );
+    });
   };
 
   // 添加 handleSave 函數

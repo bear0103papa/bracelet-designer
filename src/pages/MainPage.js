@@ -11,6 +11,7 @@ import HelperPage from './HelperPage';
 import ProfilePage from './ProfilePage';
 import MobileNavigation from '../components/MobileNavigation';
 import { useNavigate } from 'react-router-dom';
+import { Route } from 'react-router-dom';
 
 const PageLayout = styled.div`
   display: grid;
