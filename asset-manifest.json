@@ -1,9 +1,9 @@
 {
   "files": {
     "main.css": "/bracelet-designer/static/css/main.e6c13ad2.css",
-    "main.js": "/bracelet-designer/static/js/main.94e786aa.js",
-    "static/js/48.143cec22.chunk.js": "/bracelet-designer/static/js/48.143cec22.chunk.js",
-    "static/js/192.8aee308d.chunk.js": "/bracelet-designer/static/js/192.8aee308d.chunk.js",
+    "main.js": "/bracelet-designer/static/js/main.a2d799d9.js",
+    "static/js/48.c7f26419.chunk.js": "/bracelet-designer/static/js/48.c7f26419.chunk.js",
+    "static/js/192.6deac1ee.chunk.js": "/bracelet-designer/static/js/192.6deac1ee.chunk.js",
     "static/js/234.78a99578.chunk.js": "/bracelet-designer/static/js/234.78a99578.chunk.js",
     "static/js/453.363571e7.chunk.js": "/bracelet-designer/static/js/453.363571e7.chunk.js",
     "static/media/Logo.jpg": "/bracelet-designer/static/media/Logo.a8fedd51f375bc0c76b4.jpg",
@@ -27,14 +27,14 @@
     "static/media/backbone.png": "/bracelet-designer/static/media/backbone.5055e28ec771bf805ded.png",
     "index.html": "/bracelet-designer/index.html",
     "main.e6c13ad2.css.map": "/bracelet-designer/static/css/main.e6c13ad2.css.map",
-    "main.94e786aa.js.map": "/bracelet-designer/static/js/main.94e786aa.js.map",
-    "48.143cec22.chunk.js.map": "/bracelet-designer/static/js/48.143cec22.chunk.js.map",
-    "192.8aee308d.chunk.js.map": "/bracelet-designer/static/js/192.8aee308d.chunk.js.map",
+    "main.a2d799d9.js.map": "/bracelet-designer/static/js/main.a2d799d9.js.map",
+    "48.c7f26419.chunk.js.map": "/bracelet-designer/static/js/48.c7f26419.chunk.js.map",
+    "192.6deac1ee.chunk.js.map": "/bracelet-designer/static/js/192.6deac1ee.chunk.js.map",
     "234.78a99578.chunk.js.map": "/bracelet-designer/static/js/234.78a99578.chunk.js.map",
     "453.363571e7.chunk.js.map": "/bracelet-designer/static/js/453.363571e7.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.e6c13ad2.css",
-    "static/js/main.94e786aa.js"
+    "static/js/main.a2d799d9.js"
   ]
 }
