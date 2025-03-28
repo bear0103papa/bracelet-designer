@@ -265,7 +265,7 @@
     translate(-50%, -50%)
     rotate(${e=>e.angle}deg)
     translateX(${e=>e.radius}px)
-    rotate(${e=>e.isAccessory?e.angle>180?"270deg":"90deg":`-${e.angle}deg`});
+    rotate(${e=>e.isAccessory?(e.angle,"270deg"):`-${e.angle}deg`});
   transition: all 0.3s ease;
   z-index: ${e=>e.moveMode?e.isSource?3:2:e.size>10?2:1};
   pointer-events: auto;
@@ -283,7 +283,7 @@
     pointer-events: none;
   }
   
-  ${e=>e.moveMode&&`\n    filter: brightness(${e.isSource?"1.2":e.isTarget?"1":"0.7"});\n    transform: translate(-50%, -50%)\n      rotate(${e.angle}deg)\n      translateX(${e.radius}px)\n      rotate(${e.isAccessory?"90deg":`-${e.angle}`}deg)\n      scale(${e.isSource||e.isTarget?"1.1":"1"});\n    ${e.isTarget?"outline: 2px solid #4a90e2;":""}\n  `}
+  ${e=>e.moveMode&&`\n    filter: brightness(${e.isSource?"1.2":e.isTarget?"1":"0.7"});\n    transform: translate(-50%, -50%)\n      rotate(${e.angle}deg)\n      translateX(${e.radius}px)\n      rotate(${e.isAccessory?"0":`-${e.angle}`}deg)\n      scale(${e.isSource||e.isTarget?"1.1":"1"});\n    ${e.isTarget?"outline: 2px solid #4a90e2;":""}\n  `}
 `,R=o.Ay.img`
   width: 100%;
   height: 100%;
@@ -968,4 +968,4 @@
   border-radius: 4px;
   min-height: 100px;
 `,f=()=>{const{currentDesign:e}=(0,n.c)(),[t,r]=(0,i.useState)(!1),[o,l]=(0,i.useState)(!1);return(0,s.jsxs)(d,{children:[(0,s.jsx)(c,{children:(0,s.jsx)(a.A,{})}),(0,s.jsxs)(c,{children:[(0,s.jsx)(p,{children:"\u8a02\u8cfc\u8cc7\u8a0a"}),(0,s.jsxs)(x,{children:["\u7e3d\u91d1\u984d: NT$ ",e.crystals.reduce(((e,t)=>e+t.price),0)]}),(0,s.jsx)(g,{onClick:()=>{r(!0)},children:"\u4e0b\u55ae"}),t&&(0,s.jsxs)(h,{onSubmit:e=>{e.preventDefault();new FormData(e.target);l(!0),r(!1)},children:[(0,s.jsx)(u,{name:"name",placeholder:"\u59d3\u540d",required:!0}),(0,s.jsx)(u,{name:"email",type:"email",placeholder:"Email",required:!0}),(0,s.jsx)(m,{name:"address",placeholder:"\u9001\u8ca8\u5730\u5740",required:!0}),(0,s.jsx)(g,{type:"submit",children:"\u78ba\u8a8d\u9001\u51fa"})]}),o&&(0,s.jsx)("div",{style:{color:"#4CAF50",textAlign:"center",marginTop:"10px"},children:"\u8a02\u8cfc\u6210\u529f\uff01"})]})]})}}}]);
-//# sourceMappingURL=48.c7f26419.chunk.js.map
+//# sourceMappingURL=48.2ac8d340.chunk.js.map
