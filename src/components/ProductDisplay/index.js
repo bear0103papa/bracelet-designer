@@ -50,7 +50,7 @@ const CrystalBead = styled.div`
     rotate(${props => props.angle}deg)
     translateX(${props => props.radius}px)
     rotate(${props => props.isAccessory ? 
-      (props.angle > 180 ? '270deg' : '90deg') : // 根據角度調整配件朝向
+      (props.angle > 180 ? '270deg' : '270deg') : // 根據角度調整配件朝向
       `-${props.angle}deg`});
   transition: all 0.3s ease;
   z-index: ${props => props.moveMode ? (props.isSource ? 3 : 2) : (props.size > 10 ? 2 : 1)};
@@ -74,7 +74,7 @@ const CrystalBead = styled.div`
     transform: translate(-50%, -50%)
       rotate(${props.angle}deg)
       translateX(${props.radius}px)
-      rotate(${props.isAccessory ? '90deg' : `-${props.angle}`}deg)
+      rotate(${props.isAccessory ? '0' : `-${props.angle}`}deg)
       scale(${props.isSource || props.isTarget ? '1.1' : '1'});
     ${props.isTarget ? 'outline: 2px solid #4a90e2;' : ''}
   `}
