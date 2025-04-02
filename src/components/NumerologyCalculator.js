@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import { useDesign } from '../contexts/DesignContext';
@@ -6,6 +6,11 @@ import { useDesign } from '../contexts/DesignContext';
 import numerologyDescriptions from '../data/NumerologyCalculator.json'; // 匯入 JSON 資料
 // --- 匯入水晶資料 ---
 import { crystals } from '../data/crystals'; // 匯入 crystals 陣列
+
+// 引入 react-datepicker
+import DatePicker from 'react-datepicker';
+// 引入 react-datepicker 的 CSS
+import "react-datepicker/dist/react-datepicker.css";
 
 const PageTitle = styled.h2`
   margin-bottom: 30px;
@@ -23,28 +28,6 @@ const InputContainer = styled.div`
   flex-direction: column;
   align-items: center;
   margin-bottom: 40px;
-`;
-
-const InputRow = styled.div`
-  display: flex;
-  justify-content: space-between;
-  width: 100%;
-  margin-bottom: 20px;
-`;
-
-const InputField = styled.input`
-  padding: 12px 15px;
-  border-radius: 30px;
-  border: 1px solid #ddd;
-  width: 100%;
-  font-size: 16px;
-  text-align: center;
-  background: white;
-  
-  &:focus {
-    outline: none;
-    border-color: #4a90e2;
-  }
 `;
 
 const CalculateButton = styled.button`
@@ -151,12 +134,41 @@ const ClickableCrystal = styled.span`
 `;
 // --- 結束：新增樣式 ---
 
+// 可以調整 DatePicker 的樣式
+const StyledDatePicker = styled(DatePicker)`
+  padding: 12px 15px;
+  border-radius: 30px;
+  border: 1px solid #ddd;
+  width: 100%; /* 讓它填滿容器寬度 */
+  font-size: 16px;
+  text-align: center;
+  background: white;
+  cursor: pointer;
+
+  &:focus {
+    outline: none;
+    border-color: #4a90e2;
+  }
+`;
+
+const DatePickerWrapper = styled.div`
+  width: 100%; // 讓包裝器填滿寬度
+  margin-bottom: 20px; // 與按鈕的間距
+  display: flex;
+  justify-content: center; // 水平置中
+`;
+
 const NumerologyCalculator = () => {
   const navigate = useNavigate();
   const { currentDesign, setCurrentDesign } = useDesign();
-  const [year, setYear] = useState('');
-  const [month, setMonth] = useState('');
-  const [day, setDay] = useState('');
+  // 移除 year, month, day 的 state
+  // const [year, setYear] = useState('');
+  // const [month, setMonth] = useState('');
+  // const [day, setDay] = useState('');
+
+  // 新增 state 來管理選中的日期
+  const [selectedDate, setSelectedDate] = useState(null); // 初始值設為 null
+
   const [numerologyResult, setNumerologyResult] = useState(null);
   const [resultDetails, setResultDetails] = useState(null);
 
@@ -177,20 +189,19 @@ const NumerologyCalculator = () => {
   };
 
   const calculateLifeNumber = () => {
-    if (!year || !month || !day || isNaN(parseInt(year)) || isNaN(parseInt(month)) || isNaN(parseInt(day))) {
-      alert('請填寫有效的數字格式出生日期');
+    // 修改檢查邏輯，現在檢查 selectedDate
+    if (!selectedDate) {
+      alert('請選擇您的出生日期');
       return;
     }
 
-    const y = parseInt(year);
-    const m = parseInt(month);
-    const d = parseInt(day);
+    // 從 selectedDate 物件獲取年、月、日
+    const y = selectedDate.getFullYear();
+    // getMonth() 返回 0-11，所以需要 +1
+    const m = selectedDate.getMonth() + 1;
+    const d = selectedDate.getDate();
 
-    if (m < 1 || m > 12 || d < 1 || d > 31) {
-        alert('請輸入有效的月份 (1-12) 和日期 (1-31)');
-        return;
-    }
-
+    // 計算邏輯保持不變
     const fateNumber = reduceToOneDigit(d);
     const destinyNumber = reduceToOneDigit(`${y}${m}${d}`);
     const missionNumber = reduceToOneDigit(`${m}${d}`);
@@ -251,36 +262,23 @@ const NumerologyCalculator = () => {
       <PageTitle>探索你的生命靈數組合</PageTitle>
       
       <InputContainer>
-        <InputRow>
-          <InputField 
-            type="number" 
-            placeholder="出生 西元年 (例: 1990)" 
-            value={year}
-            onChange={(e) => setYear(e.target.value)}
+        {/* 加入 DatePicker */}
+        <DatePickerWrapper>
+          <StyledDatePicker
+            selected={selectedDate}
+            onChange={(date) => setSelectedDate(date)}
+            dateFormat="yyyy/MM/dd"
+            placeholderText="請選擇出生日期"
+            showYearDropdown // 保留年份下拉
+            showMonthDropdown // 保留月份下拉
+            dropdownMode="select" // 保留 select 模式
+            maxDate={new Date()}
+            isClearable
+            peekNextMonth
+            scrollableYearDropdown // 暫時保留
+            yearDropdownItemNumber={100} // 暫時保留
           />
-        </InputRow>
-        
-        <InputRow>
-          <InputField 
-            type="number" 
-            placeholder="出生 月份 (例: 8)" 
-            min="1" 
-            max="12"
-            value={month}
-            onChange={(e) => setMonth(e.target.value)}
-          />
-        </InputRow>
-        
-        <InputRow>
-          <InputField 
-            type="number" 
-            placeholder="出生 日期 (例: 15)" 
-            min="1" 
-            max="31"
-            value={day}
-            onChange={(e) => setDay(e.target.value)}
-          />
-        </InputRow>
+        </DatePickerWrapper>
         
         <CalculateButton onClick={calculateLifeNumber}>
           開始計算
@@ -315,26 +313,23 @@ const NumerologyCalculator = () => {
           {resultDetails.crystalSuggestion && resultDetails.crystalSuggestion !== 'N/A' && (
             <ExplanationSection>
               <SectionTitle>💎 命定水晶搭配建議</SectionTitle>
-              <div> {/* 使用 div 包裹，以便處理多個水晶 */}
-                {resultDetails.crystalSuggestion.split(/[、,，\s]+/) // 使用正則表達式分割多種分隔符
-                  .map(name => name.trim()) // 去除前後空白
-                  .filter(name => name) // 過濾掉空字串
+              <div>
+                {resultDetails.crystalSuggestion.split(/[、,，\s]+/)
+                  .map(name => name.trim())
+                  .filter(name => name)
                   .map((crystalName, index) => {
-                    // 在 crystals 陣列中查找對應的水晶物件
                     const foundCrystal = crystals.find(c => c.name === crystalName);
                     if (foundCrystal) {
-                      // 如果找到，渲染可點擊的水晶
                       return (
                         <ClickableCrystal
-                          key={`${foundCrystal.id}-${index}`} // 使用唯一 key
+                          key={`${foundCrystal.id}-${index}`}
                           onClick={() => handleCrystalClick(foundCrystal)}
-                          title={`點擊將 ${foundCrystal.name} (${foundCrystal.size}mm) 加入設計`} // 添加提示文字
+                          title={`點擊將 ${foundCrystal.name} (${foundCrystal.size}mm) 加入設計`}
                         >
                           {crystalName}
                         </ClickableCrystal>
                       );
                     } else {
-                      // 如果找不到，只渲染文字 (並在 console 中提示)
                       console.warn(`在 crystals.js 中找不到名為 "${crystalName}" 的水晶`);
                       return <span key={`notfound-${index}`} style={{ marginRight: '5px' }}>{crystalName}</span>;
                     }

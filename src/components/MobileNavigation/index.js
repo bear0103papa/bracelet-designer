@@ -38,7 +38,7 @@ const NavItem = styled.div`
   cursor: pointer;
   flex: 1;
   color: ${props => props.active ? '#4a90e2' : '#666'};
-  border-top: 3px solid ${props => props.active ? '#4a90e2' : 'transparent'};
+  border-top: none;
   
   &:hover {
     color: #4a90e2;
@@ -113,35 +113,34 @@ const Label = styled.div`
   font-size: 12px;
 `;
 
-// 預覽容器，直接放在導航欄中間
 const PreviewContainer = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 100px;
-  height: 100px;
-  margin-top: -40px; // 向上偏移，使其部分顯示在導航欄上方
+  width: 80px;
+  height: 80px;
+  margin-top: -30px;
   background: white;
   border-radius: 50%;
   box-shadow: 0 -2px 8px rgba(0,0,0,0.1);
   z-index: 1001;
-  visibility: ${props => props.show ? 'visible' : 'hidden'};
-  position: ${props => props.show ? 'relative' : 'absolute'};
-  flex: ${props => props.show ? 1 : 'none'};
+  position: relative;
+  flex: none;
+  order: 2;
 `;
 
 const MiniPreviewContainer = styled.div`
   position: relative;
-  width: 80px;
-  height: 80px;
+  width: 60px;
+  height: 60px;
   border-radius: 50%;
   border: 1px dashed #ccc;
 `;
 
 const MiniCrystalBead = styled.img`
   position: absolute;
-  width: ${props => props.displaySize * 0.45}px;
-  height: ${props => props.displaySize * 0.45}px;
+  width: ${props => props.displaySize * 0.35}px;
+  height: ${props => props.displaySize * 0.35}px;
   border-radius: 50%;
   transform-origin: center;
   left: 50%;
@@ -152,26 +151,15 @@ const MiniCrystalBead = styled.img`
 const MobileNavigation = ({ currentCategory, onCategoryChange }) => {
   const { currentDesign } = useDesign();
   const [beadPositions, setBeadPositions] = useState([]);
-  const navigate = useNavigate();
-
-  // 根據當前類別決定是否顯示預覽
-  const showPreview = currentCategory === 'crystal' || currentCategory === 'accessory';
 
   useEffect(() => {
-    if (currentDesign.crystals.length > 0) {
+    if (currentDesign.crystals && currentDesign.crystals.length > 0) {
       const MM_TO_PIXEL = 3.5;
       
-      // 使用圓形排列方式，計算每個水晶的位置
       const positions = currentDesign.crystals.map((crystal, index) => {
-        // 計算每個水晶的角度位置 - 從頂部開始順時針排列
-        const angle = ((index / currentDesign.crystals.length) * 360) - 90;
-        
-        // 計算顯示尺寸
         const displaySize = crystal.size * MM_TO_PIXEL;
-
         return {
           ...crystal,
-          angle,
           displaySize
         };
       });
@@ -189,7 +177,6 @@ const MobileNavigation = ({ currentCategory, onCategoryChange }) => {
 
   const handleCategoryChange = (category) => {
     if (category === 'helper') {
-      // 只清除過濾器，不進行導航
       localStorage.removeItem('crystal_color_filter');
       localStorage.removeItem('filter_timestamp');
       localStorage.removeItem('redirect_to_helper');
@@ -200,22 +187,18 @@ const MobileNavigation = ({ currentCategory, onCategoryChange }) => {
   };
 
   useEffect(() => {
-    // 將切換分類的函數暴露為全局函數，允許其他組件調用
     window.setMobileCategory = (category) => {
       onCategoryChange(category);
     };
     
-    // 檢查是否有來自範本的跳轉請求
     const fromTemplate = localStorage.getItem('fromTemplate');
     const templateTime = localStorage.getItem('template_selected_time');
     
     if (fromTemplate === 'true' && templateTime) {
-      // 檢查時間戳，確保這是最近的選擇（比如在過去5分鐘內）
       const now = Date.now();
       const selectTime = parseInt(templateTime, 10);
-      if (now - selectTime < 5 * 60 * 1000) { // 5分鐘
+      if (now - selectTime < 5 * 60 * 1000) {
         onCategoryChange('profile');
-        // 使用後清除，避免重複觸發
         localStorage.removeItem('fromTemplate');
         localStorage.removeItem('template_selected_time');
       }
@@ -229,33 +212,25 @@ const MobileNavigation = ({ currentCategory, onCategoryChange }) => {
   return (
     <NavContainer>
       <NavItems>
-      <NavItem 
+        <NavItem 
           active={currentCategory === 'profile'} 
           onClick={() => onCategoryChange('profile')}
+          style={{ order: 1 }}
         >
           <UserIcon active={currentCategory === 'profile'}>
-            <img src={userIcon} alt="個人" />
+            <img src={crystalIcon} alt="好設計" />
           </UserIcon>
-          <Label>個人</Label>
+          <Label>好設計</Label>
         </NavItem>
         
-        <NavItem 
-          active={currentCategory === 'crystal'} 
-          onClick={() => onCategoryChange('crystal')}
-        >
-          <CrystalIcon active={currentCategory === 'crystal'}>
-            <img src={crystalIcon} alt="水晶" />
-          </CrystalIcon>
-          <Label>水晶</Label>
-        </NavItem>
-                
-        <PreviewContainer show={showPreview}>
+        <PreviewContainer style={{ order: 2 }}>
           <MiniPreviewContainer>
             {beadPositions.map((bead, index) => {
+              const radius = 30;
               const position = calculateMiniBeadPosition(
                 index,
                 beadPositions.length,
-                30
+                radius
               );
               
               return (
@@ -263,14 +238,12 @@ const MobileNavigation = ({ currentCategory, onCategoryChange }) => {
                   key={`mini-${bead.id}-${index}`}
                   src={bead.image}
                   displaySize={bead.displaySize}
-                  angle={position.angle}
-                  radius={30}
                   alt={bead.name}
                   style={{
                     transform: `
                       translate(-50%, -50%)
                       rotate(${position.angle}deg)
-                      translateX(30px)
+                      translateX(${radius}px)
                     `
                   }}
                 />
@@ -279,19 +252,9 @@ const MobileNavigation = ({ currentCategory, onCategoryChange }) => {
           </MiniPreviewContainer>
         </PreviewContainer>
         <NavItem 
-          active={currentCategory === 'accessory'} 
-          onClick={() => onCategoryChange('accessory')}
-        >
-          <AccessoryIcon active={currentCategory === 'accessory'}>
-            <img src={accessoryIcon} alt="配件" />
-          </AccessoryIcon>
-          <Label>配件</Label>
-        </NavItem>
-
-        
-        <NavItem 
           active={currentCategory === 'helper'} 
           onClick={() => handleCategoryChange('helper')}
+          style={{ order: 3 }}
         >
           <HelperIcon active={currentCategory === 'helper'}>
             <img src={helperIcon} alt="小幫手" />

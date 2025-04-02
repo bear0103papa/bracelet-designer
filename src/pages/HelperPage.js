@@ -1,6 +1,8 @@
 import styled from 'styled-components';
 import { useState, useEffect, useCallback } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
+// 移除 react-joyride 導入
+// import Joyride, { STATUS, EVENTS, ACTIONS } from 'react-joyride';
 
 // 導入圖標
 import numerologyIcon from '../assets/Logo/numerology.png';
@@ -77,6 +79,13 @@ const Icon = styled.img`
   object-fit: contain;
 `;
 
+// 新增：SVG 圖標樣式（可選，用於調整 SVG 顏色等）
+const SvgIcon = styled.svg`
+  width: 70%; /* 調整 SVG 大小 */
+  height: 70%;
+  fill: #666; /* 設置 SVG 填充顏色 */
+`;
+
 const OptionTitle = styled.h3`
   font-size: 16px;
   color: #333;
@@ -101,6 +110,7 @@ const BackButton = styled.button`
 const HelperPage = () => {
   const navigate = useNavigate();
   const location = useLocation();
+  const [activeComponent, setActiveComponent] = useState(null);
   
   // 三種來源的優先順序: URL 參數 > localStorage > null
   const [selectedOption, setSelectedOption] = useState(() => {
@@ -135,44 +145,75 @@ const HelperPage = () => {
     localStorage.removeItem('filter_timestamp');
     localStorage.removeItem('redirect_to_helper');
     localStorage.removeItem('helper_page');
+    // 不再需要清除 tour 相關項目
+    // localStorage.removeItem('joyride_tour_status'); // 假設您之前有使用 localStorage 儲存 Joyride 狀態
   }, []);
   
-  const handleOptionClick = (option) => {
-    setSelectedOption(option);
-  };
+  useEffect(() => {
+    const queryParams = new URLSearchParams(location.search);
+    const page = queryParams.get('page');
+    if (page) {
+      // 確保 'guide' 不會被設置為 activeComponent
+      if (page !== 'guide') {
+        setActiveComponent(page);
+      } else {
+        // 如果 URL 參數是 guide，將其移除並重置 activeComponent
+        queryParams.delete('page');
+        navigate(`?${queryParams.toString()}`, { replace: true });
+        setActiveComponent(null);
+      }
+    } else {
+      setActiveComponent(null);
+    }
+  }, [location.search, navigate]);
   
-  const renderContent = () => {
-    console.log("渲染 HelperPage 內容，當前選項:", selectedOption);
-    
-    switch (selectedOption) {
+  // 修改 handleOptionClick: 移除 'guide' 選項的處理邏輯
+  const handleOptionClick = useCallback((option) => {
+    console.log("選擇了選項:", option);
+    const searchParams = new URLSearchParams(location.search);
+    // 直接設置 page 參數
+    searchParams.set('page', option);
+    // 確保移除 tour 參數 (雖然現在不會設置了，但保留以防萬一)
+    searchParams.delete('tour');
+    navigate(`?${searchParams.toString()}`, { replace: true });
+  }, [navigate, location.search]);
+  
+  // handleBack: 移除清除 tour 參數的程式碼
+  const handleBack = useCallback(() => {
+    const searchParams = new URLSearchParams(location.search);
+    searchParams.delete('page');
+    // searchParams.delete('tour'); // 不再需要清除 tour
+    navigate(`?${searchParams.toString()}`, { replace: true });
+  }, [navigate, location.search]);
+  
+  // 根據 activeComponent 渲染對應的組件 - 移除 guide case
+  const renderActiveComponent = () => {
+    switch (activeComponent) {
       case 'numerology':
         return <NumerologyCalculator />;
       case 'guidance':
-        return <div>引導方向內容</div>;
+        return <div>引導方向內容待添加</div>;
       case 'inspiration':
         return <InspirationTemplates />;
       case 'surprise':
         return <SurpriseGenerator />;
-      case 'ai-advisor':
-        return <div>功能開發中，敬請期待</div>;
       default:
-        return null; // 或顯示選項選擇介面
+        return null;
     }
   };
   
-  const handleBackClick = () => {
-    resetSelectedOption();
-    // 不需要導航
-  };
-  
   return (
-    <PageContainer>    
-      {selectedOption ? (
+    <PageContainer>
+      {!activeComponent ? (
         <>
-          <BackButton onClick={handleBackClick}>返回選項</BackButton>
-          {renderContent()}
+          <PageTitle>小幫手</PageTitle>
+          <PageSubtitle>需要什麼幫助嗎？讓小幫手來協助你！</PageSubtitle>
         </>
       ) : (
+         activeComponent !== null && <BackButton onClick={handleBack}>返回小幫手選項</BackButton>
+      )}
+
+      {activeComponent ? renderActiveComponent() : (
         <OptionsGrid>
           <OptionCard onClick={() => handleOptionClick('numerology')}>
             <IconContainer>

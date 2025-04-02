@@ -1,5 +1,4 @@
 import styled from 'styled-components';
-import { useNavigate } from 'react-router-dom';
 
 const TabsContainer = styled.div`
   display: flex;
@@ -24,12 +23,9 @@ const Tab = styled.div`
   }
 `;
 
-const CategoryTabs = ({ currentCategory, onCategoryChange }) => {
-  const navigate = useNavigate();
-  
+const CategoryTabs = ({ currentCategory, onCategoryChange, isMobile }) => {
   const handleTabClick = (category) => {
     if (category === 'helper') {
-      // 只清除過濾器，不進行導航
       localStorage.removeItem('crystal_color_filter');
       localStorage.removeItem('filter_timestamp');
       localStorage.removeItem('redirect_to_helper');
@@ -53,12 +49,14 @@ const CategoryTabs = ({ currentCategory, onCategoryChange }) => {
       >
         配件
       </Tab>
-      <Tab 
-        active={currentCategory === 'helper'} 
-        onClick={() => handleTabClick('helper')}
-      >
-        小幫手
-      </Tab>
+      {!isMobile && (
+        <Tab 
+          active={currentCategory === 'helper'} 
+          onClick={() => handleTabClick('helper')}
+        >
+          小幫手
+        </Tab>
+      )}
     </TabsContainer>
   );
 };

@@ -3,21 +3,28 @@ import { useDesign } from '../../contexts/DesignContext';
 
 const SavedContainer = styled.div`
   padding: 16px;
-  background: #fff;
+  background: #f9f9f9;
   border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  height: 100%;
+  display: flex;
+  flex-direction: column;
 `;
 
 const Title = styled.h3`
-  margin-bottom: 12px;
-  font-size: 16px;
+  margin-bottom: 16px;
+  font-size: 18px;
   color: #333;
+  text-align: center;
+  flex-shrink: 0;
 `;
 
 const SavedList = styled.div`
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 10px;
+  gap: 16px;
+  overflow-y: auto;
+  flex-grow: 1;
+  padding: 4px;
 `;
 
 const SavedItem = styled.div`
@@ -25,29 +32,38 @@ const SavedItem = styled.div`
   cursor: pointer;
   transition: all 0.2s ease;
   background: #fff;
-  border-radius: 8px;
+  border-radius: 10px;
   overflow: hidden;
-  
+  border: 1px solid #eee;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+
   &:hover {
-    transform: scale(1.05);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    border-color: #ddd;
   }
 `;
 
 const PreviewContainer = styled.div`
   position: relative;
   width: 100%;
-  height: 100px;
-  background: #f5f5f5;
+  padding-top: 100%;
+  background: #fff;
   display: flex;
   align-items: center;
   justify-content: center;
+  overflow: hidden;
 `;
 
 const BraceletPreview = styled.div`
-  position: relative;
-  width: 80px;
-  height: 80px;
-  border: 1px dashed #ccc;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
   border-radius: 50%;
 `;
 
@@ -56,36 +72,52 @@ const PreviewBead = styled.img`
   width: ${props => props.size}px;
   height: ${props => props.size}px;
   border-radius: 50%;
-  transform-origin: ${props => `${-props.radius}px ${0}px`};
+  left: 50%;
+  top: 50%;
+  transform-origin: center;
+  object-fit: cover;
   transform: ${props => `
     translate(-50%, -50%)
     rotate(${props.angle}deg)
+    translateX(${props.radius}px)
+    rotate(${-props.angle}deg)
   `};
-  left: 100%;
-  top: 50%;
-  object-fit: cover;
 `;
 
 const DeleteButton = styled.button`
   position: absolute;
-  top: 5px;
-  right: 5px;
-  background: rgba(255, 0, 0, 0.7);
+  top: 8px;
+  right: 8px;
+  background: rgba(0, 0, 0, 0.4);
   color: white;
   border: none;
   border-radius: 50%;
-  width: 24px;
-  height: 24px;
+  width: 20px;
+  height: 20px;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
   opacity: 0;
-  transition: opacity 0.2s;
+  transition: opacity 0.2s, background-color 0.2s;
+  padding: 0;
+  font-size: 14px;
+  line-height: 1;
 
   ${SavedItem}:hover & {
     opacity: 1;
   }
+
+  &:hover {
+    background: rgba(255, 0, 0, 0.8);
+  }
+`;
+
+const EmptyMessage = styled.div`
+  text-align: center;
+  color: #888;
+  padding: 30px;
+  font-size: 14px;
 `;
 
 const SavedDesigns = () => {
@@ -110,28 +142,31 @@ const SavedDesigns = () => {
   };
 
   const renderBraceletPreview = (design) => {
-    const PREVIEW_DIAMETER = 80;
-    const wristCircumference = design.size;
+    if (!design || !design.crystals || design.crystals.length === 0) {
+      return null;
+    }
+    const PREVIEW_RADIUS = 65;
+    const MAX_BEAD_SIZE = 35;
+    const MIN_BEAD_SIZE = 25;
+
+    const totalBeads = design.crystals.length;
 
     return design.crystals.map((crystal, index) => {
-      let accumulatedLength = design.crystals
-        .slice(0, index)
-        .reduce((sum, c) => sum + c.size, 0);
-      
-      const angle = (accumulatedLength / wristCircumference) * 360;
-      const beadDisplaySize = (crystal.size / wristCircumference) * PREVIEW_DIAMETER * Math.PI;
-      const radius = (PREVIEW_DIAMETER - beadDisplaySize) / 2;
-      
+      const angle = (index / totalBeads) * 360;
+
+      const scaleFactor = Math.min(1, crystal.size / 10);
+      const beadDisplaySize = MIN_BEAD_SIZE + (MAX_BEAD_SIZE - MIN_BEAD_SIZE) * scaleFactor;
+
       return (
         <PreviewBead
-          key={`${crystal.id}-${index}`}
+          key={`${crystal.id || index}-${index}`}
           src={crystal.image}
           size={beadDisplaySize}
           angle={angle}
-          radius={radius}
-          alt={crystal.name}
+          radius={PREVIEW_RADIUS}
+          alt={crystal.name || 'bead'}
           onError={(e) => {
-            e.target.src = '/assets/placeholder.jpg';
+            e.target.src = '/placeholder.jpg';
           }}
         />
       );
@@ -141,25 +176,29 @@ const SavedDesigns = () => {
   return (
     <SavedContainer>
       <Title>已儲存設計</Title>
-      <SavedList>
-        {(savedDesigns || []).map(design => (
-          <SavedItem 
-            key={design.id}
-            onClick={() => handleLoad(design)}
-          >
-            <PreviewContainer>
-              <BraceletPreview>
-                {renderBraceletPreview(design)}
-              </BraceletPreview>
-            </PreviewContainer>
-            <DeleteButton 
-              onClick={(e) => handleDelete(e, design.id)}
+      {savedDesigns && savedDesigns.length > 0 ? (
+        <SavedList>
+          {savedDesigns.map(design => (
+            <SavedItem
+              key={design.id}
+              onClick={() => handleLoad(design)}
             >
-              ×
-            </DeleteButton>
-          </SavedItem>
-        ))}
-      </SavedList>
+              <PreviewContainer>
+                <BraceletPreview>
+                  {renderBraceletPreview(design)}
+                </BraceletPreview>
+              </PreviewContainer>
+              <DeleteButton
+                onClick={(e) => handleDelete(e, design.id)}
+              >
+                ×
+              </DeleteButton>
+            </SavedItem>
+          ))}
+        </SavedList>
+      ) : (
+        <EmptyMessage>尚無儲存的設計</EmptyMessage>
+      )}
     </SavedContainer>
   );
 };

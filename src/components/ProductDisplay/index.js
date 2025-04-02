@@ -554,13 +554,12 @@ const ProductDisplay = ({ onCrystalClick }) => {
   const [isSpaceFull, setIsSpaceFull] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
   const [dragStartTime, setDragStartTime] = useState(0);
-  const [showFloating, setShowFloating] = useState(false);
+  const [showMobileMenu, setShowMobileMenu] = useState(false);
   const sizesInCm = [14, 15, 16, 17, 18];
   const currentSizeInCm = currentDesign.size / 10;
   const [inputValue, setInputValue] = useState(currentSizeInCm.toString());
   const [sizeError, setSizeError] = useState('');
   const [selectedBeadIndex, setSelectedBeadIndex] = useState(null);
-  const [showMobileMenu, setShowMobileMenu] = useState(false);
   const [isDraggingEnabled, setIsDraggingEnabled] = useState(false);
   const [moveMode, setMoveMode] = useState(false);
   const [sourceIndex, setSourceIndex] = useState(null);
@@ -692,16 +691,6 @@ const ProductDisplay = ({ onCrystalClick }) => {
       setIsSpaceFull(false);
     }
   }, [currentDesign]);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      const shouldShow = window.scrollY > 300;
-      setShowFloating(shouldShow);
-    };
-
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
 
   useEffect(() => {
     setInputValue(currentSizeInCm.toString());
@@ -855,15 +844,6 @@ const ProductDisplay = ({ onCrystalClick }) => {
       handleBeadRemove(index);
     }
     setIsDragging(false);
-  };
-
-  const calculateMiniBeadPosition = (index, total, radius) => {
-    const angle = (index / total) * 360;
-    return {
-      x: radius * Math.cos(angle * Math.PI / 180),
-      y: radius * Math.sin(angle * Math.PI / 180),
-      angle: angle
-    };
   };
 
   const handleSizeChange = (sizeInCm) => {
@@ -1177,38 +1157,6 @@ const ProductDisplay = ({ onCrystalClick }) => {
           </TrashIcon>
         </ImageContainer>
       </DisplayContainer>
-      
-      {/* 桌面版的浮動預覽 */}
-      <FloatingPreview show={showFloating && !isMobile}>
-        <MiniPreviewContainer>
-          {beadPositions.map((bead, index) => {
-            const position = calculateMiniBeadPosition(
-              index,
-              beadPositions.length,
-              30
-            );
-            
-            return (
-              <MiniCrystalBead
-                key={`mini-${bead.id}-${index}`}
-                src={bead.image}
-                displaySize={bead.displaySize}
-                angle={position.angle}
-                radius={30}
-                alt={bead.name}
-                draggable={false}
-                style={{
-                  transform: `
-                    translate(-50%, -50%)
-                    rotate(${position.angle}deg)
-                    translateX(30px)
-                  `
-                }}
-              />
-            );
-          })}
-        </MiniPreviewContainer>
-      </FloatingPreview>
       
       {/* 移動設備操作菜單 */}
       {showMobileMenu && selectedBeadIndex !== null && !moveMode && (
