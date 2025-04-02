@@ -182,6 +182,7 @@ import accessory157 from '../assets/Accessories/PIc163.png';
 import accessory158 from '../assets/Accessories/PIc164.png';
 import accessory159 from '../assets/Accessories/PIc165.png';
 import accessory160 from '../assets/Accessories/PIc166.png';
+import accessory161 from '../assets/Accessories/PIc167.png';
 
 
 
@@ -2618,6 +2619,19 @@ export const Accessories = [
     image: accessory160,
     size: 15.0, // mm
     category: 'accessory',
+    material: '合金',
+    color: '金色',
+    price: 15,
+    type: '手鍊配件',
+    compatible: ['手鍊'],
+    description: '精緻金色心形配件，適合搭配各種水晶手鍊'
+  },
+  {
+    id: 'a1',
+    name: '手鍊配件-金色心形',
+    image: accessory161,
+    size: 15.0, // mm
+    category: 'crystal',
     material: '合金',
     color: '金色',
     price: 15,
