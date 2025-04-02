@@ -20,7 +20,7 @@ const Title = styled.h3`
 
 const SavedList = styled.div`
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
   gap: 16px;
   overflow-y: auto;
   flex-grow: 1;
@@ -145,9 +145,9 @@ const SavedDesigns = () => {
     if (!design || !design.crystals || design.crystals.length === 0) {
       return null;
     }
-    const PREVIEW_RADIUS = 65;
-    const MAX_BEAD_SIZE = 35;
-    const MIN_BEAD_SIZE = 25;
+    const PREVIEW_RADIUS = 60;
+    const MAX_BEAD_SIZE = 32;
+    const MIN_BEAD_SIZE = 22;
 
     const totalBeads = design.crystals.length;
 
