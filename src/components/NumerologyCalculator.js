@@ -1,7 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import { useDesign } from '../contexts/DesignContext';
+// --- 匯入 JSON 檔案 ---
+import numerologyDescriptions from '../data/NumerologyCalculator.json'; // 匯入 JSON 資料
+// --- 匯入水晶資料 ---
+import { crystals } from '../data/crystals'; // 匯入 crystals 陣列
 
 const PageTitle = styled.h2`
   margin-bottom: 30px;
@@ -62,211 +66,195 @@ const CalculateButton = styled.button`
 
 const ResultContainer = styled.div`
   width: 100%;
-  max-width: 500px;
-  text-align: center;
+  max-width: 600px;
+  text-align: left;
+  background: #f9f9f9;
+  padding: 25px;
+  border-radius: 15px;
+  margin-top: 30px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
 `;
 
 const ResultTitle = styled.h3`
-  margin-bottom: 15px;
+  margin-bottom: 20px;
   color: #333;
+  text-align: center;
+  font-size: 1.5em;
+`;
+
+const ResultGrid = styled.div`
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+  gap: 15px;
+  margin-bottom: 25px;
+  text-align: center;
+`;
+
+const ResultItem = styled.div`
+  background: white;
+  padding: 15px;
+  border-radius: 10px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+`;
+
+const ResultItemLabel = styled.div`
+  font-size: 0.9em;
+  color: #666;
+  margin-bottom: 5px;
+`;
+
+const ResultItemValue = styled.div`
+  font-size: 1.8em;
+  font-weight: bold;
+  color: #4a90e2;
+`;
+
+const ExplanationSection = styled.div`
+  margin-bottom: 25px;
+  padding: 20px;
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+`;
+
+const SectionTitle = styled.h4`
+  color: #555;
+  margin-bottom: 15px;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 10px;
 `;
 
 const ResultText = styled.p`
   margin-bottom: 15px;
-  color: #666;
-  line-height: 1.6;
+  color: #555;
+  line-height: 1.7;
+  white-space: pre-wrap;
 `;
+
+// --- 新增：可點擊水晶的樣式 ---
+const ClickableCrystal = styled.span`
+  display: inline-block;
+  background-color: #e0eafc; // 淡藍色背景
+  color: #4a69bd; // 稍深的藍色文字
+  padding: 4px 10px;
+  border-radius: 15px; // 圓角
+  margin: 3px 5px 3px 0; // 外邊距
+  font-size: 0.95em;
+  cursor: pointer;
+  transition: background-color 0.2s ease, box-shadow 0.2s ease;
+  border: 1px solid #c9d9f8; // 邊框
+
+  &:hover {
+    background-color: #d0dff8; // 懸停時稍深的背景
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1); // 輕微陰影
+  }
+`;
+// --- 結束：新增樣式 ---
 
 const NumerologyCalculator = () => {
   const navigate = useNavigate();
-  const { setCurrentDesign } = useDesign();
+  const { currentDesign, setCurrentDesign } = useDesign();
   const [year, setYear] = useState('');
   const [month, setMonth] = useState('');
   const [day, setDay] = useState('');
-  const [result, setResult] = useState(null);
+  const [numerologyResult, setNumerologyResult] = useState(null);
+  const [resultDetails, setResultDetails] = useState(null);
+
+  const reduceToOneDigit = (input) => {
+    let num = 0;
+    String(input).split('').forEach(digit => {
+      num += parseInt(digit, 10);
+    });
+
+    while (num > 9) {
+      let tempSum = 0;
+      String(num).split('').forEach(digit => {
+        tempSum += parseInt(digit, 10);
+      });
+      num = tempSum;
+    }
+    return num;
+  };
 
   const calculateLifeNumber = () => {
-    if (!year || !month || !day) {
-      alert('請填寫完整的出生日期');
+    if (!year || !month || !day || isNaN(parseInt(year)) || isNaN(parseInt(month)) || isNaN(parseInt(day))) {
+      alert('請填寫有效的數字格式出生日期');
       return;
     }
 
-    // 將年月日的每一位數字相加
-    const dateString = `${year}${month}${day}`;
-    let sum = 0;
-    
-    for (let i = 0; i < dateString.length; i++) {
-      sum += parseInt(dateString[i]);
+    const y = parseInt(year);
+    const m = parseInt(month);
+    const d = parseInt(day);
+
+    if (m < 1 || m > 12 || d < 1 || d > 31) {
+        alert('請輸入有效的月份 (1-12) 和日期 (1-31)');
+        return;
     }
-    
-    // 如果結果是兩位數，繼續相加直到得到一位數
-    while (sum > 9) {
-      let tempSum = 0;
-      sum.toString().split('').forEach(digit => {
-        tempSum += parseInt(digit);
+
+    const fateNumber = reduceToOneDigit(d);
+    const destinyNumber = reduceToOneDigit(`${y}${m}${d}`);
+    const missionNumber = reduceToOneDigit(`${m}${d}`);
+    const ultimateNumber = reduceToOneDigit(fateNumber + destinyNumber + missionNumber);
+
+    const result = {
+      fateNumber,
+      destinyNumber,
+      missionNumber,
+      ultimateNumber,
+    };
+    setNumerologyResult(result);
+
+    const resultKey = `${fateNumber}-${destinyNumber}-${missionNumber}-${ultimateNumber}`;
+    const details = numerologyDescriptions.find(item => item.key === resultKey);
+
+    if (details) {
+      setResultDetails(details);
+    } else {
+      setResultDetails({
+        key: resultKey,
+        explanation: '抱歉，找不到對應的生命靈數組合解說。請檢查您的輸入或確認解說資料庫是否完整。',
+        crystalSuggestion: 'N/A',
+        designLanguage: 'N/A'
       });
-      sum = tempSum;
-    }
-    
-    setResult(sum);
-  };
-
-  const getLifeNumberMeaning = (number) => {
-    const meanings = {
-      1: {
-        title: '「１」的密碼｜第一、起始、唯一',
-        description: [
-          '「1」代表「最初、開始、起源」，由此還可以延伸出「前進、發展、起點、頂點、第一」等含義，這個數字代表的是「跨出第一步、最初播下的種子」。',
-          '此外，還象徵了「將事物整合、彙集、統合唯一」的領導能力。',
-          '「1」的角色就是「決定方向並展開行動」。不管做或是不做某件事，「我要做」或」「我不要做」的意志最為重要，如果沒有決心，任何事都無法開始。',
-          '除了下定決心，還要朝著決定的方向邁出強而有力的一部，將腦中的想法付諸實現，化為具體的行動。'
-        ],
-        role: '領袖',
-        thinking: '感性派',
-        colors: ['紅色', '黑色']
-      },
-      2: {
-        title: '「２」的密碼｜包容、和諧、平衡',
-        description: [
-          '「2」意味著兩個極端的共存。像是「男與女」、「光明與黑暗」、「陰與陽」、「正與反」等等。',
-          '相較於「1」勇往直前的特質，「2」象徵著調節相反兩極並維持平衡，代表「包容、認可、和諧、接納」這類被動要素較強的特質。',
-          '「2」的角色是「連結」。相反兩極的事物，往往是一體兩面，需要互相認可、接納、連結。',
-          '「2」這個數字的表的是容納並接受相反事物的包容力，也辦法著聯繫雙方的橋樑。此外，身處相反的兩極之地，不是選邊站，而是跟兩方都能好好相處，進行雙方的調節及統合。'
-        ],
-        role: '輔佐',
-        thinking: '理性派',
-        colors: ['白色']
-      },
-      3: {
-        title: '「３」的密碼｜創造、歡笑、孩子',
-        description: [
-          '「3」蘊含了新事物的能量，是代表創造的數字，象徵著和諧與安定中蘊藏的變化的可能性。',
-          '「3」這個數字源自「1」的動力與「2」的平衡，內含帶來新變化的「創造力」與「新能力」。以樹木的成長舉例，正是枝枒冒出嫩葉的狀態。',
-          '「3」的功能在於其存在感與躍動感，蘊含著新發展、新變動新節奏的可能性。此外，「3」是象徵孩子的數字，它無法乖乖坐著不動，具備了「歡笑」與「輕快節奏」等取悅眾人的娛樂要素。',
-          '「3」就是維繫相反的兩極，穩定兩者關係的角色。'
-        ],
-        role: '開心果',
-        thinking: '感性派',
-        colors: ['黃色']
-      },
-      4: {
-        title: '「４」的密碼｜穩定、持續、成形',
-        description: [
-          '「4」意味著物質世界的誕生，是象徵「固定」或「安定」的穩固數字，正如四輪、四角等穩定狀態，有著扎根大地，四平八穩的安定感。',
-          '此外，「4」還具備了「持續性」、「屹立不搖」等含義，代表物質世界本身，是非常強而有力的數字。',
-          '「4」的角色是「打穩地基」。正如建築中打樁等基礎步驟，這個數字擔負著重要任務。',
-          '此外，由於象徵固定、安定，「4」也具備了「安定事物」、「培養實力」等含義。以樹木的成長舉例，相當於除草、整地的階段。排除所有阻礙成長的因素，為將來做好準備、養精蓄銳。'
-        ],
-        role: '輔佐',
-        thinking: '理性派',
-        colors: ['藍色']
-      },
-      5: {
-        title: '「５」的密碼｜自由、變化、連結',
-        description: [
-          '「5」代表的是人類本身，意味著「自由、行動力、溝通」等人類的特性，是極富行動力的數字。以樹木的成長舉例，就是成長與變化的時期。',
-          '此外，「5」也象徵了不斷變化、搖擺不定、載浮載沉等，代表自由又不安定的狀態。',
-          '「5」是能夠增幅並放大人類特徵（無論是正面或負面）的數字。'
-        ],
-        role: '開心果',
-        thinking: '感性派',
-        colors: ['綠色']
-      },
-      6: {
-        title: '「６」的密碼｜愛、美、母性',
-        description: [
-          '「6」被稱為孕婦數字，因為孕育著領一個生命、另一個宇宙，所以擁有創造新生命的強大能量。以樹木的成長舉例，正是開花的時期。',
-          '「6」是象徵創造力的「3」的倍數，也意味著精神與肉體、物質與心靈等回然不同的兩股創造性能量的完全整合。',
-          '「6」的創造性能量，無疑是真正的愛、美、和諧與平衡。',
-          '「6」擁有調節全體平衡的功能，完美的均衡象徵了真正的「愛」、「美」與「和諧」。'
-        ],
-        role: '領袖',
-        thinking: '感性派',
-        colors: ['粉紅']
-      },
-      7: {
-        title: '「７」的密碼｜完成、自立、獨自一人',
-        description: [
-          '「7」代表一個週期的結束，是象徵「完成」的數字。「7」自古以來不論在東西方，均象徵著祝福與勝利，是被人熟知的幸運數字。以樹木的成長舉例，相當於修整枝葉的時期。',
-          '對自己課以嚴格的修行，排除不需要的多餘事物，等確立自己的風格獨立以後，將迎來真正的幸運。',
-          '正如一週天日、七大脈輪等，數字「7」代表的是事物的完結、一個週期的結束。意味著憑一己之力完成某事物，不流於俗，堅持貫徹自身強烈個人風格。',
-          '為了獨立開拓全新的世界，即使遭到孤立也不害怕，依舊堅持自己的生存之道，尋求屬於自己的祝福與勝利。'
-        ],
-        role: '輔佐',
-        thinking: '理性派',
-        colors: ['藍色']
-      },
-      8: {
-        title: '「８」的密碼｜熱情、無限、富足',
-        description: [
-          '「8」代表的是「物質與精神」等兩個世界的整合、均衡、循環與平衡。「8」的形狀如同無限的符號一樣，象徵繁榮、榮耀、財富、富足，具備讓事物無限增幅的強大力量。',
-          '「8」的功能在於增幅、擴大現實的能量。以樹木的成長舉例，正是結實累累的收穫時期。',
-          '此外，也具備了連結、統合現實世界和靈性世界，在調節雙方平衡的同時，使其無限循環的功能。'
-        ],
-        role: '開心果',
-        thinking: '感性派',
-        colors: ['橙色']
-      },
-      9: {
-        title: '「９」的密碼｜終結、智慧、放下',
-        description: [
-          '「9」位於數字的最後，包含所有數字要素在內的終結、結束與統合，代表包含現實世界與另一個世界在內的宇宙全體循環，象徵了「智慧」與「真理」。',
-          '「9」的角色是整合全體的最後一棒，因此，數字「9」具備具備了強化並輔助其鄰近數字的功能。以樹木的成長舉例，正式回歸大地的時期。',
-          '這個數字代表施展目前為止累積的所有智慧、經驗來整合全體，無私奉獻社會，為全人類付出。',
-          '你的力量來自於無條件的愛和奉獻，以及將個人經驗轉化為集體智慧的能力。'
-        ],
-        role: '領袖',
-        thinking: '理性派',
-        colors: ['紫色']
-      }
-    };
-    
-    return meanings[number] || {
-      title: '無法解析此生命靈數',
-      description: ['請確認您輸入的生日是否正確'],
-      role: '',
-      thinking: '',
-      colors: []
-    };
-  };
-
-  const handleColorCrystalClick = (color) => {
-    // 保存篩選顏色和時間戳
-    localStorage.setItem('crystal_color_filter', color);
-    localStorage.setItem('filter_timestamp', Date.now().toString());
-    
-    console.log(`選擇了 ${color} 系水晶，即將跳轉...`);
-    
-    try {
-      // 不使用網址導航，改為使用本地狀態
-      localStorage.setItem('redirect_to_helper', 'true');
-      localStorage.setItem('helper_page', 'inspiration');
-      
-      // 如果在同一頁面內，直接調用函數切換
-      if (window.location.href.includes('/helper')) {
-        // 可以嘗試呼叫本頁面的函數
-        if (typeof window.setSelectedOption === 'function') {
-          window.setSelectedOption('inspiration');
-          return;
-        }
-      }
-      
-      // 否則回到主頁面，由主頁面處理重定向
-      window.location.href = window.location.origin + (process.env.PUBLIC_URL || '');
-    } catch (error) {
-      console.error("跳轉失敗:", error);
+      console.warn(`找不到 key 為 ${resultKey} 的解說資料`);
     }
   };
+
+  // --- 新增：處理水晶點擊的函數 ---
+  const handleCrystalClick = (crystalToAdd) => {
+    if (!crystalToAdd) return;
+
+    // 計算目前已使用的長度 (參考 CrystalTable)
+    const currentLength = currentDesign.crystals.reduce((sum, crystal) => sum + crystal.size, 0);
+    const maxLength = 300; // 最大長度 30cm = 300mm
+
+    // 檢查添加後是否會超出最大限制
+    if (currentLength + crystalToAdd.size > maxLength) {
+      alert(`新增此水晶 (${crystalToAdd.name} - ${crystalToAdd.size}mm) 會超過最大長度限制 (${maxLength / 10}cm)。`);
+      return; // 不添加水晶
+    }
+
+    // 更新 currentDesign
+    setCurrentDesign({
+      ...currentDesign,
+      crystals: [...currentDesign.crystals, crystalToAdd]
+    });
+
+    // 可以選擇性地給予使用者提示
+    console.log(`已將 ${crystalToAdd.name} 加入設計中。`);
+    // 或者使用更明顯的提示方式，例如 toast notification
+  };
+  // --- 結束：新增函數 ---
 
   return (
     <>
-      <PageTitle>開始探索生命靈數</PageTitle>
+      <PageTitle>探索你的生命靈數組合</PageTitle>
       
       <InputContainer>
         <InputRow>
           <InputField 
             type="number" 
-            placeholder="年" 
+            placeholder="出生 西元年 (例: 1990)" 
             value={year}
             onChange={(e) => setYear(e.target.value)}
           />
@@ -275,7 +263,7 @@ const NumerologyCalculator = () => {
         <InputRow>
           <InputField 
             type="number" 
-            placeholder="月" 
+            placeholder="出生 月份 (例: 8)" 
             min="1" 
             max="12"
             value={month}
@@ -286,7 +274,7 @@ const NumerologyCalculator = () => {
         <InputRow>
           <InputField 
             type="number" 
-            placeholder="日" 
+            placeholder="出生 日期 (例: 15)" 
             min="1" 
             max="31"
             value={day}
@@ -299,44 +287,67 @@ const NumerologyCalculator = () => {
         </CalculateButton>
       </InputContainer>
       
-      {result && (
+      {numerologyResult && resultDetails && (
         <ResultContainer>
-          <ResultTitle>您的生命靈數是</ResultTitle>
-          <h1 style={{ fontSize: '60px', margin: '10px 0' }}>{result}</h1>
-          <div style={{ margin: '20px 0', fontWeight: 'bold' }}>
-            {getLifeNumberMeaning(result).title.split('｜')[1] || ''}
-          </div>
-          
-          <ResultText>{getLifeNumberMeaning(result).title}</ResultText>
-          
-          {getLifeNumberMeaning(result).description.map((paragraph, index) => (
-            <ResultText key={index}>{paragraph}</ResultText>
-          ))}
-          
-          <div style={{ margin: '30px 0' }}>
-            <div>角色：{getLifeNumberMeaning(result).role}</div>
-            <div>思考：{getLifeNumberMeaning(result).thinking}</div>
-            <div>顏色：{getLifeNumberMeaning(result).colors.join('、')}</div>
-          </div>
-          
-          {getLifeNumberMeaning(result).colors.map((color, index) => (
-            <div key={index} style={{ margin: '10px 0' }}>
-              <a 
-                onClick={() => handleColorCrystalClick(color)}
-                style={{ 
-                  display: 'inline-block',
-                  padding: '10px 20px',
-                  border: '1px solid #ddd',
-                  borderRadius: '30px',
-                  textDecoration: 'none',
-                  color: '#333',
-                  cursor: 'pointer'
-                }}
-              >
-                查看{color}系相關水晶飾品
-              </a>
-            </div>
-          ))}
+          <ResultTitle>您的生命靈數組合</ResultTitle>
+          <ResultGrid>
+            <ResultItem>
+              <ResultItemLabel>宿命數</ResultItemLabel>
+              <ResultItemValue>{numerologyResult.fateNumber}</ResultItemValue>
+            </ResultItem>
+            <ResultItem>
+              <ResultItemLabel>命運數</ResultItemLabel>
+              <ResultItemValue>{numerologyResult.destinyNumber}</ResultItemValue>
+            </ResultItem>
+            <ResultItem>
+              <ResultItemLabel>使命數</ResultItemLabel>
+              <ResultItemValue>{numerologyResult.missionNumber}</ResultItemValue>
+            </ResultItem>
+            <ResultItem>
+              <ResultItemLabel>天命數</ResultItemLabel>
+              <ResultItemValue>{numerologyResult.ultimateNumber}</ResultItemValue>
+            </ResultItem>
+          </ResultGrid>
+          <ExplanationSection>
+            <SectionTitle>📜 完整命定解說</SectionTitle>
+            <ResultText>{resultDetails.explanation}</ResultText>
+          </ExplanationSection>
+          {resultDetails.crystalSuggestion && resultDetails.crystalSuggestion !== 'N/A' && (
+            <ExplanationSection>
+              <SectionTitle>💎 命定水晶搭配建議</SectionTitle>
+              <div> {/* 使用 div 包裹，以便處理多個水晶 */}
+                {resultDetails.crystalSuggestion.split(/[、,，\s]+/) // 使用正則表達式分割多種分隔符
+                  .map(name => name.trim()) // 去除前後空白
+                  .filter(name => name) // 過濾掉空字串
+                  .map((crystalName, index) => {
+                    // 在 crystals 陣列中查找對應的水晶物件
+                    const foundCrystal = crystals.find(c => c.name === crystalName);
+                    if (foundCrystal) {
+                      // 如果找到，渲染可點擊的水晶
+                      return (
+                        <ClickableCrystal
+                          key={`${foundCrystal.id}-${index}`} // 使用唯一 key
+                          onClick={() => handleCrystalClick(foundCrystal)}
+                          title={`點擊將 ${foundCrystal.name} (${foundCrystal.size}mm) 加入設計`} // 添加提示文字
+                        >
+                          {crystalName}
+                        </ClickableCrystal>
+                      );
+                    } else {
+                      // 如果找不到，只渲染文字 (並在 console 中提示)
+                      console.warn(`在 crystals.js 中找不到名為 "${crystalName}" 的水晶`);
+                      return <span key={`notfound-${index}`} style={{ marginRight: '5px' }}>{crystalName}</span>;
+                    }
+                  })}
+              </div>
+            </ExplanationSection>
+          )}
+          {resultDetails.designLanguage && resultDetails.designLanguage !== 'N/A' && (
+            <ExplanationSection>
+              <SectionTitle>✨ 手鍊設計語言</SectionTitle>
+              <ResultText>{resultDetails.designLanguage}</ResultText>
+            </ExplanationSection>
+          )}
         </ResultContainer>
       )}
     </>
