@@ -13,7 +13,7 @@
   flex-shrink: 0;
 `,s=t.Ay.div`
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
   gap: 16px;
   overflow-y: auto;
   flex-grow: 1;
@@ -94,7 +94,7 @@
   color: #888;
   padding: 30px;
   font-size: 14px;
-`,f=()=>{const{currentDesign:e,setCurrentDesign:r,savedDesigns:i=[],setSavedDesigns:t}=(0,n.c)(),f=e=>{if(!e||!e.crystals||0===e.crystals.length)return null;const r=e.crystals.length;return e.crystals.map(((e,i)=>{const t=i/r*360,n=25+10*Math.min(1,e.size/10);return(0,o.jsx)(c,{src:e.image,size:n,angle:t,radius:65,alt:e.name||"bead",onError:e=>{e.target.src="/placeholder.jpg"}},`${e.id||i}-${i}`)}))};return(0,o.jsxs)(d,{children:[(0,o.jsx)(a,{children:"\u5df2\u5132\u5b58\u8a2d\u8a08"}),i&&i.length>0?(0,o.jsx)(s,{children:i.map((e=>(0,o.jsxs)(l,{onClick:()=>(e=>{r({...e})})(e),children:[(0,o.jsx)(p,{children:(0,o.jsx)(x,{children:f(e)})}),(0,o.jsx)(g,{onClick:r=>((e,r)=>{e.stopPropagation();const n=i.filter((e=>e.id!==r));t(n),localStorage.setItem("savedDesigns",JSON.stringify(n))})(r,e.id),children:"\xd7"})]},e.id)))}):(0,o.jsx)(h,{children:"\u5c1a\u7121\u5132\u5b58\u7684\u8a2d\u8a08"})]})}},996:(e,r,i)=>{i.r(r),i.d(r,{default:()=>b});var t=i(43),n=i(464),o=i(540),d=i(276),a=i(579);n.Ay.div`
+`,f=()=>{const{currentDesign:e,setCurrentDesign:r,savedDesigns:i=[],setSavedDesigns:t}=(0,n.c)(),f=e=>{if(!e||!e.crystals||0===e.crystals.length)return null;const r=e.crystals.length;return e.crystals.map(((e,i)=>{const t=i/r*360,n=22+10*Math.min(1,e.size/10);return(0,o.jsx)(c,{src:e.image,size:n,angle:t,radius:60,alt:e.name||"bead",onError:e=>{e.target.src="/placeholder.jpg"}},`${e.id||i}-${i}`)}))};return(0,o.jsxs)(d,{children:[(0,o.jsx)(a,{children:"\u5df2\u5132\u5b58\u8a2d\u8a08"}),i&&i.length>0?(0,o.jsx)(s,{children:i.map((e=>(0,o.jsxs)(l,{onClick:()=>(e=>{r({...e})})(e),children:[(0,o.jsx)(p,{children:(0,o.jsx)(x,{children:f(e)})}),(0,o.jsx)(g,{onClick:r=>((e,r)=>{e.stopPropagation();const n=i.filter((e=>e.id!==r));t(n),localStorage.setItem("savedDesigns",JSON.stringify(n))})(r,e.id),children:"\xd7"})]},e.id)))}):(0,o.jsx)(h,{children:"\u5c1a\u7121\u5132\u5b58\u7684\u8a2d\u8a08"})]})}},996:(e,r,i)=>{i.r(r),i.d(r,{default:()=>b});var t=i(43),n=i(464),o=i(540),d=i(276),a=i(579);n.Ay.div`
   margin-bottom: 20px;
 `,n.Ay.h3`
   margin-bottom: 12px;
@@ -192,4 +192,4 @@
   border-radius: 4px;
   min-height: 100px;
 `,b=()=>{const{currentDesign:e}=(0,d.c)(),[r,i]=(0,t.useState)(!1),[n,s]=(0,t.useState)(!1);return(0,a.jsxs)(l,{children:[(0,a.jsx)(p,{children:(0,a.jsx)(o.A,{})}),(0,a.jsxs)(p,{children:[(0,a.jsx)(x,{children:"\u8a02\u8cfc\u8cc7\u8a0a"}),(0,a.jsxs)(c,{children:["\u7e3d\u91d1\u984d: NT$ ",e.crystals.reduce(((e,r)=>e+r.price),0)]}),(0,a.jsx)(g,{onClick:()=>{i(!0)},children:"\u4e0b\u55ae"}),r&&(0,a.jsxs)(h,{onSubmit:e=>{e.preventDefault();new FormData(e.target);s(!0),i(!1)},children:[(0,a.jsx)(f,{name:"name",placeholder:"\u59d3\u540d",required:!0}),(0,a.jsx)(f,{name:"email",type:"email",placeholder:"Email",required:!0}),(0,a.jsx)(u,{name:"address",placeholder:"\u9001\u8ca8\u5730\u5740",required:!0}),(0,a.jsx)(g,{type:"submit",children:"\u78ba\u8a8d\u9001\u51fa"})]}),n&&(0,a.jsx)("div",{style:{color:"#4CAF50",textAlign:"center",marginTop:"10px"},children:"\u8a02\u8cfc\u6210\u529f\uff01"})]})]})}}}]);
-//# sourceMappingURL=234.f1fa1a1f.chunk.js.map
+//# sourceMappingURL=234.b3ef5829.chunk.js.map
