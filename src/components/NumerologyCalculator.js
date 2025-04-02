@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import styled from 'styled-components';
+import styled, { createGlobalStyle } from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import { useDesign } from '../contexts/DesignContext';
 // --- 匯入 JSON 檔案 ---
@@ -7,10 +7,141 @@ import numerologyDescriptions from '../data/NumerologyCalculator.json'; // 匯�
 // --- 匯入水晶資料 ---
 import { crystals } from '../data/crystals'; // 匯入 crystals 陣列
 
-// 引入 react-datepicker
-import DatePicker from 'react-datepicker';
-// 引入 react-datepicker 的 CSS
+// 引入 react-datepicker 及相關功能
+import DatePicker, { registerLocale } from 'react-datepicker'; // 修改：同時匯入 registerLocale
 import "react-datepicker/dist/react-datepicker.css";
+// 引入 date-fns 的繁體中文語系檔
+import { zhTW } from 'date-fns/locale'; // 新增：匯入語系檔
+
+// --- 註冊語系 ---
+registerLocale('zh-TW', zhTW); // 新增：註冊繁體中文
+
+// --- 新增：定義全域日曆樣式 ---
+const GlobalDatePickerStyle = createGlobalStyle`
+  /* 主容器 */
+  .react-datepicker-popper[data-placement^="bottom"] .react-datepicker__triangle {
+    /* 隱藏預設的小三角形 */
+    display: none;
+  }
+
+  .custom-calendar.react-datepicker {
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; /* 保持字體一致 */
+    border: 1px solid #ddd; /* 淺灰色邊框 */
+    border-radius: 12px; /* 圓角 */
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1); /* 添加陰影 */
+    padding: 5px; /* 內部留白 */
+    background-color: #fff; /* 白色背景 */
+  }
+
+  /* 頂部標頭 */
+  .custom-calendar .react-datepicker__header {
+    background-color: #f8f8f8; /* 淺灰色背景 */
+    border-bottom: 1px solid #eee;
+    border-top-left-radius: 10px; /* 匹配外容器圓角 */
+    border-top-right-radius: 10px;
+    padding-top: 10px;
+  }
+
+  /* 月份和年份下拉選單 */
+  .custom-calendar .react-datepicker__year-select,
+  .custom-calendar .react-datepicker__month-select {
+    padding: 5px 8px;
+    border-radius: 15px; /* 圓角 */
+    border: 1px solid #ccc;
+    background-color: #fff;
+    margin: 0 3px;
+    font-size: 0.9em;
+    cursor: pointer;
+    transition: border-color 0.2s;
+
+    &:focus {
+      outline: none;
+      border-color: #4a90e2; /* Focus 時的邊框顏色 */
+    }
+  }
+
+  /* 導航按鈕 (上/下個月) */
+  .custom-calendar .react-datepicker__navigation {
+    top: 12px; /* 調整垂直位置 */
+  }
+  .custom-calendar .react-datepicker__navigation--previous {
+     border-right-color: #aaa; /* 箭頭顏色 */
+     left: 12px; /* 調整水平位置 */
+     &:hover { border-right-color: #333; }
+  }
+  .custom-calendar .react-datepicker__navigation--next {
+     border-left-color: #aaa; /* 箭頭顏色 */
+     right: 12px; /* 調整水平位置 */
+     &:hover { border-left-color: #333; }
+  }
+
+  /* 星期標題 */
+  .custom-calendar .react-datepicker__day-name {
+    color: #666; /* 稍深的灰色 */
+    font-weight: bold;
+    font-size: 0.8em;
+    width: 2.2rem; /* 調整寬度以適應 */
+    line-height: 2.2rem;
+    margin: 0.1rem; /* 微調間距 */
+  }
+
+  /* 日期格子 */
+  .custom-calendar .react-datepicker__day {
+    color: #333;
+    width: 2.2rem;
+    line-height: 2.2rem;
+    margin: 0.1rem;
+    border-radius: 50%; /* 圓形格子 */
+    transition: background-color 0.2s, color 0.2s;
+
+    &:hover {
+      background-color: #f0f0f0; /* 淺灰色 hover 背景 */
+      border-radius: 50%; /* 保持圓形 */
+    }
+  }
+
+  /* 當前月份以外的日期 */
+  .custom-calendar .react-datepicker__day--outside-month {
+    color: #ccc; /* 淺灰色 */
+  }
+
+  /* 今天 */
+  .custom-calendar .react-datepicker__day--today {
+    font-weight: bold;
+    border: 1px solid #4a90e2; /* 藍色邊框 */
+  }
+
+  /* 選中的日期 */
+  .custom-calendar .react-datepicker__day--selected {
+    background-color: #4a90e2; /* 藍色背景 */
+    color: white; /* 白色文字 */
+    border-radius: 50%;
+    &:hover {
+        background-color: #3a80d2; /* Hover 時稍深的藍色 */
+    }
+  }
+
+  /* 清除按鈕 (如果 isClearable 為 true) */
+  .react-datepicker__close-icon {
+    padding-right: 10px; /* 給清除圖標一些空間 */
+    &::after {
+      background-color: #aaa; /* 預設叉叉顏色 */
+      font-size: 16px;
+      height: 18px; /* 調整大小 */
+      width: 18px;
+      line-height: 18px;
+      padding: 0;
+      border-radius: 50%;
+      text-align: center;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+     &:hover::after {
+       background-color: #f00; /* Hover 時變紅色 */
+     }
+  }
+`;
+// --- 結束：定義樣式 ---
 
 const PageTitle = styled.h2`
   margin-bottom: 30px;
@@ -259,6 +390,9 @@ const NumerologyCalculator = () => {
 
   return (
     <>
+      {/* 將全域樣式應用到元件中 */}
+      <GlobalDatePickerStyle />
+
       <PageTitle>探索你的生命靈數組合</PageTitle>
       
       <InputContainer>
@@ -273,10 +407,13 @@ const NumerologyCalculator = () => {
             showMonthDropdown // 保留月份下拉
             dropdownMode="select" // 保留 select 模式
             maxDate={new Date()}
+            locale="zh-TW"
             isClearable
             peekNextMonth
             scrollableYearDropdown // 暫時保留
             yearDropdownItemNumber={100} // 暫時保留
+            calendarClassName="custom-calendar"
+            popperPlacement="bottom-start"
           />
         </DatePickerWrapper>
         
