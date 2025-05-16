@@ -122,12 +122,6 @@ import accessory97 from '../assets/Accessories/PIc103.png';
 import accessory98 from '../assets/Accessories/PIc104.png';
 import accessory99 from '../assets/Accessories/PIc105.png';
 import accessory100 from '../assets/Accessories/PIc106.png';
-import accessory101 from '../assets/Accessories/PIc107.png';
-import accessory102 from '../assets/Accessories/PIc108.png';
-import accessory103 from '../assets/Accessories/PIc109.png';
-import accessory104 from '../assets/Accessories/PIc110.png';
-import accessory105 from '../assets/Accessories/PIc111.png';
-import accessory106 from '../assets/Accessories/PIc112.png';
 
 
 
